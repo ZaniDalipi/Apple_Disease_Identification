@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Apple Disease Indentification</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--content Descriptions-->
+    <string name="on_navigation_to_location_description">bottom navigation bar for your saved locations</string>
+    <string name="on_navigation_to_data_description">bottom navigation bar for your saved data</string>
+    <string name="on_navigation_to_camera_classification_description">bottom navigation bar for your model inference classification</string>
+
+    <!--labels-->
+    <string name="locations_label">Locations</string>
+    <string name="your_diseases_label">Data</string>
+    <string name="classification_camera">Classify</string>
+
+    <string name="disease_name">Apple Scab</string>
+    <string name="disease_caption">this disease is from fungus that is so rare in some countries but in europe its so common so to stop this you should read on our blog and learn what diseases
+    to use in order to get rid of these diseases by using different fungicids that are recommended in our blogs so i encourage you to go through it and learn a lot i hope you are happy with the
+    description of this disease that was classified</string>
+
+
+    <string name="exampleDiseaseNames">
+        Apple scab : 0.00 "\n"
+        Apple_cedar_rust : 0.00"\n"
+        Apple_black_rot : 0.00
+    </string>
+    <string name="disease_type">Atom Pomi</string>
+</resources>

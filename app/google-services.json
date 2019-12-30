@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "939177967297",
+    "firebase_url": "https://apple-disease-identificator.firebaseio.com",
+    "project_id": "apple-disease-identificator",
+    "storage_bucket": "apple-disease-identificator.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:939177967297:android:48bc772cf0e1570aa69e40",
+        "android_client_info": {
+          "package_name": "com.zanoapp.applediseaseindentificator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "939177967297-qtssncnkb41vqps404s5tq7onceocrph.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmMMcbETSlAW4iSq4DqPVjmRmKGq92y0o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "939177967297-qtssncnkb41vqps404s5tq7onceocrph.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
