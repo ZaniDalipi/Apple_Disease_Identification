@@ -35,14 +35,8 @@ private val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.CAMERA)
 
 class CameraFragment : Fragment(), LifecycleOwner , ActivityCompat.OnRequestPermissionsResultCallback{
 
-    fun newInstance(): ClassificationFragment? {
-        return ClassificationFragment()
-    }
-
-
     private lateinit var viewModel: CameraViewModel
     private var checkedPermissions = false
-    private lateinit var classificationFragment: ClassificationFragment
     private var runClassifier: Boolean = true
     private val job = Job()
     private val uiCoroutineScope = CoroutineScope(Dispatchers.Main + job)
@@ -69,36 +63,34 @@ class CameraFragment : Fragment(), LifecycleOwner , ActivityCompat.OnRequestPerm
         super.onViewCreated(view, savedInstanceState)
 
         if (allPermissionsGranted()){
-            startCamera()
+            viewFinder.post { startCamera() }
           //  bitmap = viewFinder.getBitmap(viewFinder.width, viewFinder.height)
         }else{
             ActivityCompat.requestPermissions(
                 requireActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSION)
         }
         viewFinder.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
-            updateTransform()
+//            updateTransform()
         }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val cameraViewModelFactory =
-            CameraViewModelFactory()
+        val cameraViewModelFactory = CameraViewModelFactory()
         viewModel = ViewModelProvider(this,cameraViewModelFactory).get(CameraViewModel::class.java)
-        /*viewModel.modelStateDownloaded.observe(viewLifecycleOwner, Observer<Boolean> { isDownloaded ->
-            if(isDownloaded){
+
+        /*viewModel.isDownloaded.observe(viewLifecycleOwner, Observer { isDownloaded ->
+            isDownloaded?.let {
                 Toast.makeText(activity, "Model has been Downloaded", Toast.LENGTH_SHORT).show()
                 viewModel.doneDownloading()
-            }else{
-                Toast.makeText(activity, "NOOO", Toast.LENGTH_SHORT).show()
             }
         })*/
 
-        if (viewModel.remoteModel.modelName.equals(" ")){
+       /* if (viewModel.remoteModel.modelName.equals(" ")){
             Toast.makeText(context, "wait for downloading proccess", Toast.LENGTH_LONG).show()
         }else{
             Toast.makeText(context, "the model version that you are using is : ${viewModel.remoteModel.modelName}", Toast.LENGTH_LONG).show()
-        }
+        }*/
     }
 
     // cameraX implementation operation
@@ -128,7 +120,7 @@ class CameraFragment : Fragment(), LifecycleOwner , ActivityCompat.OnRequestPerm
                 parent.addView(viewFinder, 0)
 
                 viewFinder.surfaceTexture = it.surfaceTexture
-                updateTransform()
+//                updateTransform()
             }
         }
         preview.removePreviewOutputListener()
@@ -140,10 +132,9 @@ class CameraFragment : Fragment(), LifecycleOwner , ActivityCompat.OnRequestPerm
         }.build()
 
         val imageAnalysisUseCase = ImageAnalysis(imageAnalysisConfig).apply {
-            setAnalyzer(executor, CameraViewModel())
+
 
         }
-
 
         CameraX.bindToLifecycle(this, preview, imageAnalysisUseCase)
 
@@ -206,7 +197,7 @@ class CameraFragment : Fragment(), LifecycleOwner , ActivityCompat.OnRequestPerm
             ActivityCompat.requestPermissions(this.requireActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSION)
         }
         viewFinder.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
-            updateTransform()
+           // updateTransform()
         }
     }
 

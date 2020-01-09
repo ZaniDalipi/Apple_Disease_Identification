@@ -5,6 +5,11 @@ apply plugin: "androidx.navigation.safeargs"
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 
+project.ext.ASSET_DIR = projectDir.toString() + '/src/main/assets'
+
+assert file(project.ext.ASSET_DIR + "/plant_disease_model_v1.lite").exists()
+assert file(project.ext.ASSET_DIR + "/retrained_labels.txt").exists()
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -42,7 +47,6 @@ android {
         noCompress "tflite"
         noCompress "lite"
     }
-
 }
 
 dependencies {

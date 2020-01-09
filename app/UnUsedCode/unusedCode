@@ -1,0 +1,89 @@
+
+   /* @RequiresApi(Build.VERSION_CODES.N)
+    override fun analyze(image: ImageProxy?, rotationDegrees: Int) {
+        var lastAnalyzedTimestamp = 0L
+
+        uiCoroutineScope.launch {
+            val localModel =
+                FirebaseCustomLocalModel.Builder().setAssetFilePath(MODEL_PATH_LOCAL).build()
+            _interpreter.value = createInterpreter(localModel)
+            val inputOutputOptions = createInputOutputOptions()
+            val labelList: MutableList<String> = mutableListOf()
+
+
+            val currentTimestamp = System.currentTimeMillis()
+            if (currentTimestamp - lastAnalyzedTimestamp >=
+                TimeUnit.SECONDS.toMillis(1)
+            ) {
+                lastAnalyzedTimestamp = currentTimestamp
+            }
+
+            *//*The ImageProxy object sent into the analyze() method contains information about our latest image in YUV format.
+        This means the image is broken into three planes: the first is a measure of brightness, and the second and third are measures of color in the red and blue space.
+        We can retrieve these three planes like so*//*
+            val y = image?.planes?.get(0)
+            val u = image?.planes?.get(1)
+            val v = image?.planes?.get(2)
+
+            *//*get the remining buffers from each plane*//*
+            val numOfPixelsInY = y?.buffer?.remaining()
+            val numOfPixelsInU = u?.buffer?.remaining()
+            val numOfPixelsInV = v?.buffer?.remaining()
+
+            *//*convert them into a singe YUV formatted ByteArray*//*
+            val imageDataYUV = ByteArray(numOfPixelsInY!! + numOfPixelsInU!! + numOfPixelsInV!!)
+
+            y.buffer.get(imageDataYUV, 0, numOfPixelsInY)
+            u.buffer.get(imageDataYUV, 0, numOfPixelsInU)
+            v.buffer.get(imageDataYUV, 0, numOfPixelsInV)
+
+            val inputs = FirebaseModelInputs.Builder()
+                .add(imageDataYUV)
+                .build()
+
+            Log.i("$TAG 🙄🙄🙄", _interpreter.value.toString())
+            _interpreter.value?.run(inputs, inputOutputOptions)
+                ?.addOnSuccessListener {
+                    try {
+                        BufferedReader(
+                            InputStreamReader(Application().resources.assets.open(LABEL_NAME))
+                        ).use { reader ->
+                            var line = reader.readLine()
+                            while (line != null) {
+                                labelList.add(line)
+                                line = reader.readLine()
+                            }
+                        }
+                    } catch (e: IOException) {
+                        Log.e(TAG, "couldnt read the labels", e)
+                    }
+                }
+        }
+    }*/
+
+
+     /*fun convertBitmapToByteByffer(bitmap: Bitmap): ByteBuffer {
+
+         if (imgData == null){
+             return
+         }
+         *//*re reading the buffer and cleaning the old one *//*
+         imgData.rewind()
+
+         bitmap.getPixels(intValues, 0, 0 ,0,0, bitmap.width, bitmap.height)
+
+         val pixel = 0
+         val startTime = SystemClock.uptimeMillis()
+
+         for(widthReader in  0 until  DIM_IMG_SIZE_X){
+             for (heightReader in 0 until DIM_IMG_SIZE_Y){
+                 val valuesHolder = intValues[pixel.plus(1)]
+                 imgData.putFloat((((valuesHolder shr 16 and 0xFF) - IMAGE_MEAN)/ IMAGE_STRIDE))
+                 imgData.putFloat((((valuesHolder shr 8 and 0xFF) - IMAGE_MEAN)/ IMAGE_STRIDE))
+                 imgData.putFloat((((valuesHolder  and 0xFF) - IMAGE_MEAN)/ IMAGE_STRIDE))
+             }
+         }
+         val endTime = SystemClock.uptimeMillis()
+
+     }
+*/
