@@ -3,9 +3,12 @@ package com.zanoapp.applediseaseindentificator.uiController.camera
 import android.app.Activity
 import android.app.Application
 import android.graphics.*
-import android.media.Image
+import android.media.Image.Plane
 import android.os.SystemClock
 import android.util.Log
+import android.view.TextureView
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageProxy
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,14 +16,14 @@ import com.google.firebase.ml.common.FirebaseMLException
 import com.google.firebase.ml.common.modeldownload.FirebaseModelDownloadConditions
 import com.google.firebase.ml.common.modeldownload.FirebaseModelManager
 import com.google.firebase.ml.custom.*
+import com.zanoapp.applediseaseindentificator.uiController.classification.ClassificationViewModel.Companion.RESULTS_TO_SHOW
 import kotlinx.coroutines.*
-import java.io.BufferedReader
-import java.io.ByteArrayOutputStream
-import java.io.IOException
-import java.io.InputStreamReader
+import java.io.*
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import java.util.*
 import kotlin.coroutines.resume
+
 
 class CameraViewModel: ViewModel()/*, ImageAnalysis.Analyzer*/{
 
@@ -28,44 +31,45 @@ class CameraViewModel: ViewModel()/*, ImageAnalysis.Analyzer*/{
 
     private val uiCoroutineScope = CoroutineScope(Dispatchers.Main + job)
     private val ioScope = CoroutineScope(Dispatchers.IO + job)
-    var remoteModel = FirebaseCustomRemoteModel.Builder(MODEL_PATH_REMOTE).build()
-    //private val localModel = FirebaseCustomLocalModel.Builder().setAssetFilePath(localModelName).build()
-    private val localModel = FirebaseCustomLocalModel.Builder().setFilePath(MODEL_PATH_LOCAL).build()
-    private lateinit var imgData: ByteBuffer
-
+    private var remoteModel = FirebaseCustomRemoteModel.Builder(MODEL_PATH_REMOTE).build()
+    private var imgData: ByteBuffer
+    private val imageProxy: ImageProxy? = null
     private val interpreterOptions
         get() =_interpreterOptions.value
 
+    private val localModel = FirebaseCustomLocalModel.Builder().setFilePath(MODEL_PATH_LOCAL).build()
+
     //private val labelList = MutableLiveData<List<String>>()
     private val _bitmapDataFromCamera = MutableLiveData<Bitmap>()
-    /*val bitmapdataFromCamera: LiveData<Bitmap>
-            get() = TODO("imageProxyToBitmapConverter() invoke method here so that we can pass through to convert it to bytebuffer")
-*/
+     val bitmapdataFromCamera: Bitmap
+        get() = convertImageProxyToBitmap(imageProxy!!)
+            //TODO("imageProxyToBitmapConverter() invoke method here so that we can pass through to convert it to bytebuffer")
 
 
     private val _interpreter = MutableLiveData<FirebaseModelInterpreter>()
     private val _interpreterOptions = MutableLiveData<FirebaseModelInterpreterOptions>()
 
     init {
+//        loadLabels()
         remoteModel
         localModel
         downloadRemoteModel()
-        checkIfModelIsDownloaded(localModel, remoteModel)
     }
 
     private fun downloadRemoteModel() {
 
         uiCoroutineScope.launch {
             _interpreter.value = getRemoteModelInBackground(remoteModel)
-            Log.i("$TAG_MODEL_STATE😈😈😈", _interpreter.value.toString())
+            Log.i("$TAG_MODEL_STATE😈😈😈1", _interpreter.value.toString())
         }
-        Log.i("$TAG_MODEL_STATE😈😈😈", _interpreter.value.toString())
     }
 
     private suspend fun getRemoteModelInBackground(remoteModel: FirebaseCustomRemoteModel): FirebaseModelInterpreter {
 
         return suspendCancellableCoroutine { cont ->
             Log.i("$TAG_MODEL_STATE👍👍👍", "Downloading model ...")
+
+            Log.i("labels", labelList?.size.toString())
 
             val conditions = FirebaseModelDownloadConditions.Builder()
                 .requireWifi()
@@ -88,13 +92,12 @@ class CameraViewModel: ViewModel()/*, ImageAnalysis.Analyzer*/{
                     }
 
                     val msg = "Remote model successfully downloaded"
-                    Log.i("$TAG_MODEL_STATE😎😎😎", "${remoteModel.modelName!!}. text: $msg " )
-
                     _interpreter.value = FirebaseModelInterpreter.getInstance(
                         FirebaseModelInterpreterOptions.Builder(remoteModel).build()
                     )!!
 
-                    Log.i("$TAG_MODEL_STATE😎😎😎", "remoteModel.modelName!!. text: $msg " )
+                    Log.i("$TAG_MODEL_STATE😎😎😎", "${remoteModel.modelName.toString()}. text: $msg " )
+                    Log.i("$TAG_MODEL_STATE interpreter", "${_interpreter.value.toString().reader()}. text: $msg " )
 
                     val remoteInterpreter = FirebaseModelInterpreter.getInstance(
                                         FirebaseModelInterpreterOptions.Builder(remoteModel).build())!!
@@ -107,9 +110,7 @@ class CameraViewModel: ViewModel()/*, ImageAnalysis.Analyzer*/{
             }
     }
 
-    private fun checkIfModelIsDownloaded(localModel: FirebaseCustomLocalModel,
-                                         remoteModel: FirebaseCustomRemoteModel){
-
+    private fun checkIfModelIsDownloaded(){
             FirebaseModelManager.getInstance().isModelDownloaded(remoteModel)
                 .addOnSuccessListener{ isDownloaded ->
                     _interpreterOptions.value =
@@ -125,7 +126,7 @@ class CameraViewModel: ViewModel()/*, ImageAnalysis.Analyzer*/{
     }
 
     @Throws(FirebaseMLException::class)
-    private fun createInterpreter(localModel: FirebaseCustomLocalModel): FirebaseModelInterpreter?{
+    private fun createInterpreter(): FirebaseModelInterpreter?{
         uiCoroutineScope.launch {
             _interpreterOptions.value = FirebaseModelInterpreterOptions.Builder(localModel).build()
             _interpreter.value = interpreterOptions?.let { FirebaseModelInterpreter.getInstance(it) }
@@ -135,6 +136,7 @@ class CameraViewModel: ViewModel()/*, ImageAnalysis.Analyzer*/{
         }
             return _interpreter.value
 }
+
 
     private fun createInputOutputOptions(): FirebaseModelInputOutputOptions{
 
@@ -146,7 +148,6 @@ class CameraViewModel: ViewModel()/*, ImageAnalysis.Analyzer*/{
             .setOutputFormat(0, FirebaseModelDataType.FLOAT32, outputs.toIntArray())
             .build()
     }
-
 
      private fun bitmapToInputArray(): Array<Array<Array<FloatArray>>> {
          // [START mlkit_bitmap_input]
@@ -168,11 +169,11 @@ class CameraViewModel: ViewModel()/*, ImageAnalysis.Analyzer*/{
          return input
      }
 
-    fun Image.convertImageProxyToBitmap(): Bitmap{
+    fun convertImageProxyToBitmap(image: ImageProxy): Bitmap{
 
-        val yBuffer = planes[0].buffer // Y
-        val uBuffer = planes[1].buffer // U
-        val vBuffer = planes[2].buffer // V
+        val yBuffer =image.planes[0].buffer // Y
+        val uBuffer =image.planes[1].buffer // U
+        val vBuffer =image.planes[2].buffer // V
 
         val ySize = yBuffer.remaining()
         val uSize = uBuffer.remaining()
@@ -185,9 +186,9 @@ class CameraViewModel: ViewModel()/*, ImageAnalysis.Analyzer*/{
         vBuffer.get(nv21, ySize, vSize)
         uBuffer.get(nv21, ySize + vSize, uSize)
 
-        val yuvImage = YuvImage(nv21, ImageFormat.NV21, this.width, this.height, null)
+        val yuvImage = YuvImage(nv21, ImageFormat.NV21, image.width, image.height, null)
         val out = ByteArrayOutputStream()
-        yuvImage.compressToJpeg(Rect(0, 0, yuvImage.width, yuvImage.height), 50, out)
+        yuvImage.compressToJpeg(Rect(0, 0, yuvImage.width, yuvImage.height), 100, out)
         val imageBytes = out.toByteArray()
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
     }
@@ -197,10 +198,10 @@ class CameraViewModel: ViewModel()/*, ImageAnalysis.Analyzer*/{
         val topLabels = mutableListOf<String>()
 
         _interpreter.value?.let {
-            val localModel = FirebaseCustomLocalModel.Builder().build()
-            _interpreter.value = createInterpreter(localModel)
+            _interpreter.value = createInterpreter()
             val input = bitmapToInputArray()
             val inputOutputOptions = createInputOutputOptions()
+            val labelList: ArrayList<String>? = null
 
             val inputs = FirebaseModelInputs.Builder()
                 .add(input)
@@ -216,7 +217,7 @@ class CameraViewModel: ViewModel()/*, ImageAnalysis.Analyzer*/{
                          ).use { reader ->
                              var line = reader.readLine()
                              while (line != null) {
-                                 labelList.add(line)
+                                 labelList?.add(line)
                                  line = reader.readLine()
                              }
                          }
@@ -229,10 +230,87 @@ class CameraViewModel: ViewModel()/*, ImageAnalysis.Analyzer*/{
         return topLabels
     }
 
-    private val labelList by lazy {
-        BufferedReader(InputStreamReader(Activity().resources.assets.open(LABEL_NAME))).lineSequence().toMutableList()
+    private fun applyFilterToLabels(){
+        val numberOfLabels = labelList?.size
+
+        /*first stage of filtering */
+        for (j in 0 until  numberOfLabels!!){
+            filterLabelProbArray!![0][j] += FILTER_FACTOR * (labelProbArray!![0][j] -
+                    filterLabelProbArray!![0][j])
+        }
+        for (i in 1 until FILTER_STAGES){
+            for (j in 0 until  numberOfLabels){
+                filterLabelProbArray!![i][j] += FILTER_FACTOR * (
+                        filterLabelProbArray!![i-1][j] - filterLabelProbArray!![i][j]
+                        )
+            }
+        }
+        for(j in 0 until numberOfLabels){
+            labelProbArray!![0][j] = filterLabelProbArray!![FILTER_STAGES-1][j]
+        }
     }
-    init {
+
+/*
+    private fun loadLabels(): ArrayList<String>? {
+        try {
+            val activity = Activity()
+            val file = File("retrained_labels.txt")
+
+            val reader = BufferedReader(
+                InputStreamReader(activity.resources.assets.open("retrained_labels"))
+            ).use { reader ->
+                var line = reader.readLine()
+                while (line != null) {
+                    (labelList as ArrayList<String>).add(line)
+                    line = reader.readLine()
+                }
+            }
+        }catch (e: IOException){
+            Log.e("$TAG_MODEL_STATE😥😥😥", "couldnt read the labels", e)
+        }
+        return labelList as ArrayList<String>
+    }
+*/
+
+    private val sortedLabels =
+        PriorityQueue(
+            RESULTS_TO_SHOW,  // the initialCapacity
+// next we setup a comparator that will used to order this priority queue
+            Comparator { o1: Map.Entry<String?, Float>, o2: Map.Entry<String?, Float> ->
+                o1.value.compareTo(
+                    o2.value
+                )
+            }
+        )
+
+
+    fun printTopKLabels(): String{
+        for (i in labelList?.indices!!){
+            sortedLabels.add(
+                // creating an AbstractMap so we get only the skeleton of the Map Interfece so it can be running faster than Map interface ,
+// SimpleEntry () we can build custom maps
+                AbstractMap.SimpleEntry(
+                    labelList!![i],
+                    labelProbArray!![0][i]
+                )
+            )
+            if (sortedLabels.size > RESULTS_TO_SHOW){
+                sortedLabels.poll()
+            }
+        }
+
+        var textToShow = ""
+        val size = sortedLabels.size
+        for (i in 0 until size){
+            val label: Map.Entry<String?, Float>? = sortedLabels.poll()
+            textToShow = String.format("\n%s: %4.2f", label!!.key, label.value) + textToShow
+        }
+        return textToShow
+    }
+
+    private var labelList: List<String>? = null
+
+   init {
         // allocate a to the variable or to a bytebuffer directly there is start and the limit or the capacity in the parameters
         imgData = ByteBuffer.allocateDirect(
             4 * DIM_BATCH_SIZE *
@@ -241,7 +319,9 @@ class CameraViewModel: ViewModel()/*, ImageAnalysis.Analyzer*/{
                     DIM_PIXEL_SIZE
         )
         imgData.order(ByteOrder.nativeOrder())
-    }
+       labelProbArray = Array(1) { FloatArray(labelList!!.size) }
+       filterLabelProbArray = Array(FILTER_STAGES) { FloatArray(labelList!!.size) }
+   }
 
     companion object {
         const val TAG_MODEL_STATE = "ModelState:"
@@ -254,6 +334,10 @@ class CameraViewModel: ViewModel()/*, ImageAnalysis.Analyzer*/{
         const val DIM_IMG_SIZE_X = 299
         const val DIM_IMG_SIZE_Y = 299
         val intValues = intArrayOf(DIM_IMG_SIZE_X * DIM_IMG_SIZE_Y)
+        private var labelProbArray: Array<FloatArray>? = null
+        private var filterLabelProbArray: Array<FloatArray>? = null
+        private const val FILTER_STAGES = 3
+        private const val FILTER_FACTOR = 0.4f
     }
 
     override fun onCleared() {

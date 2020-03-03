@@ -18,7 +18,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.zanoapp.applediseaseindentificator.databinding.FragmentCameraBinding
-import com.zanoapp.applediseaseindentificator.uiController.classification.ClassificationFragment
 import kotlinx.android.synthetic.main.fragment_camera.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -64,13 +63,12 @@ class CameraFragment : Fragment(), LifecycleOwner , ActivityCompat.OnRequestPerm
 
         if (allPermissionsGranted()){
             viewFinder.post { startCamera() }
-          //  bitmap = viewFinder.getBitmap(viewFinder.width, viewFinder.height)
         }else{
             ActivityCompat.requestPermissions(
                 requireActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSION)
         }
         viewFinder.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
-//            updateTransform()
+            updateTransform()
         }
     }
 
@@ -78,31 +76,17 @@ class CameraFragment : Fragment(), LifecycleOwner , ActivityCompat.OnRequestPerm
         super.onActivityCreated(savedInstanceState)
         val cameraViewModelFactory = CameraViewModelFactory()
         viewModel = ViewModelProvider(this,cameraViewModelFactory).get(CameraViewModel::class.java)
-
-        /*viewModel.isDownloaded.observe(viewLifecycleOwner, Observer { isDownloaded ->
-            isDownloaded?.let {
-                Toast.makeText(activity, "Model has been Downloaded", Toast.LENGTH_SHORT).show()
-                viewModel.doneDownloading()
-            }
-        })*/
-
-       /* if (viewModel.remoteModel.modelName.equals(" ")){
-            Toast.makeText(context, "wait for downloading proccess", Toast.LENGTH_LONG).show()
-        }else{
-            Toast.makeText(context, "the model version that you are using is : ${viewModel.remoteModel.modelName}", Toast.LENGTH_LONG).show()
-        }*/
     }
 
-    // cameraX implementation operation
+
     private fun startCamera(){
 
         if(!checkedPermissions && !allPermissionsGranted()){
             ActivityCompat.requestPermissions(requireActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSION)
         }else{
+            viewFinder.post{ startCamera() }
             checkedPermissions = true
         }
-
-        /*we config the way the camera has to be shown*/
 
         val previewConfig = PreviewConfig.Builder().apply {
             setTargetResolution(Size(viewFinder.measuredWidth,viewFinder.measuredHeight))
@@ -120,7 +104,7 @@ class CameraFragment : Fragment(), LifecycleOwner , ActivityCompat.OnRequestPerm
                 parent.addView(viewFinder, 0)
 
                 viewFinder.surfaceTexture = it.surfaceTexture
-//                updateTransform()
+                updateTransform()
             }
         }
         preview.removePreviewOutputListener()
