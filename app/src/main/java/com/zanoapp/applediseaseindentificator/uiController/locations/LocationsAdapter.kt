@@ -1,3 +1,4 @@
+/*
 package com.zanoapp.applediseaseindentificator.uiController.locations
 
 import android.view.LayoutInflater
@@ -46,3 +47,4 @@ class LocationsAdapter: ListAdapter<SavedLocation, LocationsAdapter.ViewHolder>(
         }
     }
 }
+*/

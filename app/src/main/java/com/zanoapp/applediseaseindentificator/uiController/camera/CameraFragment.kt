@@ -110,7 +110,7 @@ class CameraFragment : Fragment(), LifecycleOwner , ActivityCompat.OnRequestPerm
         preview.removePreviewOutputListener()
 
 
-        val imageAnalysisConfig = ImageAnalysisConfig.Builder().apply {
+       /* val imageAnalysisConfig = ImageAnalysisConfig.Builder().apply {
         setTargetResolution(Size(viewFinder.width, viewFinder.height))
             setImageReaderMode(ImageAnalysis.ImageReaderMode.ACQUIRE_LATEST_IMAGE)
         }.build()
@@ -118,9 +118,9 @@ class CameraFragment : Fragment(), LifecycleOwner , ActivityCompat.OnRequestPerm
         val imageAnalysisUseCase = ImageAnalysis(imageAnalysisConfig).apply {
 
 
-        }
+        }*/
 
-        CameraX.bindToLifecycle(this, preview, imageAnalysisUseCase)
+        CameraX.bindToLifecycle(this, preview)
 
     }
     // viewfinder transformations that will make sure rotations work well
