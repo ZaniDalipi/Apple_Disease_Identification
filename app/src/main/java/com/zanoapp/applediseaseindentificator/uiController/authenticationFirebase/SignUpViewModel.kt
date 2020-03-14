@@ -1,4 +1,4 @@
-package com.zanoapp.applediseaseindentificator.uiController
+package com.zanoapp.applediseaseindentificator.uiController.authenticationFirebase
 
 import android.app.Activity
 import android.content.Intent
@@ -71,7 +71,9 @@ class SignUpViewModel(private var userRepository: UserRepository) : ViewModel() 
         googleSignInClient = GoogleSignIn.getClient(Activity(), googleSigninOptions)
 
         val googleDialogIntent = googleSignInClient.signInIntent
-        activity.startActivityForResult(googleDialogIntent, RC_SIGN_IN)
+        activity.startActivityForResult(googleDialogIntent,
+            RC_SIGN_IN
+        )
     }
 
 
@@ -134,4 +136,10 @@ class SignUpViewModel(private var userRepository: UserRepository) : ViewModel() 
             handleSignInResult(task, activity)
         }
     }
+
+
+
+
+
+    /*TRYING OUT NEW WAY OF DOING THINGS */
 }

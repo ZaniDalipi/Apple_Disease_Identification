@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.zanoapp.applediseaseindentificator.uiController.SignUpFragment"
+        android:name="com.zanoapp.applediseaseindentificator.uiController.authenticationFirebase.SignUpFragment"
         android:label="sign_up_fragment"
         tools:layout="@layout/sign_up_fragment" >
         <action
