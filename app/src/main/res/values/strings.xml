@@ -28,4 +28,5 @@
     <string name="disease_type">Atom Pomi</string>
     <string name="hello_user_welcome_to_my_app_press_the_button_below_to_signup_with_google_hint">Hello User welcome to my app , press the button below to signup with google</string>
     <string name="no_user_signed_in">no user is signed in</string>
+    <string name="after_sign_out_msg">You have signed out Please sign in with google  account</string>
 </resources>
