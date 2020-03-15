@@ -1,3 +1,4 @@
+/*
 package com.zanoapp.applediseaseindentificator.uiController.camera
 
 import android.util.Log
@@ -22,7 +23,8 @@ class ImageAnalyzer: ImageAnalysis.Analyzer {
     }
     var imageBuffer = intArrayOf(DIM_IMG_SIZE_X * DIM_IMG_SIZE_Y)
 
-    /*private fun ByteBuffer.toByteArray(): ByteArray {
+    */
+/*private fun ByteBuffer.toByteArray(): ByteArray {
         rewind()
         val data = ByteArray(remaining())
         get(data)
@@ -47,7 +49,8 @@ class ImageAnalyzer: ImageAnalysis.Analyzer {
             Log.d("CameraXApp", "Average luminosity: $pixel")
             lastAnalyzedTimestamp = currentTimeStamp
         }
-    }*/
+    }*//*
+
 
 
     private fun ByteBuffer.toByteArray(): ByteArray {
@@ -76,4 +79,4 @@ class ImageAnalyzer: ImageAnalysis.Analyzer {
             lastAnalyzedTimestamp = currentTimestamp
         }
     }
-}
+}*/
