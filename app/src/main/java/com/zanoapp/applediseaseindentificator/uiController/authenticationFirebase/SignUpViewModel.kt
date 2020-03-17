@@ -50,6 +50,12 @@ class SignUpViewModel(private val userRepository: UserRepository?) : ViewModel()
     val userState: LiveData<Boolean>
         get() = _userState
 
+    init {
+        _user.value?.let {
+            insertDataToRoomDB(it)
+        }
+    }
+
     fun signInWithGoogle(activity: Activity) {
 
         launchDataLoad {
@@ -64,11 +70,9 @@ class SignUpViewModel(private val userRepository: UserRepository?) : ViewModel()
             googleSignInClient = GoogleSignIn.getClient(activity, googleSignInOptions)
 
             val googleDialogIntent = googleSignInClient.signInIntent
-            startActivityForResult(
-                activity,
+            activity.startActivityForResult(
                 googleDialogIntent,
-                RC_SIGN_IN,
-                null
+                RC_SIGN_IN
             )
         }
     }

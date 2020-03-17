@@ -3,10 +3,8 @@ package com.zanoapp.applediseaseindentificator.uiController.camera
 
 import android.app.Activity
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.os.Bundle
-import android.util.Log
 import android.util.Size
 import android.view.*
 import android.widget.Toast
@@ -15,7 +13,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.zanoapp.applediseaseindentificator.databinding.FragmentCameraBinding
 import kotlinx.android.synthetic.main.fragment_camera.*
@@ -23,8 +20,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.io.IOException
-import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 
@@ -74,8 +69,8 @@ class CameraFragment : Fragment(), LifecycleOwner , ActivityCompat.OnRequestPerm
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val cameraViewModelFactory = CameraViewModelFactory()
-        viewModel = ViewModelProvider(this,cameraViewModelFactory).get(CameraViewModel::class.java)
+        //val cameraViewModelFactory = CameraViewModelFactory()
+       // viewModel = ViewModelProvider(this,cameraViewModelFactory).get(CameraViewModel::class.java)
     }
 
 
@@ -89,7 +84,7 @@ class CameraFragment : Fragment(), LifecycleOwner , ActivityCompat.OnRequestPerm
         }
 
         val previewConfig = PreviewConfig.Builder().apply {
-            setTargetResolution(Size(viewFinder.measuredWidth,viewFinder.measuredHeight))
+            setTargetResolution(Size(640, 480))
             setLensFacing(CameraX.LensFacing.BACK)
         }.build()
 //        build the viewfinder use case
@@ -101,7 +96,7 @@ class CameraFragment : Fragment(), LifecycleOwner , ActivityCompat.OnRequestPerm
                 //            remove and re add it (surfacetexureview)
                 val parent = viewFinder.parent as ViewGroup
                 parent.removeView(viewFinder)
-                parent.addView(viewFinder, 0)
+                parent.addView(viewFinder, 1)
 
                 viewFinder.surfaceTexture = it.surfaceTexture
                 updateTransform()
@@ -110,7 +105,7 @@ class CameraFragment : Fragment(), LifecycleOwner , ActivityCompat.OnRequestPerm
         preview.removePreviewOutputListener()
 
 
-       /* val imageAnalysisConfig = ImageAnalysisConfig.Builder().apply {
+        val imageAnalysisConfig = ImageAnalysisConfig.Builder().apply {
         setTargetResolution(Size(viewFinder.width, viewFinder.height))
             setImageReaderMode(ImageAnalysis.ImageReaderMode.ACQUIRE_LATEST_IMAGE)
         }.build()
@@ -118,9 +113,9 @@ class CameraFragment : Fragment(), LifecycleOwner , ActivityCompat.OnRequestPerm
         val imageAnalysisUseCase = ImageAnalysis(imageAnalysisConfig).apply {
 
 
-        }*/
+        }
 
-        CameraX.bindToLifecycle(this, preview)
+        CameraX.bindToLifecycle(this, preview, imageAnalysisUseCase)
 
     }
     // viewfinder transformations that will make sure rotations work well

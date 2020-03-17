@@ -75,4 +75,10 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return findNavController(R.id.my_nav_host_fragment).navigateUp(appBarConfiguration)
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        signUpViewModel.onActivityResult(requestCode, resultCode, data, this)
+
+    }
 }

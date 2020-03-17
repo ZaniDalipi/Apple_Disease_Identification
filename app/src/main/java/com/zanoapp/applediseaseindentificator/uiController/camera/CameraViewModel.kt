@@ -1,15 +1,10 @@
 package com.zanoapp.applediseaseindentificator.uiController.camera
 
-import android.app.Activity
 import android.app.Application
 import android.graphics.*
-import android.media.Image.Plane
 import android.os.SystemClock
 import android.util.Log
-import android.view.TextureView
-import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.ml.common.FirebaseMLException
