@@ -1,13 +1,16 @@
 package com.zanoapp.applediseaseindentificator.uiController.authenticationFirebase
 
 import android.app.Activity
+import android.app.Application
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.facebook.CallbackManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -18,31 +21,25 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.zanoapp.applediseaseindentificator.R
+import com.zanoapp.applediseaseindentificator.localDataPersistence.User
 import com.zanoapp.applediseaseindentificator.localDataPersistence.UserRepository
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 
-private val RC_SIGN_IN = 1
-private val TAG = "signUpViewModel"
+class SignUpViewModel(private val userRepository: UserRepository?) : ViewModel() {
 
-class SignUpViewModel(private var userRepository: UserRepository) : ViewModel() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-
-
-    /**
-     * 1. create an object for user info
-     * 2. create an object for user state
-     * 3. create toast livedata
-     * 4. create spinner livedata */
+    private var callbackManager: CallbackManager? = null
 
     private val _toast = MutableLiveData<String>()
     val toast: LiveData<String>
         get() = _toast
 
-    private val _spinner = MutableLiveData<String>()
-    val spinner: LiveData<String>
+    private val _spinner = MutableLiveData<Boolean>()
+    val spinner: LiveData<Boolean>
         get() = _spinner
 
     private val _user = MutableLiveData<FirebaseUser>()
@@ -53,93 +50,116 @@ class SignUpViewModel(private var userRepository: UserRepository) : ViewModel() 
     val userState: LiveData<Boolean>
         get() = _userState
 
+    fun signInWithGoogle(activity: Activity) {
 
-    init {
-        signInWithGoogle(Activity())
+        launchDataLoad {
+            callbackManager = CallbackManager.Factory.create()
 
+            val googleSignInOptions =
+                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(R.string.default_web_client_id.toString())
+                    .requestEmail()
+                    .build()
+
+            googleSignInClient = GoogleSignIn.getClient(activity, googleSignInOptions)
+
+            val googleDialogIntent = googleSignInClient.signInIntent
+            startActivityForResult(
+                activity,
+                googleDialogIntent,
+                RC_SIGN_IN,
+                null
+            )
+        }
     }
 
-     fun signInWithGoogle(activity: Activity) {
-
-        auth = FirebaseAuth.getInstance()
-
-        val googleSigninOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(R.string.default_web_client_id.toString())
-            .requestEmail()
-            .build()
-
-        googleSignInClient = GoogleSignIn.getClient(Activity(), googleSigninOptions)
-
-        val googleDialogIntent = googleSignInClient.signInIntent
-        activity.startActivityForResult(googleDialogIntent,
-            RC_SIGN_IN
-        )
-    }
-
-
-     fun handleSignInResult(completedTask: Task<GoogleSignInAccount>, activity: Activity) {
+    private fun firebaseAuthWithGoogle(account: GoogleSignInAccount, activity: Activity) {
         viewModelScope.launch {
-            try {
-                val account = completedTask.getResult(ApiException::class.java)
-                account.let {
-                    val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
-                    auth.signInWithCredential(credential).addOnCompleteListener {
-                        if (completedTask.isSuccessful) {
-                            Log.d(TAG, "signInWithCredential:success")
-                            Toast.makeText(activity.applicationContext, "Sign In Successful ${auth.currentUser?.email}", Toast.LENGTH_SHORT).show()
-                            _user.value = auth.currentUser
-                        }
-                        /* when (val result = userRepository.signInWithCredential(credential)) {
-                         is MyResult.Success<*> -> {
-                             result.data.
-
-                         }
-                         is MyResult.Error -> {
-                             TODO()
-                         }
-                         is MyResult.Canceled -> {
-                             TODO()
-
-                         }
-                         else -> TODO()
-                     }*/
+            Log.d(TAG, "firebaseAuthWithGoogle: ${account.id}")
+            val credentials = GoogleAuthProvider.getCredential(account.idToken, null)
+            auth.signInWithCredential(credentials)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(
+                            Activity(),
+                            "Successfully signed in : ${account.email}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        val user = auth.currentUser
+                        _user.value = user
+                        Toast.makeText(
+                            Activity(),
+                            "Welcome to my app : ${user?.email}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        _user.value?.let { firebaseUser -> insertDataToRoomDB(firebaseUser) }
+                        _userState.value = true
+                    } else {
+                        Toast.makeText(
+                            Activity(),
+                            "Failed to SignUp With Firebase",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
+        }
+    }
+
+
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?, activity: Activity) {
+        callbackManager?.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN) {
+            val completedTask = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = completedTask.getResult(ApiException::class.java)
+                firebaseAuthWithGoogle(account!!, activity)
             } catch (e: ApiException) {
-                Toast.makeText(activity.applicationContext, "Sign In Failed", Toast.LENGTH_SHORT).show()
+                Log.e(TAG, "Google sign in failed", e)
             }
         }
     }
 
-    fun checkUserLoggedIn(): FirebaseUser? {
-        var _firebaseUser: FirebaseUser? = null
+    fun signOutUser() {
         viewModelScope.launch {
-            _firebaseUser = userRepository.checkUserLoggedIn()
+            _userState.value = false
         }
-        return _firebaseUser
     }
 
-    fun logOutUser(){
+    fun onToastShown() {
+        _toast.value = null
+    }
+
+
+    private fun launchDataLoad(block: suspend () -> Unit): Job {
+        return viewModelScope.launch {
+            try {
+                _spinner.value = true
+                block()
+            } catch (error: Throwable) {
+                _toast.value = error.message
+            } finally {
+                _spinner.value = false
+            }
+        }
+    }
+
+    private fun insertDataToRoomDB(firebaseUser: FirebaseUser) {
+
+        _user.value = firebaseUser
+
         viewModelScope.launch {
-            userRepository.logOutUser()
+            val currentUser = User(
+                uid = _user.value?.uid!!.toLong(),
+                name = _user.value?.displayName!!,
+                email = _user.value?.email!!
+            )
+            userRepository?.insertDataToRoomDb(currentUser)
         }
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?, activity: Activity)
-    {
-
-        onActivityResult(requestCode, resultCode, data, activity)
-
-        if(requestCode == RC_SIGN_IN)
-        {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleSignInResult(task, activity)
-        }
+    companion object {
+        const val RC_SIGN_IN = 9001
+        const val TAG = "signUpViewModel"
     }
-
-
-
-
-
-    /*TRYING OUT NEW WAY OF DOING THINGS */
 }

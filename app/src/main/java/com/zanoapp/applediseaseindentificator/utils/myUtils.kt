@@ -3,11 +3,11 @@ package com.zanoapp.applediseaseindentificator.utils
 import java.lang.Exception
 
 
-sealed class MyResult<out R>{
+sealed class MyResult{
 
-    data class Success<out T>(val data: T) : MyResult<T>() // Status success and data of the result
-    data class Error(val exception: Exception) : MyResult<Nothing>() // Status Error an error message
-    data class Canceled(val exception: Exception?) : MyResult<Nothing>() // Status Canceled
+    data class Success<out T>(val data: T) : MyResult() // Status success and data of the result
+    data class Error(val exception: Exception) : MyResult() // Status Error an error message
+    data class Canceled(val exception: Exception?) : MyResult() // Status Canceled
 
 
     override fun toString(): String {
