@@ -26,7 +26,14 @@
         Apple_black_rot : 0.00
     </string>
     <string name="disease_type">Atom Pomi</string>
-    <string name="hello_user_welcome_to_my_app_press_the_button_below_to_signup_with_google_hint">Hello User welcome to my app , press the button below to signup with google</string>
-    <string name="no_user_signed_in">no user is signed in</string>
+    <string name="hello_user_welcome_to_my_app_press_the_button_below_to_signup_with_google_hint">Hello User welcome, please sign up by pressing the button below to sign up with google account</string>
+    <string name="no_user_signed_in">you are not signed in please click sign in to use this app </string>
     <string name="after_sign_out_msg">You have signed out Please sign in with google  account</string>
+    <string name="user_email">email :</string>
+    <string name="user_name">user name :</string>
+    <string name="sign_out">Sign out</string>
+    <string name="sign_up_with_google">Sign Up with Google</string>
+    <string name="example_hint_email">example@gmail.com</string>
+    <string name="example_user_hint">Example Example</string>
+    <string name="hint">Take care for our environment by using less pesticides, and be more efficient</string>
 </resources>
