@@ -1,4 +1,4 @@
-package com.zanoapp.applediseaseIdentification.uiController.locations
+package com.zanoapp.applediseaseIdentification.ui.locations
 
 import androidx.lifecycle.ViewModel
 

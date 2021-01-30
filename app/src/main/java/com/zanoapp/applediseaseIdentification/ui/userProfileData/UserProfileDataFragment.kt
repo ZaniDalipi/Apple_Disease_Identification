@@ -1,4 +1,4 @@
-package com.zanoapp.applediseaseIdentification.uiController.userProfileData
+package com.zanoapp.applediseaseIdentification.ui.userProfileData
 
 
 import android.app.Application
@@ -17,13 +17,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 
 import com.zanoapp.applediseaseIdentification.R
-import com.zanoapp.applediseaseIdentification.databinding.FragmentUserProfileDataBinding
-import com.zanoapp.applediseaseIdentification.uiController.authenticationFirebase.SignUpViewModel
-import com.zanoapp.applediseaseIdentification.uiController.authenticationFirebase.SignUpViewModelFactory
+import com.zanoapp.applediseaseIdentification.databinding.UserProfileDataFragmentBinding
+import com.zanoapp.applediseaseIdentification.ui.authenticationFirebase.SignUpViewModel
+import com.zanoapp.applediseaseIdentification.ui.authenticationFirebase.SignUpViewModelFactory
 
 class UserProfileDataFragment : Fragment() {
 
-    private lateinit var binding: FragmentUserProfileDataBinding
+    private lateinit var binding: UserProfileDataFragmentBinding
     private lateinit var signUpViewModel: SignUpViewModel
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -35,12 +35,12 @@ class UserProfileDataFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             layoutInflater,
-            R.layout.fragment_user_profile_data,
+            R.layout.user_profile_data_fragment,
             container,
             false
         )
-        binding.lifecycleOwner = this
         binding.signUpViewModel = signUpViewModel
+        binding.lifecycleOwner = this
 
         binding.signOutButton.setOnClickListener {
             signOutUser()
@@ -52,7 +52,7 @@ class UserProfileDataFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initViewModel()
-        initGooogleSignInOptions()
+        initGoogleSignInOptions()
     }
 
     private fun initViewModel() {
@@ -60,7 +60,7 @@ class UserProfileDataFragment : Fragment() {
         val viewModelFactory = SignUpViewModelFactory(application)
         signUpViewModel = ViewModelProvider(this, viewModelFactory).get(SignUpViewModel::class.java)
     }
-    private fun initGooogleSignInOptions(){
+    private fun initGoogleSignInOptions(){
         auth = FirebaseAuth.getInstance()
         val googleSignInOptions =
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

@@ -1,4 +1,4 @@
-package com.zanoapp.applediseaseIdentification.uiController.camera
+package com.zanoapp.applediseaseIdentification.ui.camera
 
 import android.app.Application
 import android.graphics.*

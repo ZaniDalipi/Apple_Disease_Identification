@@ -1,4 +1,4 @@
-package com.zanoapp.applediseaseIdentification.uiController.camera
+package com.zanoapp.applediseaseIdentification.ui.camera
 
 
 import android.app.Activity
@@ -13,13 +13,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
-import kotlinx.android.synthetic.main.camera_fragment.*
+import kotlinx.android.synthetic.main.fragment_camera.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
-import com.zanoapp.applediseaseIdentification.databinding.CameraFragmentBinding
+import com.zanoapp.applediseaseIdentification.databinding.FragmentCameraBinding
 
 
 //arbitrary value to track the permission request
@@ -45,7 +45,7 @@ class CameraFragment : Fragment(), LifecycleOwner,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val binding = CameraFragmentBinding.inflate(inflater, container, false)
+        val binding = FragmentCameraBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         viewFinder = binding.viewFinderCameraX
 

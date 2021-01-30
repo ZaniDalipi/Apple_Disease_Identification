@@ -1,4 +1,4 @@
-package com.zanoapp.applediseaseIdentification.uiController.camera
+package com.zanoapp.applediseaseIdentification.ui.camera
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

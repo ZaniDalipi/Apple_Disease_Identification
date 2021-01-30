@@ -10,11 +10,20 @@ class UserRepository(private val userDb: UserDatabase) {
             userDb.userDao().insertUser(user)
         }
     }
-
+/*
     suspend fun getUserFromDb(uid: String): User? {
         return withContext(Dispatchers.Default) {
             val user = userDb.userDao().getUser(uid)
             user
         }
     }
+*/
+
+    suspend fun getUserFromDb(userId: String): User? =
+        supervisorScope {
+            val deferredResult = async(Dispatchers.IO) {
+                userDb.userDao().getUser(userId)
+            }
+            deferredResult.await()
+        }
 }

@@ -10,8 +10,10 @@
         <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>
         <item name="colorOnSecondary">@color/secondaryTextColor</item>
 
+        <item name="textAppearanceHeadline5">@style/TextAppearance.CustomHeadline5</item>
         <item name="textAppearanceHeadline6">@style/TextAppearance.CustomHeadline6</item>
         <item name="textAppearanceSubtitle1">@style/TextAppearance.CustomSubTitle1</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.CustomBody1</item>
 
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MyApp.SmallComponent</item>
         <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MyApp.MediumComponent</item>
@@ -36,16 +38,33 @@
         <item name="cornerSize">4dp</item>
     </style>
 
+    <style name="circleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 
     <!--FONTS-->
     <!--costom style for titles-->
     <style name="TextAppearance.CustomHeadline6" parent="TextAppearance.MaterialComponents.Headline6">
         <item name="fontFamily">@font/aclonica</item>
+        <item name="android:textColor">@color/secondaryTextColor</item>
+    </style>
+
+    <style name="TextAppearance.CustomHeadline5" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/aclonica</item>
+        <item name="android:textColor">@color/secondaryTextColor</item>
     </style>
 
     <!--custom style for subtitles-->
     <style name="TextAppearance.CustomSubTitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="fontFamily">@font/aclonica</item>
+        <item name="android:textColor">@color/secondaryTextColor</item>
+    </style>
+
+    <style name="TextAppearance.CustomBody1" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="fontFamily">@font/aclonica</item>
+        <item name="android:textColor">@color/secondaryTextColor</item>
     </style>
 
 

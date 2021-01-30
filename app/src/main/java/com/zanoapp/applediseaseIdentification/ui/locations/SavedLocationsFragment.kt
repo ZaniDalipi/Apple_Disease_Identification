@@ -1,4 +1,4 @@
-package com.zanoapp.applediseaseIdentification.uiController.locations
+package com.zanoapp.applediseaseIdentification.ui.locations
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -21,7 +21,7 @@ class SavedLocationsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.saved_locations_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_saved_locations, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

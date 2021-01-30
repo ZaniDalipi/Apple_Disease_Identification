@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".uiController.camera.CameraFragment">
+        tools:context=".ui.camera.CameraFragment">
 
         <TextureView
             android:id="@+id/view_finder_cameraX"
