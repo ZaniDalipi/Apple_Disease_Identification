@@ -77,13 +77,13 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch { getUserFromDb() }
     }
 
-    /**function that its intention is to setup one tap first components like:
+   /* *function that its intention is to setup one tap first components like:
      *  oneTapClient witch has to get the previous signed in account
      *  and than we have the signInRequest builder that will begin the sign in with previous authorized accounts just because it is true
      *
      *
-     * *//*
-    *//*private fun oneTapSignUpSetup() {
+     *
+    private fun oneTapSignUpSetup() {
         try {
             oneTapClient = Identity.getSignInClient(Activity())
             signInRequest = BeginSignInRequest.builder()
@@ -104,7 +104,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
             displaySignUpOptions()
         }
     }
-*//*
+
     private fun displaySignUpOptions() {
         oneTapClient.beginSignIn(signInRequest)
             .addOnSuccessListener { result ->
@@ -128,9 +128,9 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
                     Toast.LENGTH_SHORT
                 ).show()
             }
-    }*/
+    }
 
-
+*/
     /**Function that will be triggered after sign up button is clicked and the intention of this function is to initialize the needed objects to request an intent to the user ,and make sure to communicate with firebase backend server through defining the options */
     fun signInWithGoogle(activity: Activity) {
         val googleSignInOptions =
