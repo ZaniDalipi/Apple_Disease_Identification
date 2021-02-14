@@ -18,6 +18,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -46,10 +47,12 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
     private var callbackManager: CallbackManager? = CallbackManager.Factory.create()
     private lateinit var oneTapClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
+    lateinit var credential: AuthCredential
 
     /** Live Data authentication data holder that will monitor the state of user*/
     val _authenticationState = MutableLiveData<AuthenticationState>()
     val authenticationState: LiveData<AuthenticationState> = _authenticationState
+
 
     private val _showOneTapUI = MutableLiveData(true)
     var showOneTapUI: LiveData<Boolean> = _showOneTapUI
@@ -72,12 +75,10 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
     init {
         _user.value = auth.currentUser
         checkIfUseIsAuthenticated()
-      //  oneTapSignUpSetup()
+        //  oneTapSignUpSetup()
         Log.i(TAG_VIEWMODEL, "_user_value(init): ${_user.value?.email}")
         viewModelScope.launch { getUserFromDb() }
     }
-
-
 
 
     /**Function that will be triggered after sign up button is clicked and the intention of this function is to initialize the needed objects to request an intent to the user ,and make sure to communicate with firebase backend server through defining the options */
@@ -102,12 +103,15 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
     fun firebaseAuthWithGoogle(account: GoogleSignInAccount, activity: Activity) {
         viewModelScope.launch {
             Log.i(TAG_VIEWMODEL, "firebaseAuthWithGoogle (account ID): ${account.id}")
-            val credentials = GoogleAuthProvider.getCredential(account.idToken, null)
-            auth.signInWithCredential(credentials).addOnCompleteListener { task ->
+            credential = GoogleAuthProvider.getCredential(account.idToken, null)
+            auth.signInWithCredential(credential).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     _user.value = auth.currentUser
                     _authenticationState.value = AuthenticationState.AUTHENTICATED
-                    Log.i(TAG_VIEWMODEL, "firebaseAuthWithGoogle:  the state of autheticationStateUser is : " + authenticationState.value)
+                    Log.i(
+                        TAG_VIEWMODEL,
+                        "firebaseAuthWithGoogle:  the state of autheticationStateUser is : " + authenticationState.value
+                    )
                     _userState.value = true
                     _user.value?.let { insertDataToRoomDB(it) }
 
@@ -129,9 +133,9 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
                         .show()
                 }
             }
+
         }
     }
-
 
     /** Function that will get the user that is last inserted in the Room Db and return that user for future usage in the app*/
     private fun getUserFromDb() = viewModelScope.launch {

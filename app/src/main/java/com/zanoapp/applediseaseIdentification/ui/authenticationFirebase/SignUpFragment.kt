@@ -43,7 +43,6 @@ class SignUpFragment : Fragment() {
         Log.i(LIFECYCLE_EVENTS, "onCreate: Has been called ${Math.random()}")
         super.onCreate(savedInstanceState)
         initViewModel()
-        //initGoogleSignInClient()
     }
 
     override fun onCreateView(
@@ -113,29 +112,6 @@ class SignUpFragment : Fragment() {
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        signUpViewModel.onActivityResult(requestCode, resultCode, data, Activity())
-        authenticationObserver()
-
-
-    }
-
-
-    /*Scared to delete this method it looks like its useless but iam scared :P */
-    private fun initGoogleSignInClient() {
-        auth = FirebaseAuth.getInstance()
-        val googleSignInOptions =
-            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                //.setLogSessionId(Math.random().toString())
-                .requestIdToken("939177967297-m8t18sqb3436mohhb50rgh9scvdrdcv7.apps.googleusercontent.com")
-                .requestEmail()
-                .build()
-
-        googleSignInClient = GoogleSignIn.getClient(requireContext(), googleSignInOptions)
-    }
-
     private fun initViewModel() {
         val application = Application()
         val viewModelFactory = SignUpViewModelFactory(application)
@@ -144,3 +120,5 @@ class SignUpFragment : Fragment() {
     }
 
 }
+
+
