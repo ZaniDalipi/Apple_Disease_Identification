@@ -23,35 +23,25 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <FrameLayout
-            android:id="@+id/control"
-            android:layout_width="match_parent"
-            android:layout_height="135dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="32dp"
-            android:background="@drawable/rounded_shape"
-            android:elevation="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintCircleRadius="@dimen/corner_radius"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/predictionText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="18dp"
                 android:elegantTextHeight="true"
+                style="?attr/shapeAppearanceSmallComponent"
                 android:paddingStart="24dp"
-                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginBottom="20dp"
                 android:text="@string/exampleDiseaseNames"
                 android:textAlignment="textStart"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="#3C3B3B"
+                android:textAppearance="?attr/textAppearanceCaption"
                 android:textSize="17sp" />
 
-        </FrameLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

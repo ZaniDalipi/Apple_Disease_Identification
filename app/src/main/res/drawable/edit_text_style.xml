@@ -5,12 +5,13 @@
         android:right="2dp"
         android:bottom="2dp"/>
 
-    <corners
+    <corners android:bottomRightRadius="38dp"
+        android:bottomLeftRadius="16dp"
         android:topLeftRadius="38dp"
-        android:topRightRadius="38dp"/>
+        android:topRightRadius="16dp"/>
     <gradient
         android:type="linear"
         android:startColor="#FFffffff"
-        android:endColor="#666A6B"
+        android:endColor="@color/secondaryColor"
         android:angle="270"/>
 </shape>

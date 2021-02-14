@@ -1,5 +1,6 @@
 package com.zanoapp.applediseaseIdentification.ui.authenticationFirebase
 
+import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import android.content.IntentSender
@@ -20,15 +21,13 @@ import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.zanoapp.applediseaseIdentification.R
 import com.zanoapp.applediseaseIdentification.databinding.FragmentSignUpBinding
 import com.zanoapp.applediseaseIdentification.ui.authenticationFirebase.SignUpViewModel.AuthenticationState.*
-import com.zanoapp.applediseaseIdentification.utils.LIFECYCLE_EVENTS
-import com.zanoapp.applediseaseIdentification.utils.REQ_ONE_TAP
-import com.zanoapp.applediseaseIdentification.utils.TAG_ONE_TAP
-import com.zanoapp.applediseaseIdentification.utils.TAG_VIEWMODEL
+import com.zanoapp.applediseaseIdentification.utils.*
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 
 class SignUpFragment : Fragment() {
@@ -75,7 +74,6 @@ class SignUpFragment : Fragment() {
 
     private fun authenticationObserver() {
 
-        Log.i(LIFECYCLE_EVENTS, "authenticationObserver: has been called ${Math.random()} ")
         signUpViewModel.authenticationState.observe(viewLifecycleOwner, Observer { authState ->
             currentUserAvailable = signUpViewModel.user.value
             Log.i(TAG_VIEWMODEL, "authObserverCalled1")
@@ -106,7 +104,7 @@ class SignUpFragment : Fragment() {
 
         Log.i(LIFECYCLE_EVENTS, "onViewCreated: has been called ${Math.random()}")
 
-        binding.signUpButton.setOnClickListener {
+        binding.SignUpButton.setOnClickListener {
             signUpViewModel.signInWithGoogle(requireActivity())
             progressBar.visibility = View.VISIBLE
         }
@@ -118,7 +116,7 @@ class SignUpFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        signUpViewModel.onActivityResult(requestCode, resultCode, data, requireActivity())
+        signUpViewModel.onActivityResult(requestCode, resultCode, data, Activity())
         authenticationObserver()
 
 

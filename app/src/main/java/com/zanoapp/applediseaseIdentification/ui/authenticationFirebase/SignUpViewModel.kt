@@ -7,6 +7,7 @@ import android.content.IntentSender
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.*
+import androidx.lifecycle.Transformations.map
 import com.facebook.CallbackManager
 import com.zanoapp.applediseaseIdentification.R
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
@@ -46,13 +47,12 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
     private lateinit var oneTapClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
 
-    private val _showOneTapUI = MutableLiveData(true)
-    var showOneTapUI: LiveData<Boolean> = _showOneTapUI
-
-
     /** Live Data authentication data holder that will monitor the state of user*/
     val _authenticationState = MutableLiveData<AuthenticationState>()
     val authenticationState: LiveData<AuthenticationState> = _authenticationState
+
+    private val _showOneTapUI = MutableLiveData(true)
+    var showOneTapUI: LiveData<Boolean> = _showOneTapUI
 
 
     /**Live Data firebaseUser object,holding the latest user*/
@@ -77,58 +77,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch { getUserFromDb() }
     }
 
-    /**function that its intention is to setup one tap first components like:
-     *  oneTapClient witch has to get the previous signed in account
-     *  and than we have the signInRequest builder that will begin the sign in with previous authorized accounts just because it is true
-     *
-     *
-     * *//*
-    *//*private fun oneTapSignUpSetup() {
-        try {
-            oneTapClient = Identity.getSignInClient(Activity())
-            signInRequest = BeginSignInRequest.builder()
-                .setGoogleIdTokenRequestOptions(
-                    BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                        .setSupported(true)
-                        .setServerClientId("939177967297-m8t18sqb3436mohhb50rgh9scvdrdcv7.apps.googleusercontent.com")
-                        .setFilterByAuthorizedAccounts(true)
-                        .build()
-                ).build()
-        } catch (e: Exception) {
-            Toast.makeText(
-                Activity(),
-                "Couldn't start One Tap UI : ${e.localizedMessage}",
-                Toast.LENGTH_SHORT
-            ).show()
-        } finally {
-            displaySignUpOptions()
-        }
-    }
-*//*
-    private fun displaySignUpOptions() {
-        oneTapClient.beginSignIn(signInRequest)
-            .addOnSuccessListener { result ->
-                try {
-                    Activity().startIntentSenderForResult(
-                        result.pendingIntent.intentSender, REQ_ONE_TAP, null, 0, 0, 0, null
-                    )
-                } catch (e: IntentSender.SendIntentException) {
-                    Log.e(TAG_ONE_TAP, "Couldn't start One Tap UI : ${e.localizedMessage}")
-                    Toast.makeText(
-                        Activity(),
-                        "Couldn't start One Tap UI : ${e.localizedMessage}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-            .addOnFailureListener {
-                Toast.makeText(
-                    Activity(),
-                    "Sorry Something went wrong with one tap ${it.localizedMessage}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-    }*/
+
 
 
     /**Function that will be triggered after sign up button is clicked and the intention of this function is to initialize the needed objects to request an intent to the user ,and make sure to communicate with firebase backend server through defining the options */
@@ -150,7 +99,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
 
     /** Function that will check if the credentials are right , check if  task that has to be executed is successfully executed,
      *  and also provide the app with current user data than can be observed in different circumstances*/
-    private fun firebaseAuthWithGoogle(account: GoogleSignInAccount, activity: Activity) {
+    fun firebaseAuthWithGoogle(account: GoogleSignInAccount, activity: Activity) {
         viewModelScope.launch {
             Log.i(TAG_VIEWMODEL, "firebaseAuthWithGoogle (account ID): ${account.id}")
             val credentials = GoogleAuthProvider.getCredential(account.idToken, null)
@@ -158,6 +107,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
                 if (task.isSuccessful) {
                     _user.value = auth.currentUser
                     _authenticationState.value = AuthenticationState.AUTHENTICATED
+                    Log.i(TAG_VIEWMODEL, "firebaseAuthWithGoogle:  the state of autheticationStateUser is : " + authenticationState.value)
                     _userState.value = true
                     _user.value?.let { insertDataToRoomDB(it) }
 
@@ -195,7 +145,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
     /** Function that will insert the user that is signed up after the intent is finished and the sign up has been successfully */
     private fun insertDataToRoomDB(firebaseUser: FirebaseUser) {
         _user.value = firebaseUser
-        // Log.i(TAG, "user_value(inserting to db): ${_user.value?.email}")
+        Log.i(TAG_VIEWMODEL, "user_value(inserting to db): ${_user.value?.email}")
         viewModelScope.launch {
             val currentUser = User(
                 uid = _user.value?.uid!!,
@@ -221,6 +171,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
                         TAG_VIEWMODEL,
                         "checked authentication inside onActivityResult(ViewModel) : ${authenticationState.value} "
                     )
+
 
                     firebaseAuthWithGoogle(account!!, activity)
                 } catch (e: ApiException) {

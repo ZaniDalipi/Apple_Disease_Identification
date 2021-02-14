@@ -33,7 +33,10 @@
     <string name="user_name">user name :</string>
     <string name="sign_out">Sign out</string>
     <string name="sign_up_with_google">Sign Up with Google</string>
-    <string name="example_hint_email">example@gmail.com</string>
+    <string name="sign_up_with_email">Sign Up Now!!!</string>
+    <string name="example_hint_email">Email</string>
     <string name="example_user_hint">Example Example</string>
     <string name="hint">Take care for our environment by using less pesticides, and be more efficient</string>
+    <string name="login_text">Or login</string>
+    <string name="plant_managment">Plant Managment</string>
 </resources>

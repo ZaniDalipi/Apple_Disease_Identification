@@ -2,6 +2,6 @@
 <resources>
     <array name="preloaded_fonts" translatable="false">
         <item>@font/aclonica</item>
-        <item>@font/vampiro_one</item>
+        <item>@font/rubik_light</item>
     </array>
 </resources>

@@ -7,10 +7,12 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
@@ -24,6 +26,7 @@ import com.zanoapp.applediseaseIdentification.ui.authenticationFirebase.SignUpVi
 import com.zanoapp.applediseaseIdentification.ui.authenticationFirebase.SignUpViewModelFactory
 import com.zanoapp.applediseaseIdentification.utils.REQ_ONE_TAP
 import com.zanoapp.applediseaseIdentification.utils.TAG_ONE_TAP
+import com.zanoapp.applediseaseIdentification.utils.TAG_VIEWMODEL
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -46,7 +49,11 @@ class MainActivity : AppCompatActivity() {
 
         floatingActionButton.setOnClickListener {
             //findNavController(R.id.my_nav_host_fragment).navigate(R.id.action_mainActivity_to_cameraFragment)
-            Snackbar.make(it,"Saved your data with location and the top 3 diseases that were classified in",Snackbar.LENGTH_LONG).show()
+            Snackbar.make(
+                it,
+                "Saved your data with location and the top 3 diseases that were classified in",
+                Snackbar.LENGTH_LONG
+            ).show()
         }
 
         val host: NavHostFragment = supportFragmentManager
@@ -62,15 +69,16 @@ class MainActivity : AppCompatActivity() {
 
         val navController = host.navController
         setupBottomNavBarWithNavigation(navController)
-              navController.addOnDestinationChangedListener {_ , destination, _ ->
-                      when (destination.id) {
-                          R.id.cameraFragment -> showBottomNav()
-                          R.id.userProfileDataFragment -> showBottomNav()
-                          R.id.locationFragment -> showBottomNav()
-                          else -> hideBottomNav()
-                      }
-                  }
-              }
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.cameraFragment -> showBottomNav()
+                R.id.userProfileDataFragment -> showBottomNav()
+                R.id.locationFragment -> showBottomNav()
+                else -> hideBottomNav()
+            }
+        }
+    }
+
     private fun showBottomNav() {
         bottomNav.visibility = View.VISIBLE
         fab.visibility = View.VISIBLE
@@ -95,8 +103,5 @@ class MainActivity : AppCompatActivity() {
 
         signUpViewModel.onActivityResult(requestCode, resultCode, data, this)
     }
-
-
-
 
 }
