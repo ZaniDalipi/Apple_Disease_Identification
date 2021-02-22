@@ -54,6 +54,10 @@
             app:popUpToInclusive="false" />
 
     </fragment>
+    <fragment
+        android:id="@+id/locationFragment"
+        android:name="com.zanoapp.applediseaseIdentification.ui.locations.SavedLocationsFragment"
+        android:label="SavedLocationsFragment" />
 
 
 </navigation>

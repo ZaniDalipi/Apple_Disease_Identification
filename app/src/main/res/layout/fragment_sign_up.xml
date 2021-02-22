@@ -10,8 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:theme="@style/AppTheme" >
+        android:layout_height="match_parent">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/titleTextView"
@@ -52,7 +51,7 @@
 
         </com.google.android.material.textview.MaterialTextView>
 
-    <!--email-->
+        <!--email-->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/email"
@@ -80,17 +79,17 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passwordEditText"
+            style="@style/Widget.App.TextInputLayout.Custom"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             android:hint="password"
             app:endIconMode="password_toggle"
-            app:layout_constraintTop_toBottomOf="@id/email"
-            style="@style/Widget.App.TextInputLayout.Custom">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/email">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -103,17 +102,17 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/confirmPasswordEditText"
+            style="@style/Widget.App.TextInputLayout.Custom"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             android:hint="re-enter password"
             app:endIconMode="password_toggle"
-            app:layout_constraintTop_toBottomOf="@id/passwordEditText"
-            style="@style/Widget.App.TextInputLayout.Custom">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/passwordEditText">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -136,7 +135,6 @@
             android:rotationX="18"
             android:text="@string/sign_up_with_email"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.554"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/confirmPasswordEditText" />
 
@@ -177,7 +175,6 @@
             android:text="@string/sign_up_with_google"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.565"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/signinGoogleTextView" />
 
