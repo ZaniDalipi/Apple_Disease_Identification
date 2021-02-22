@@ -3,16 +3,10 @@ package com.zanoapp.applediseaseIdentification.ui.authenticationFirebase
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
-import android.content.IntentSender
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.*
-import androidx.lifecycle.Transformations.map
 import com.facebook.CallbackManager
-import com.zanoapp.applediseaseIdentification.R
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.Identity
-import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -25,31 +19,25 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.zanoapp.applediseaseIdentification.localDataPersistence.User
 import com.zanoapp.applediseaseIdentification.localDataPersistence.UserDatabase
 import com.zanoapp.applediseaseIdentification.localDataPersistence.UserRepository
-import com.zanoapp.applediseaseIdentification.utils.REGISTRATION_SIGN_IN_CODE
-import com.zanoapp.applediseaseIdentification.utils.REQ_ONE_TAP
-import com.zanoapp.applediseaseIdentification.utils.TAG_ONE_TAP
-import com.zanoapp.applediseaseIdentification.utils.TAG_VIEWMODEL
+import com.zanoapp.applediseaseIdentification.utils.*
 import kotlinx.coroutines.*
-import java.lang.Exception
 
 
 class SignUpViewModel(application: Application) : AndroidViewModel(application) {
 
     enum class AuthenticationState {
-        UNAUTHENTICATED,
         AUTHENTICATED,
+        UNAUTHENTICATED,
         INVALID_AUTH
     }
 
     private val userRepository = UserRepository(UserDatabase.getInstance(application))
-    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
+    var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var googleSignInClient: GoogleSignInClient
     private var callbackManager: CallbackManager? = CallbackManager.Factory.create()
-    private lateinit var oneTapClient: SignInClient
-    private lateinit var signInRequest: BeginSignInRequest
     lateinit var credential: AuthCredential
 
-    /** Live Data authentication data holder that will monitor the state of user*/
+    /** Live Data authentication data holder that will monitor the state of user (its state can be AUTHENTICATED, UNAUTHENTICATED, INVALID_AUTH*/
     val _authenticationState = MutableLiveData<AuthenticationState>()
     val authenticationState: LiveData<AuthenticationState> = _authenticationState
 
@@ -73,10 +61,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
 
 
     init {
-        _user.value = auth.currentUser
-        checkIfUseIsAuthenticated()
-        //  oneTapSignUpSetup()
-        Log.i(TAG_VIEWMODEL, "_user_value(init): ${_user.value?.email}")
+        _user.value = firebaseAuth.currentUser
         viewModelScope.launch { getUserFromDb() }
     }
 
@@ -85,7 +70,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
     fun signInWithGoogle(activity: Activity) {
         val googleSignInOptions =
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("939177967297-m8t18sqb3436mohhb50rgh9scvdrdcv7.apps.googleusercontent.com")
+                .requestIdToken(API_KEY)
                 .requestEmail()
                 .build()
 
@@ -96,25 +81,25 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
             googleDialogIntent,
             REGISTRATION_SIGN_IN_CODE
         )
+
     }
 
     /** Function that will check if the credentials are right , check if  task that has to be executed is successfully executed,
      *  and also provide the app with current user data than can be observed in different circumstances*/
-    fun firebaseAuthWithGoogle(account: GoogleSignInAccount, activity: Activity) {
+    private fun firebaseAuthWithGoogle(account: GoogleSignInAccount, activity: Activity) {
         viewModelScope.launch {
-            Log.i(TAG_VIEWMODEL, "firebaseAuthWithGoogle (account ID): ${account.id}")
             credential = GoogleAuthProvider.getCredential(account.idToken, null)
-            auth.signInWithCredential(credential).addOnCompleteListener { task ->
+            firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    _user.value = auth.currentUser
+                    _user.value = firebaseAuth.currentUser
                     _authenticationState.value = AuthenticationState.AUTHENTICATED
+                    _userState.value = true
+                    _user.value?.let { insertDataToRoomDB(it) }
                     Log.i(
                         TAG_VIEWMODEL,
                         "firebaseAuthWithGoogle:  the state of autheticationStateUser is : " + authenticationState.value
                     )
-                    _userState.value = true
-                    _user.value?.let { insertDataToRoomDB(it) }
-
+                    Log.i(TAG_VIEWMODEL, "firebaseAuthWithGoogle (account ID): ${account.id}")
                     Log.i(
                         TAG_VIEWMODEL,
                         "user_value(firebaseAuthWithGoogleFun): ${_user.value?.email}"
@@ -170,52 +155,49 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
                 val completedTask = GoogleSignIn.getSignedInAccountFromIntent(data)
                 try {
                     val account = completedTask.getResult(ApiException::class.java)
-                    _authenticationState.value = AuthenticationState.AUTHENTICATED
                     Log.i(
                         TAG_VIEWMODEL,
                         "checked authentication inside onActivityResult(ViewModel) : ${authenticationState.value} "
                     )
-
-
                     firebaseAuthWithGoogle(account!!, activity)
                 } catch (e: ApiException) {
                     Log.e(TAG_VIEWMODEL, "Google sign in failed", e)
                 }
             }
-            REQ_ONE_TAP -> {
-                try {
-                    val credentials = oneTapClient.getSignInCredentialFromIntent(data)
-                    val idToken = credentials.googleIdToken
-                    val username = credentials.id
-                    val password = credentials.password
+            /*           REQ_ONE_TAP -> {
+                           try {
+                               val credentials = oneTapClient.getSignInCredentialFromIntent(data)
+                               val idToken = credentials.googleIdToken
+                               val username = credentials.id
+                               val password = credentials.password
 
-                    when {
-                        idToken != null -> {
-                            val accountTask = GoogleSignIn.getSignedInAccountFromIntent(data)
-                            val account = accountTask.getResult(ApiException::class.java)
-                            account?.let { firebaseAuthWithGoogle(it, Activity()) }
-                            Log.d(TAG_ONE_TAP, "Got ID token.")
-                        }
-                        password != null -> {
-                            // auth with backend
-                            Log.d(TAG_ONE_TAP, "Got ID token.")
+                               when {
+                                   idToken != null -> {
+                                       val accountTask = GoogleSignIn.getSignedInAccountFromIntent(data)
+                                       val account = accountTask.getResult(ApiException::class.java)
+                                       account?.let { firebaseAuthWithGoogle(it, Activity()) }
+                                       Log.d(TAG_ONE_TAP, "Got ID token.")
+                                   }
+                                   password != null -> {
+                                       // auth with backend
+                                       Log.d(TAG_ONE_TAP, "Got ID token.")
 
-                        }
-                        else -> {
-                            Log.d(TAG_ONE_TAP, "Got ID token and password.")
-                        }
-                    }
-                } catch (e: ApiException) {
-                    Log.e(TAG_ONE_TAP, "one tap Google sign in failed", e)
-                }
-            }
+                                   }
+                                   else -> {
+                                       Log.d(TAG_ONE_TAP, "Got ID token and password.")
+                                   }
+                               }
+                           } catch (e: ApiException) {
+                               Log.e(TAG_ONE_TAP, "one tap Google sign in failed", e)
+                           }
+                       }*/
 
         }
     }
 
 
     /** function that will check if a user is authenticated in the beginning of starting the application*/
-    private fun checkIfUseIsAuthenticated() {
+    fun checkIfUserIsAuthenticated() {
         if (_user.value != null) {
             _authenticationState.value = AuthenticationState.AUTHENTICATED
             _userState.value = true
@@ -224,4 +206,41 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
             _userState.value = false
         }
     }
+
+   /* fun loginWithFirebase(email: String, password: String) {
+
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener {
+                if (it.isSuccessful){
+                    // succesfully logged in
+                    _user.value = firebaseAuth.currentUser
+                    _authenticationState.value = AuthenticationState.AUTHENTICATED
+                } else {
+                    Toast.makeText(
+                        getApplication(),
+                        "Login Failure" + it.exception,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+        }
+    }
+
+    fun registerWithFirebase(email: String, password: String) {
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    _user.postValue(firebaseAuth.currentUser)
+                    _authenticationState.value = AuthenticationState.AUTHENTICATED
+                } else {
+                    Toast.makeText(
+                        getApplication(),
+                        "Register Failure" + task.exception,
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                }
+
+            }
+    }*/
 }

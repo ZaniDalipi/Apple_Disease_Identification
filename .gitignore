@@ -11,4 +11,6 @@
 /build
 /captures
 .externalNativeBuild
+/app/src/main/java/com/zanoapp/applediseaseIdentification/utils/Constants.kt
 .cxx
+

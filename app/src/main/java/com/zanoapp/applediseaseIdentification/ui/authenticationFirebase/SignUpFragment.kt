@@ -1,9 +1,6 @@
 package com.zanoapp.applediseaseIdentification.ui.authenticationFirebase
 
-import android.app.Activity
 import android.app.Application
-import android.content.Intent
-import android.content.IntentSender
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,13 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.Identity
-import com.google.android.gms.auth.api.identity.SignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.zanoapp.applediseaseIdentification.R
@@ -32,7 +22,6 @@ import kotlinx.android.synthetic.main.fragment_sign_up.*
 
 class SignUpFragment : Fragment() {
 
-    private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: FragmentSignUpBinding
     private lateinit var signUpViewModel: SignUpViewModel
@@ -43,16 +32,33 @@ class SignUpFragment : Fragment() {
         Log.i(LIFECYCLE_EVENTS, "onCreate: Has been called ${Math.random()}")
         super.onCreate(savedInstanceState)
         initViewModel()
+        Log.i(
+            TAG_VIEWMODEL,
+            "onCreate: user status here is ${signUpViewModel.authenticationState.value}"
+        )
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        userObserver()
+        Log.i(TAG_VIEWMODEL, "onStart: User state is : ${signUpViewModel.user.value}")
+        authenticationObserver()
+        Log.i(
+            TAG_VIEWMODEL,
+            "onStart: Authentication state : ${signUpViewModel.authenticationState.value} "
+        )
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Log.i(LIFECYCLE_EVENTS, "onCreateView: has been called ${Math.random()}")
         binding =
             DataBindingUtil.inflate(layoutInflater, R.layout.fragment_sign_up, container, false)
         binding.lifecycleOwner = this
+
 
         return binding.root
     }
@@ -65,6 +71,7 @@ class SignUpFragment : Fragment() {
             firebaseUser?.let { currentUser ->
                 currentUserAvailable = currentUser
                 Log.i(TAG_VIEWMODEL, "#2 user data : ${currentUserAvailable!!.email}")
+                signUpViewModel.checkIfUserIsAuthenticated()
                 authenticationObserver()
             }
             Log.i(TAG_VIEWMODEL, "userObserverCalled")
@@ -73,10 +80,10 @@ class SignUpFragment : Fragment() {
 
     private fun authenticationObserver() {
 
-        signUpViewModel.authenticationState.observe(viewLifecycleOwner, Observer { authState ->
+        signUpViewModel.authenticationState.observe(viewLifecycleOwner, Observer {
             currentUserAvailable = signUpViewModel.user.value
-            Log.i(TAG_VIEWMODEL, "authObserverCalled1")
-            when (authState) {
+            Log.i(TAG_VIEWMODEL, "authenticationObserver: method has been called ")
+            when (it) {
                 AUTHENTICATED -> {
                     if (findNavController().currentDestination?.id == R.id.signUpFragment) {
                         findNavController().navigate(R.id.action_signUpFragment_to_userProfileDataFragment)
@@ -94,13 +101,12 @@ class SignUpFragment : Fragment() {
                     Toast.makeText(activity, "something went wrong", Toast.LENGTH_SHORT).show()
                 }
             }
-            Log.i(TAG_VIEWMODEL, "observer value is: ${authState.name}")
+            Log.i(TAG_VIEWMODEL, "observer value is: ${it.name}")
         })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         Log.i(LIFECYCLE_EVENTS, "onViewCreated: has been called ${Math.random()}")
 
         binding.SignUpButton.setOnClickListener {
@@ -119,6 +125,67 @@ class SignUpFragment : Fragment() {
 
     }
 
+
+    /* private fun loginUser() {
+         binding.signUpWithEmailButton.setOnClickListener {
+             if (signUpViewModel.firebaseAuth.currentUser == null) {
+                 val email = binding.email.editText?.text.toString()
+                 val password = binding.passwordEditText.editText?.text.toString()
+
+                 if (email.isNotEmpty() && password.isNotEmpty()) {
+                     if (email != signUpViewModel.userObjectFromDb.value?.email) {
+                         signUpViewModel.loginWithFirebase(email, password)
+                         Toast.makeText(
+                             context,
+                             "Succesfully login in , Welcome ${signUpViewModel.user.value?.email}",
+                             Toast.LENGTH_SHORT
+                         ).show()
+                         if (findNavController().currentDestination?.id == R.id.signUpFragment) {
+                             findNavController().navigate(R.id.action_signUpFragment_to_userProfileDataFragment)
+                         }
+
+
+                     }
+
+
+                 } else {
+                     Toast.makeText(
+                         context,
+                         "You re already signed in by the next email : ${auth.currentUser!!.email}",
+                         Toast.LENGTH_SHORT
+                     ).show()
+                 }
+             }
+         }
+     }
+ */
+    /* private fun registerNewUser() {
+         binding.SignUpButton.setOnClickListener {
+             val email = binding.email.editText?.text.toString()
+             val password = binding.passwordEditText.editText?.text.toString()
+             val confirmPassword = binding.confirmPasswordEditText.editText?.text.toString()
+
+             it.let {
+                 if (email.isNotEmpty() && password.isNotEmpty()) {
+                     if (password == confirmPassword) {
+                         signUpViewModel.registerWithFirebase(email, password)
+                         if (findNavController().currentDestination?.id == R.id.signUpFragment) {
+                             findNavController().navigate(R.id.action_signUpFragment_to_userProfileDataFragment)
+                         }
+                     }
+                 } else {
+                     Toast.makeText(
+                         context,
+                         "Email Address and Password Must Be Entered",
+                         Toast.LENGTH_SHORT
+                     ).show()
+                 }
+             }
+
+         }
+     }
+
+ }*/
 }
 
 

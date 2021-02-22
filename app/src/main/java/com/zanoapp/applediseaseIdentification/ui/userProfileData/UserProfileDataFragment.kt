@@ -77,6 +77,7 @@ class UserProfileDataFragment : Fragment() {
         auth.signOut()
         googleSignInClient.signOut().addOnCompleteListener {
             Toast.makeText(activity,"you have logged out : ${signUpViewModel.user.value?.displayName} ",Toast.LENGTH_SHORT).show()
+            signUpViewModel._userState.value = false
             signUpViewModel._authenticationState.value = SignUpViewModel.AuthenticationState.UNAUTHENTICATED
             findNavController().navigate(R.id.action_userProfileDataFragment_to_signUpFragment)
         }

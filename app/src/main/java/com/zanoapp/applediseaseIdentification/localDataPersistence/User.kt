@@ -11,5 +11,5 @@ data class User(
     var uid:String = CURRENT_USER_ID,
     var name: String,
     var email: String,
-    var isAuthenticated: Boolean = false
+    var isAuthenticated: Boolean
     )

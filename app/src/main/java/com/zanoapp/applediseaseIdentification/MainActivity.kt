@@ -16,17 +16,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.Identity
-import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.zanoapp.applediseaseIdentification.ui.authenticationFirebase.SignUpViewModel
 import com.zanoapp.applediseaseIdentification.ui.authenticationFirebase.SignUpViewModelFactory
-import com.zanoapp.applediseaseIdentification.utils.REQ_ONE_TAP
-import com.zanoapp.applediseaseIdentification.utils.TAG_ONE_TAP
-import com.zanoapp.applediseaseIdentification.utils.TAG_VIEWMODEL
+
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -97,6 +92,7 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return findNavController(R.id.my_nav_host_fragment).navigateUp(appBarConfiguration)
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
