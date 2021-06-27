@@ -3,163 +3,161 @@ package com.zanoapp.applediseaseIdentification.ui.camera
 
 import android.app.Activity
 import android.content.pm.PackageManager
-import android.graphics.Matrix
+import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Size
-import android.view.*
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.TextureView
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.camera.core.*
+import androidx.camera.core.Camera
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+
+import androidx.camera.view.PreviewView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
-import kotlinx.android.synthetic.main.fragment_camera.*
+import com.google.common.util.concurrent.ListenableFuture
+import com.zanoapp.applediseaseIdentification.MainActivity
+import com.zanoapp.applediseaseIdentification.R
+import com.zanoapp.applediseaseIdentification.databinding.FragmentCameraBinding
+import com.zanoapp.applediseaseIdentification.ui.camera.ImageAnalyzer.Companion.DIM_IMG_SIZE_X
+import com.zanoapp.applediseaseIdentification.ui.camera.ImageAnalyzer.Companion.DIM_IMG_SIZE_Y
+import com.zanoapp.applediseaseIdentification.utils.CONTROL_LIFECYCLE_METHODS
+import com.zanoapp.applediseaseIdentification.utils.TRACK_FRAGCAMBITMAP_STATE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import java.util.concurrent.Executors
-import com.zanoapp.applediseaseIdentification.databinding.FragmentCameraBinding
 
 
 //arbitrary value to track the permission request
 private const val REQUEST_CODE_PERMISSION = 10
 private val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.CAMERA)
 
+
 class CameraFragment : Fragment(), LifecycleOwner,
     ActivityCompat.OnRequestPermissionsResultCallback {
 
+    private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
+    private lateinit var imageAnalyzer: ImageAnalyzer
     private lateinit var viewModel: CameraViewModel
-    private var checkedPermissions = false
-    private var runClassifier: Boolean = true
+    private var runClassifier = false
     private val job = Job()
-    private val uiCoroutineScope = CoroutineScope(Dispatchers.Main + job)
-    private val executor = Executors.newSingleThreadExecutor()
-    private lateinit var viewFinder: TextureView
+    private var myBitmap: Bitmap? = null
 
-    // private lateinit var bitmap:Bitmap
+    private val uiCoroutineScope = CoroutineScope(Dispatchers.Main + job)
+    private lateinit var viewFinder: PreviewView
+    private lateinit var preview: Preview
+    private var camera: Camera? = null
+    private var _binding: FragmentCameraBinding? = null
+    private val binding
+        get() = _binding!!
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        val binding = FragmentCameraBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = this
-        viewFinder = binding.viewFinderCameraX
+    ): View {
+        _binding = FragmentCameraBinding.inflate(layoutInflater, container, false)
 
         return binding.root
-
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.i(CONTROL_LIFECYCLE_METHODS, "onViewCreated: called")
 
-        if (allPermissionsGranted()) {
-            viewFinder.post { startCamera() }
-        } else {
-            ActivityCompat.requestPermissions(
-                requireActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSION
-            )
-        }
-        viewFinder.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
-            updateTransform()
-        }
+        val container = view as ConstraintLayout
+        viewFinder = container.findViewById(R.id.viewFinder)
+
+
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        //val cameraViewModelFactory = CameraViewModelFactory()
-        // viewModel = ViewModelProvider(this,cameraViewModelFactory).get(CameraViewModel::class.java)
-    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.i(CONTROL_LIFECYCLE_METHODS, "onCreate: called inside the fragment")
+        try {
+            imageAnalyzer = ImageAnalyzer(Activity())
+            runClassifier = true
+            Toast.makeText(activity, "Model and labels has been loaded", Toast.LENGTH_SHORT).show()
 
+        } catch (io: Exception) {
+            Toast.makeText(activity, "Something went wrong ${io.message}", Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
 
     private fun startCamera() {
+        Log.i(CONTROL_LIFECYCLE_METHODS, "startCamera: Called")
 
-        if (!checkedPermissions && !allPermissionsGranted()) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                REQUIRED_PERMISSIONS,
-                REQUEST_CODE_PERMISSION
-            )
-        } else {
-            viewFinder.post { startCamera() }
-            checkedPermissions = true
-        }
+        cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
-        val previewConfig = PreviewConfig.Builder().apply {
-            setTargetResolution(Size(640, 480))
-            setLensFacing(CameraX.LensFacing.BACK)
-        }.build()
-//        build the viewfinder use case
-        val preview = Preview(previewConfig)
+        cameraProviderFuture.addListener({
+            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-        uiCoroutineScope.launch {
-            //        code that will replace the layout everytime that the layout is recomputed
-            preview.setOnPreviewOutputUpdateListener {
-                //            remove and re add it (surfacetexureview)
-                val parent = viewFinder.parent as ViewGroup
-                parent.removeView(viewFinder)
-                parent.addView(viewFinder, 1)
+            //Preview
+            preview = Preview.Builder().build()
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
-                viewFinder.surfaceTexture = it.surfaceTexture
-                updateTransform()
+            cameraProvider.unbindAll()
+
+            try {
+                camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview)
+                preview.setSurfaceProvider(viewFinder.surfaceProvider)
+                myBitmap = viewFinder.bitmap
+                Log.d(
+                    TRACK_FRAGCAMBITMAP_STATE,
+                    "startCamera: this is inside the try and the bitmap is ${viewFinder.bitmap}"
+                )
+            } catch (ex: Exception) {
+                showToast("Failed to setup camera preview")
             }
-        }
-        preview.removePreviewOutputListener()
-
-
-        val imageAnalysisConfig = ImageAnalysisConfig.Builder().apply {
-            setTargetResolution(Size(viewFinder.width, viewFinder.height))
-            setImageReaderMode(ImageAnalysis.ImageReaderMode.ACQUIRE_LATEST_IMAGE)
-        }.build()
-
-        val imageAnalysisUseCase = ImageAnalysis(imageAnalysisConfig).apply {
-
-
-        }
-
-        CameraX.bindToLifecycle(this, preview, imageAnalysisUseCase)
-
+        }, ContextCompat.getMainExecutor(context))
     }
 
-    // viewfinder transformations that will make sure rotations work well
-    private fun updateTransform() {
-        val matrix = Matrix()
+    override fun onResume() {
+        super.onResume()
+        Log.i(CONTROL_LIFECYCLE_METHODS, "onResume: called")
 
-        val centerX = viewFinder.width / 2f
-        val centerY = viewFinder.height / 2f
-
-        val rotateDegrees = when (viewFinder.display.rotation) {
-            Surface.ROTATION_0 -> 0
-            Surface.ROTATION_90 -> 90
-            Surface.ROTATION_180 -> 180
-            Surface.ROTATION_270 -> 270
-            else -> return
+        if (allPermissionsGranted()) {
+            startCamera()
+            runClassifier = true
+            periodicClassify.run()
         }
 
-        matrix.postRotate(-rotateDegrees.toFloat(), centerX, centerY)
-
-//        apply transformation to textureview
-        viewFinder.setTransform(matrix)
-
-
+        Log.d(
+            TRACK_FRAGCAMBITMAP_STATE,
+            "onResume: is view finder visible :${viewFinder.isVisible} && view finder bitmap state is ${viewFinder.bitmap}"
+        )
     }
 
-    /**
-    CAMERA PERMISSION
-     */
+    /** CAMERA PERMISSION*/
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+        Log.i(CONTROL_LIFECYCLE_METHODS, "onRequestPermissionsResult: ")
         checkForCameraPermission()
 
         if (requestCode == REQUEST_CODE_PERMISSION) {
+            Log.d(
+                TRACK_FRAGCAMBITMAP_STATE,
+                "onRequestPermissionsResult: ViewFinder bitmap is before startCamera() ${viewFinder.bitmap}"
+            )
             if (allPermissionsGranted())
-                viewFinder.post { startCamera() }
+                startCamera()
+            Log.d(
+                TRACK_FRAGCAMBITMAP_STATE,
+                "onRequestPermissionsResult: ViewFinder bitmap is after startCamera() ${viewFinder.bitmap}"
+            )
         } else {
             Toast.makeText(
                 requireContext(),
@@ -172,8 +170,9 @@ class CameraFragment : Fragment(), LifecycleOwner,
 
     private fun allPermissionsGranted(): Boolean {
         for (permission in REQUIRED_PERMISSIONS) {
+            Log.i(CONTROL_LIFECYCLE_METHODS, "allPermissionsGranted: called")
             if (ContextCompat.checkSelfPermission(
-                    context!!, permission
+                    requireContext(), permission
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 return false
@@ -183,8 +182,9 @@ class CameraFragment : Fragment(), LifecycleOwner,
     }
 
     private fun checkForCameraPermission() {
+        Log.i(CONTROL_LIFECYCLE_METHODS, "checkForCameraPermission: called")
         if (allPermissionsGranted()) {
-            viewFinder.post { startCamera() }
+            startCamera()
         } else {
             ActivityCompat.requestPermissions(
                 this.requireActivity(),
@@ -192,42 +192,68 @@ class CameraFragment : Fragment(), LifecycleOwner,
                 REQUEST_CODE_PERMISSION
             )
         }
-        viewFinder.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
-            // updateTransform()
+    }
+
+
+    private fun classifyFrame() {
+
+        Log.i(CONTROL_LIFECYCLE_METHODS, "classifyFrame:called ")
+        if (activity == null) {
+            showToast("Failed to setup camera preview")
+            return
+        }
+
+
+        Log.d(
+            TRACK_FRAGCAMBITMAP_STATE,
+            "MyBitmap byte count ${myBitmap?.byteCount} && the source provide is  ${viewFinder.surfaceProvider}"
+        )
+
+        viewFinder.implementationMode = PreviewView.ImplementationMode.COMPATIBLE
+        val previewChild = viewFinder.getChildAt(0)
+        if (previewChild is TextureView) {
+            myBitmap = previewChild.getBitmap(DIM_IMG_SIZE_X, DIM_IMG_SIZE_Y)
+        }
+
+
+        var textToShow: String = ""
+        if (viewFinder.bitmap == null) {
+            showToast("the bitmap is null")
+        } else {
+            Log.d(TRACK_FRAGCAMBITMAP_STATE, "classifyFrame: bitmap value is $myBitmap")
+            textToShow = imageAnalyzer.classifyFrame(myBitmap!!)
+            myBitmap?.recycle()
+            showToast(textToShow)
         }
     }
 
-    private fun showToast(text: List<String>) {
+    private fun showToast(text: String) {
         val activity: Activity? = activity
-        activity?.runOnUiThread { predictionText.text = text.component1() }
+        activity?.runOnUiThread { binding.predictionText.text = text }
     }
 
-    /*  fun classifyFrame(){
+    private val ioScope = CoroutineScope(Dispatchers.IO + job)
 
-              bitmap = viewFinder.getBitmap(bitmap)
-              val textToShow =  classificationFragment.classifyframe(bitmap)
-              bitmap.recycle()
-              showToast(textToShow)
+    private val periodicClassify: Runnable =
+        Runnable {
+            if (runClassifier) {
+                classifyFrame()
+            }
+        }
 
-      }*/
-
-
-    /* private fun startClassifier(){
-         uiCoroutineScope.launch {
-             if (runClassifier) {
-                 classifyFrame()
-             }
-         }
-     }*/
 
     override fun onDetach() {
         super.onDetach()
+        Log.i(CONTROL_LIFECYCLE_METHODS, "onDetach: ")
         runClassifier = false
         job.cancel()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        Log.i(CONTROL_LIFECYCLE_METHODS, "onDestroyView: ")
+        _binding = null
 
     }
 }
+

@@ -18,8 +18,6 @@ import com.zanoapp.applediseaseIdentification.R
 import com.zanoapp.applediseaseIdentification.databinding.FragmentSignUpBinding
 import com.zanoapp.applediseaseIdentification.ui.authenticationFirebase.SignUpViewModel.AuthenticationState.*
 import com.zanoapp.applediseaseIdentification.utils.*
-import kotlinx.android.synthetic.main.fragment_sign_up.*
-
 class SignUpFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
@@ -29,17 +27,17 @@ class SignUpFragment : Fragment() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.i(LIFECYCLE_EVENTS, "onCreate: Has been called ${Math.random()}")
+
         super.onCreate(savedInstanceState)
         initViewModel()
         Log.i(
-            TAG_VIEWMODEL,
+            TRACK_SIGNUP_STATE,
             "onCreate: user status here is ${signUpViewModel.authenticationState.value}"
         )
 
     }
 
-    override fun onStart() {
+  /*  override fun onStart() {
         super.onStart()
         userObserver()
         Log.i(TAG_VIEWMODEL, "onStart: User state is : ${signUpViewModel.user.value}")
@@ -48,13 +46,13 @@ class SignUpFragment : Fragment() {
             TAG_VIEWMODEL,
             "onStart: Authentication state : ${signUpViewModel.authenticationState.value} "
         )
-    }
+    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.i(LIFECYCLE_EVENTS, "onCreateView: has been called ${Math.random()}")
+        Log.i(TRACK_LIFECYCLE_EVENTS, "onCreateView: has been called ${Math.random()}")
         binding =
             DataBindingUtil.inflate(layoutInflater, R.layout.fragment_sign_up, container, false)
         binding.lifecycleOwner = this
@@ -66,15 +64,14 @@ class SignUpFragment : Fragment() {
 
     private fun userObserver() {
 
-        Log.i(LIFECYCLE_EVENTS, "userObserver: Has been called ${Math.random()}")
+        Log.i(TRACK_LIFECYCLE_EVENTS, "userObserver: Has been called ${Math.random()}")
         signUpViewModel.user.observe(viewLifecycleOwner, Observer { firebaseUser ->
             firebaseUser?.let { currentUser ->
                 currentUserAvailable = currentUser
-                Log.i(TAG_VIEWMODEL, "#2 user data : ${currentUserAvailable!!.email}")
-                signUpViewModel.checkIfUserIsAuthenticated()
+                Log.i(TRACK_SIGNUP_STATE, "#2 user data : ${currentUserAvailable!!.email}")
                 authenticationObserver()
             }
-            Log.i(TAG_VIEWMODEL, "userObserverCalled")
+            Log.i(TRACK_SIGNUP_STATE, "userObserverCalled")
         })
     }
 
@@ -82,7 +79,7 @@ class SignUpFragment : Fragment() {
 
         signUpViewModel.authenticationState.observe(viewLifecycleOwner, Observer {
             currentUserAvailable = signUpViewModel.user.value
-            Log.i(TAG_VIEWMODEL, "authenticationObserver: method has been called ")
+            Log.i(TRACK_SIGNUP_STATE, "authenticationObserver: method has been called ")
             when (it) {
                 AUTHENTICATED -> {
                     if (findNavController().currentDestination?.id == R.id.signUpFragment) {
@@ -101,18 +98,19 @@ class SignUpFragment : Fragment() {
                     Toast.makeText(activity, "something went wrong", Toast.LENGTH_SHORT).show()
                 }
             }
-            Log.i(TAG_VIEWMODEL, "observer value is: ${it.name}")
+            Log.i(TRACK_SIGNUP_STATE, "observer value is: ${it.name}")
         })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.i(LIFECYCLE_EVENTS, "onViewCreated: has been called ${Math.random()}")
+        Log.i(TRACK_LIFECYCLE_EVENTS, "onViewCreated: has been called ${Math.random()}")
 
         binding.SignUpButton.setOnClickListener {
             signUpViewModel.signInWithGoogle(requireActivity())
-            progressBar.visibility = View.VISIBLE
+           // progressBar.visibility = View.VISIBLE
         }
+        signupWithEmail()
         authenticationObserver()
         userObserver()
 
@@ -123,6 +121,13 @@ class SignUpFragment : Fragment() {
         val viewModelFactory = SignUpViewModelFactory(application)
         signUpViewModel = ViewModelProvider(this, viewModelFactory).get(SignUpViewModel::class.java)
 
+
+    }
+
+    fun signupWithEmail() {
+        binding.signUpWithEmailButton.setOnClickListener {
+            findNavController().navigate(R.id.action_signUpFragment_to_userProfileDataFragment)
+        }
     }
 
 

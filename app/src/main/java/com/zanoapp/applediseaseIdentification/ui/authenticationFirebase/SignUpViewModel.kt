@@ -3,14 +3,11 @@ package com.zanoapp.applediseaseIdentification.ui.authenticationFirebase
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
-import android.content.IntentSender
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.*
 import com.facebook.CallbackManager
-import com.zanoapp.applediseaseIdentification.R
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -25,10 +22,9 @@ import com.zanoapp.applediseaseIdentification.localDataPersistence.UserDatabase
 import com.zanoapp.applediseaseIdentification.localDataPersistence.UserRepository
 import com.zanoapp.applediseaseIdentification.utils.REGISTRATION_SIGN_IN_CODE
 import com.zanoapp.applediseaseIdentification.utils.REQ_ONE_TAP
-import com.zanoapp.applediseaseIdentification.utils.TAG_ONE_TAP
-import com.zanoapp.applediseaseIdentification.utils.TAG_VIEWMODEL
+import com.zanoapp.applediseaseIdentification.utils.TRACK_TAG_ONE_TAP
+import com.zanoapp.applediseaseIdentification.utils.TRACK_SIGNUP_STATE
 import kotlinx.coroutines.*
-import java.lang.Exception
 
 
 class SignUpViewModel(application: Application) : AndroidViewModel(application) {
@@ -73,7 +69,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
         _user.value = auth.currentUser
         checkIfUseIsAuthenticated()
       //  oneTapSignUpSetup()
-        Log.i(TAG_VIEWMODEL, "_user_value(init): ${_user.value?.email}")
+        Log.i(TRACK_SIGNUP_STATE, "_user_value(init): ${_user.value?.email}")
         viewModelScope.launch { getUserFromDb() }
     }
 
@@ -152,7 +148,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
      *  and also provide the app with current user data than can be observed in different circumstances*/
     private fun firebaseAuthWithGoogle(account: GoogleSignInAccount, activity: Activity) {
         viewModelScope.launch {
-            Log.i(TAG_VIEWMODEL, "firebaseAuthWithGoogle (account ID): ${account.id}")
+            Log.i(TRACK_SIGNUP_STATE, "firebaseAuthWithGoogle (account ID): ${account.id}")
             val credentials = GoogleAuthProvider.getCredential(account.idToken, null)
             auth.signInWithCredential(credentials).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -162,12 +158,12 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
                     _user.value?.let { insertDataToRoomDB(it) }
 
                     Log.i(
-                        TAG_VIEWMODEL,
+                        TRACK_SIGNUP_STATE,
                         "user_value(firebaseAuthWithGoogleFun): ${_user.value?.email}"
                     )
-                    Log.i(TAG_VIEWMODEL, "user_obj(room): ${_userObjectFromDb.value?.email}")
+                    Log.i(TRACK_SIGNUP_STATE, "user_obj(room): ${_userObjectFromDb.value?.email}")
                     Log.i(
-                        TAG_VIEWMODEL,
+                        TRACK_SIGNUP_STATE,
                         "auth_state_value(firebaseAuthWithGoogleFun): ${authenticationState.value}"
                     )
                     Toast.makeText(activity, "Welcome: ${_user.value?.email}", Toast.LENGTH_SHORT)
@@ -188,7 +184,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
         try {
             _userObjectFromDb.value = userRepository.getUserFromDb(_user.value?.uid!!)
         } catch (e: NullPointerException) {
-            Log.i(TAG_VIEWMODEL, "User not found(Local DB) ${e.message}")
+            Log.i(TRACK_SIGNUP_STATE, "User not found(Local DB) ${e.message}")
         }
     }
 
@@ -218,13 +214,13 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
                     val account = completedTask.getResult(ApiException::class.java)
                     _authenticationState.value = AuthenticationState.AUTHENTICATED
                     Log.i(
-                        TAG_VIEWMODEL,
+                        TRACK_SIGNUP_STATE,
                         "checked authentication inside onActivityResult(ViewModel) : ${authenticationState.value} "
                     )
 
                     firebaseAuthWithGoogle(account!!, activity)
                 } catch (e: ApiException) {
-                    Log.e(TAG_VIEWMODEL, "Google sign in failed", e)
+                    Log.e(TRACK_SIGNUP_STATE, "Google sign in failed", e)
                 }
             }
             REQ_ONE_TAP -> {
@@ -239,19 +235,19 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
                             val accountTask = GoogleSignIn.getSignedInAccountFromIntent(data)
                             val account = accountTask.getResult(ApiException::class.java)
                             account?.let { firebaseAuthWithGoogle(it, Activity()) }
-                            Log.d(TAG_ONE_TAP, "Got ID token.")
+                            Log.d(TRACK_TAG_ONE_TAP, "Got ID token.")
                         }
                         password != null -> {
                             // auth with backend
-                            Log.d(TAG_ONE_TAP, "Got ID token.")
+                            Log.d(TRACK_TAG_ONE_TAP, "Got ID token.")
 
                         }
                         else -> {
-                            Log.d(TAG_ONE_TAP, "Got ID token and password.")
+                            Log.d(TRACK_TAG_ONE_TAP, "Got ID token and password.")
                         }
                     }
                 } catch (e: ApiException) {
-                    Log.e(TAG_ONE_TAP, "one tap Google sign in failed", e)
+                    Log.e(TRACK_TAG_ONE_TAP, "one tap Google sign in failed", e)
                 }
             }
 

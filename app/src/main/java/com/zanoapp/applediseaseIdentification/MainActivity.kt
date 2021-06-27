@@ -21,8 +21,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.zanoapp.applediseaseIdentification.ui.authenticationFirebase.SignUpViewModel
 import com.zanoapp.applediseaseIdentification.ui.authenticationFirebase.SignUpViewModelFactory
-
-import kotlinx.android.synthetic.main.activity_main.*
+import com.zanoapp.applediseaseIdentification.utils.CONTROL_LIFECYCLE_METHODS
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,13 +35,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        Log.i(CONTROL_LIFECYCLE_METHODS, "onCreate: Activity called")
+
         bottomNav = findViewById(R.id.bottom_nav_view)
         fab = findViewById(R.id.floatingActionButton)
 
         val viewModelFactory = SignUpViewModelFactory(application)
         signUpViewModel = ViewModelProvider(this, viewModelFactory).get(SignUpViewModel::class.java)
 
-        floatingActionButton.setOnClickListener {
+        fab.setOnClickListener {
             //findNavController(R.id.my_nav_host_fragment).navigate(R.id.action_mainActivity_to_cameraFragment)
             Snackbar.make(
                 it,
