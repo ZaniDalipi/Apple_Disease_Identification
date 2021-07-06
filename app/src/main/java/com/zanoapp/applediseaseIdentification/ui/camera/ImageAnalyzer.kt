@@ -180,6 +180,8 @@ class ImageAnalyzer constructor(activity: Activity) {
         private const val IMAGE_STD = 128.0f
         private const val FILTER_STAGES_RGB = 3
         private const val FILTER_FACTOR = 0.4f
+
+        fun newInstance() = ImageAnalyzer(Activity())
     }
 
     /** Initializes an `ImageClassifier`.  */

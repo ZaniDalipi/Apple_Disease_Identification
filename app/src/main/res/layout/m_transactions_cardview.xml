@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/ShapeAppearance.MyApp.MediumComponent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primaryColor"
+    android:elevation="10dp"
+    android:padding="10dp">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/transaction_id"
+        style="@style/TextAppearance.CustomHeadline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Transaction id : 3345-2345"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/transaction_amount"
+        style="@style/TextAppearance.CustomHeadline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:hint="Amount : 236.000,00 MKD"
+        android:textColor="@color/primaryTextColor"
+        app:layout_constraintEnd_toEndOf="@id/transaction_id"
+        app:layout_constraintStart_toStartOf="@id/transaction_id"
+        app:layout_constraintTop_toBottomOf="@id/transaction_id"
+        app:layout_goneMarginStart="32dp" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/transaction_type"
+        style="@style/TextAppearance.CustomHeadline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:hint="Type: Ins"
+        android:textColor="@color/primaryTextColor"
+        app:layout_constraintEnd_toEndOf="@id/transaction_amount"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/transaction_amount"
+        app:layout_constraintTop_toBottomOf="@id/transaction_amount" />
+    <com.google.android.material.textview.MaterialTextView
+    android:id="@+id/transaction_date"
+    style="@style/TextAppearance.CustomHeadline6"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="14dp"
+    android:hint="Date : 26/7/2021"
+    android:textColor="@color/primaryTextColor"
+    app:layout_constraintEnd_toEndOf="@id/transaction_type"
+    app:layout_constraintHorizontal_bias="0.0"
+    app:layout_constraintStart_toStartOf="@id/transaction_type"
+    app:layout_constraintTop_toBottomOf="@id/transaction_type" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

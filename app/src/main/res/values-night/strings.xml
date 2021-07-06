@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="overview">Overview</string>
+    <string name="transactions">Transactions</string>
+    <string name="ins">Incomes</string>
+    <string name="outs">Expenses</string>
+    <string name="total_balance">Total Balance</string>
+    <string name="test_value">257.000,00 MKD</string>
+</resources>
