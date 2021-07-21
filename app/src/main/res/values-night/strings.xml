@@ -6,4 +6,26 @@
     <string name="outs">Expenses</string>
     <string name="total_balance">Total Balance</string>
     <string name="test_value">257.000,00 MKD</string>
+
+    <!-- START
+       This is for the dialog -->
+    <string name="product_name">* Specify the Product Name 🍎 </string>
+    <string name="mass_of_product_sold">* mass of product sold </string>
+    <string name="unit_price_per_kg_l">* unit price per kg/l € </string>
+    <string name="additional_description_on_transaction">description on transaction  👀</string>
+    <string name="transaction_type">* transaction type</string>
+    <string name="client_name">Client name 🧑🏽 </string>
+    <string name="save_transaction">Save transaction</string>
+    <string name="edit">Edit</string>
+    <string name="create">Create</string>
+    <string name="long_message">Are you sure you want to Exit  ? 🤔</string>
+    <string name="decline">decline 🤷‍♂</string>
+    <string name="accept">Accept 🤦‍♂</string>
+    <string name="selectDateHint">dd/mm/yyyy 🗓</string>
+    <string name="field_info_text">All Fields specified with * must be filled</string>
+    <string-array name="transaction_options">
+        <item>Ins</item>
+        <item>Expenses</item>
+    </string-array>
+    <!--END-->
 </resources>

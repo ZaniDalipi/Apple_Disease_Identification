@@ -1,77 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <!--1 Overview-->
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/overview_tab"
-            android:layout_width="wrap_content"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/overview" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <!--2 Transactions-->
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/transaction_tab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/transactions" />
-        <!--3 Ins-->
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/incomes_tab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ins" />
-        <!--4 Expenses-->
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/expenses_tab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/outs" />
-    </com.google.android.material.tabs.TabLayout>
+            <!--1 Overview-->
+            <com.google.android.material.tabs.TabItem
 
-    <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/overview" />
+
+            <!--2 Transactions-->
+            <com.google.android.material.tabs.TabItem
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/transactions" />
+            <!--3 Ins-->
+            <com.google.android.material.tabs.TabItem
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ins" />
+            <!--4 Expenses-->
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/outs" />
+        </com.google.android.material.tabs.TabLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/total_balance_textView"
+            style="@style/TextAppearance.CustomHeadline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/total_balance"
+            android:textColor="#605C5C"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tab" />
+
+        <!--this is the balance-->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/balance_textView"
+            style="@style/TextAppearance.CustomBody2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="@string/test_value"
+            android:rotationX="18"
+            app:layout_constraintEnd_toEndOf="@id/total_balance_textView"
+            app:layout_constraintStart_toStartOf="@id/total_balance_textView"
+            app:layout_constraintTop_toBottomOf="@+id/total_balance_textView" />
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/transaction_fab"
+            style="@style/ShapeAppearance.MaterialComponents.SmallComponent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/fab_margin_end_default"
+            android:clickable="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:layout_marginBottom="@dimen/fab_margin_bottom_default"
+            android:foregroundTint="@color/primaryTextColor"
+            app:srcCompat="@drawable/ic_fab"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/create_transaction_fab"
+        style="@style/ShapeAppearance.MaterialComponents.SmallComponent"
         android:layout_width="wrap_content"
-        android:id="@+id/totalBalanceTextView"
         android:layout_height="wrap_content"
-        android:text="@string/total_balance"
-        android:layout_marginTop="32dp"
-        style="@style/TextAppearance.CustomHeadline6"
-        android:textColor="#605C5C"
-        app:layout_constraintTop_toBottomOf="@+id/tab"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:visibility="gone"
+        android:layout_marginEnd="@dimen/fab_margin_end_default"
+        android:layout_marginBottom="@dimen/additional_fab_end_margin"
+        app:layout_constraintBottom_toTopOf="@id/transaction_fab"
+        app:layout_constraintEnd_toEndOf="@id/transaction_fab"
+        app:srcCompat="@drawable/ic_fab"
+        android:contentDescription="creating a new transaction" />
 
-    <!--this is the balance-->
-    <com.google.android.material.textview.MaterialTextView
-        android:layout_width="wrap_content"
-        android:id="@+id/balanceTextView"
-        android:layout_height="wrap_content"
-        android:hint="@string/test_value"
-        android:layout_marginTop="12dp"
-        style="@style/TextAppearance.CustomHeadline5"
-        app:layout_constraintTop_toBottomOf="@+id/totalBalanceTextView"
-        app:layout_constraintStart_toStartOf="@id/totalBalanceTextView"
-        app:layout_constraintEnd_toEndOf="@id/totalBalanceTextView"/>
-
-
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/edit_transactions_fab"
+        style="@style/ShapeAppearance.MaterialComponents.SmallComponent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="14dp"
-        android:layout_marginBottom="60dp"
-        android:text="@string/create"
-        app:icon="@drawable/ic_fab"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_marginEnd="@dimen/fab_margin_end_default"
+        android:layout_marginBottom="@dimen/additional_fab_end_margin"
+        android:visibility="gone"
+        app:srcCompat="@android:drawable/ic_menu_edit"
+        app:layout_constraintBottom_toTopOf="@id/create_transaction_fab"
+        app:layout_constraintEnd_toEndOf="@id/create_transaction_fab"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/create_transaction_fab"
+        android:contentDescription="setting transactions in a editional mode" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+

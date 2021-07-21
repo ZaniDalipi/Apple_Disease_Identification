@@ -19,35 +19,50 @@
         <item name="textAppearanceHeadline6">@style/TextAppearance.CustomHeadline6</item>
         <item name="textAppearanceSubtitle1">@style/TextAppearance.CustomSubTitle1</item>
         <item name="textAppearanceBody1">@style/TextAppearance.CustomBody1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.CustomBody2</item>
 
-        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MyApp.SmallComponent
-        </item>
-        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MyApp.MediumComponent
-        </item>
-        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.MyApp.LargeComponent
-        </item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MyApp.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MyApp.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.MyApp.LargeComponent</item>
+
+
+    </style>
+
+    <!--dialog animation-->
+    <style name="MyDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
     </style>
 
     <style name="ShapeAppearance.MyApp.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
-        <item name="cornerFamily">cut</item>
-        <item name="cornerSize">8dp</item>
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
         <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="ShapeAppearance.MyApp.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
-        <item name="cornerFamily">cut</item>
+        <item name="cornerFamily">rounded</item>
         <item name="cornerSize">6dp</item>
     </style>
 
     <style name="ShapeAppearance.MyApp.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
         <item name="cornerFamily">cut</item>
-        <item name="cornerSize">4dp</item>
+        <item name="cornerSize">6dp</item>
     </style>
+
+
+    <style name="ShapeAppearance.MyApp.SmallComponent.FloatingActionButtonCustom" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="fontFamily">@font/aclonica</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
 
     <style name="circleImageView" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
 
 
     <!--FONTS-->
@@ -71,6 +86,12 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="TextAppearance.CustomBody2" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="fontFamily">@font/aclonica</item>
+        <item name="android:textColor">@color/primaryDarkColor</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <!--custom style for subtitles-->
     <style name="TextAppearance.CustomSubTitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="fontFamily">@font/rubik_light</item>
@@ -90,6 +111,7 @@
         <item name="boxStrokeWidthFocused">2dp</item>
         <item name="android:enabled">true</item>
         <item name="hintTextColor">@color/primaryColor</item>
+        <item name="boxStrokeErrorColor">@color/onError</item>
         <item name="hintTextAppearance">?attr/textAppearanceCaption</item>
         <item name="android:textAppearance">@style/TextAppearance.CustomSubTitle1</item>
         <item name="singleLine">true</item>

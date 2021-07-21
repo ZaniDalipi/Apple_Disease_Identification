@@ -5,25 +5,31 @@
         android:id="@+id/locationFragment"
         android:alphabeticShortcut="LOC"
         android:contentDescription="@string/on_navigation_to_location_description"
-        android:title="@string/locations_label"
-        android:icon="@android:drawable/ic_dialog_map"/>
+        android:icon="@android:drawable/ic_dialog_map"
+        android:title="@string/locations_label" />
 
     <item
         android:id="@+id/cameraFragment"
         android:alphabeticShortcut="Camera"
-        android:enabled="true"
         android:contentDescription="@string/on_navigation_to_data_description"
-        android:title="@string/classification_camera"
-        android:icon="@android:drawable/ic_menu_camera"/>
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_camera"
+        android:title="@string/classification_camera" />
 
     <item
         android:id="@+id/userProfileDataFragment"
         android:alphabeticShortcut="DATA"
-        android:icon="@android:drawable/ic_menu_myplaces"
         android:contentDescription="@string/on_navigation_to_data_description"
+        android:icon="@android:drawable/ic_menu_myplaces"
         android:title="@string/your_diseases_label" />
 
-
+    <item
+        android:id="@+id/AnalyticsAndManagementNestedGraph"
+        android:alphabeticShortcut="Analytics"
+        android:contentDescription="bottom navigation bar for your analytics"
+        android:enabled="true"
+        android:icon="@drawable/ic_fab"
+        android:title="Analytics" />
 
 
 </menu>

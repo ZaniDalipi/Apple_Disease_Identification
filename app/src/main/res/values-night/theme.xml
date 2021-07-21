@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="Theme.MyApp" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">#00695C</item>
         <item name="colorPrimaryDark">#004D40</item>
         <item name="colorPrimaryVariant">#00897B</item>
@@ -14,39 +14,57 @@
         <item name="colorOnSurface">@color/onSurface</item>
         <item name="colorOnError">@color/onError</item>
 
+
+        <item name="textAppearanceHeadline4">@style/TextAppearance.CustomHeadline4</item>
         <item name="textAppearanceHeadline5">@style/TextAppearance.CustomHeadline5</item>
         <item name="textAppearanceHeadline6">@style/TextAppearance.CustomHeadline6</item>
         <item name="textAppearanceSubtitle1">@style/TextAppearance.CustomSubTitle1</item>
         <item name="textAppearanceBody1">@style/TextAppearance.CustomBody1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.CustomBody2</item>
 
-        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MyApp.SmallComponent
-        </item>
-        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MyApp.MediumComponent
-        </item>
-        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.MyApp.LargeComponent
-        </item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MyApp.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MyApp.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.MyApp.LargeComponent</item>
+
+
+    </style>
+
+    <!--dialog animation-->
+    <style name="MyDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
     </style>
 
     <style name="ShapeAppearance.MyApp.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
-        <item name="cornerFamily">cut</item>
-        <item name="cornerSize">8dp</item>
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
         <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="ShapeAppearance.MyApp.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
-        <item name="cornerFamily">cut</item>
+        <item name="cornerFamily">rounded</item>
         <item name="cornerSize">6dp</item>
     </style>
 
     <style name="ShapeAppearance.MyApp.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
         <item name="cornerFamily">cut</item>
-        <item name="cornerSize">4dp</item>
+        <item name="cornerSize">6dp</item>
     </style>
+
+
+    <style name="ShapeAppearance.MyApp.SmallComponent.FloatingActionButtonCustom" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="fontFamily">@font/aclonica</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
 
     <style name="circleImageView" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
+
 
 
     <!--FONTS-->

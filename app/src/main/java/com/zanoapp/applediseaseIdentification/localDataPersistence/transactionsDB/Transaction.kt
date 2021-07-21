@@ -6,40 +6,38 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.zanoapp.applediseaseIdentification.localDataPersistence.userDB.User
 import java.text.SimpleDateFormat
+import java.util.*
 
 
 @Entity
 data class Transaction (
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "transaction_id")
-        private val tId: String,
+    @ColumnInfo(name = "transactionId")
+        public val transactionId: Int?,
 
     @ColumnInfo(name = "transaction_type")
-        private val transactionType: String,
+        public val transactionType: String,
 
-    @ColumnInfo(name = "product_type")
-        private val productName: String,
+    @ColumnInfo(name = "product_name")
+        public val productName: String,
 
     @ColumnInfo(name = "mass")
-        private val mass: Int,
+        public val mass: Int,
 
     @ColumnInfo(name = "unit_price")
-        private val price: Double,
+        public val price: Double,
 
-    @ColumnInfo(name = "gross_amount")
-        private val grossAmount: String,
+    /*@ColumnInfo(name = "gross_amount")
+        public val grossAmount: String,*/
 
     @ColumnInfo(name = "sale_date")
-        private val saleDate: SimpleDateFormat,
+        public val saleDate: String,
 
     @ColumnInfo(name = "additional_description")
-        private val additionalDescription: String,
+        public val additionalDescription: String,
 
-
-    @ColumnInfo(name = "user")
-        private val user: User,
 
     @ColumnInfo(name = "client_name")
-        private val clientName: String
+        public val clientName: String
     )

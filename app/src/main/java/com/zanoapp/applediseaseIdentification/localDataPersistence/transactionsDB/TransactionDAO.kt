@@ -3,6 +3,7 @@ package com.zanoapp.applediseaseIdentification.localDataPersistence.transactions
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import java.text.SimpleDateFormat
+import java.util.*
 
 @Dao
 interface TransactionDAO {
@@ -33,5 +34,5 @@ interface TransactionDAO {
 
     /** Get data by a range of date */
     @Query("SELECT * FROM `Transaction` WHERE sale_date BETWEEN :startDate AND :endDate")
-        fun getTransactionByDataRange(startDate: SimpleDateFormat, endDate: SimpleDateFormat): LiveData<List<Transaction>>
+        fun getTransactionByDataRange(startDate: Date, endDate: Date): LiveData<List<Transaction>>
 }

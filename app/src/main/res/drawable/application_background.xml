@@ -5,10 +5,6 @@
         android:right="2dp"
         android:bottom="2dp"/>
 
-    <corners android:bottomRightRadius="16dp"
-        android:bottomLeftRadius="16dp"
-        android:topLeftRadius="16dp"
-        android:topRightRadius="16dp"/>
     <gradient
         android:type="linear"
         android:startColor="#FFffffff"

@@ -1,23 +1,22 @@
 package com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsDB
 
 import kotlinx.coroutines.*
-import java.text.SimpleDateFormat
+import java.util.*
 
-class TransactionRepository(transactionDatabase: TransactionDatabase) {
-
-    private val transactionDB = transactionDatabase.transactionDao()
+class TransactionRepository(private val transactionDAO: TransactionDAO) {
+    
 
     /** Inset a transaction into the DB*/
     fun insertTransaction(transaction: Transaction) {
         CoroutineScope(Dispatchers.IO).launch {
-            transactionDB.insertTransaction(transaction)
+            transactionDAO.insertTransaction(transaction)
         }
     }
 
     /** Delete a transaction from the DB*/
     fun deleteTransaction(transaction: Transaction) {
         CoroutineScope(Dispatchers.IO).launch {
-            transactionDB.deleteTransaction(transaction)
+            transactionDAO.deleteTransaction(transaction)
         }
     }
 
@@ -25,7 +24,7 @@ class TransactionRepository(transactionDatabase: TransactionDatabase) {
     fun getAllTransactions(): List<Transaction> {
         var myTransactions = listOf<Transaction>()
         CoroutineScope(Dispatchers.IO).launch {
-            myTransactions = transactionDB.getAllTransactions()
+            myTransactions = transactionDAO.getAllTransactions()
         }
         return myTransactions
     }
@@ -34,7 +33,7 @@ class TransactionRepository(transactionDatabase: TransactionDatabase) {
     suspend fun getIncomesTransaction(): List<Transaction> {
         return supervisorScope {
             val deferredResult = async(Dispatchers.IO) {
-                transactionDB.getIncomesTransaction()
+                transactionDAO.getIncomesTransaction()
             }
             deferredResult.await()
         }
@@ -44,7 +43,7 @@ class TransactionRepository(transactionDatabase: TransactionDatabase) {
     suspend fun getExpenseTransaction(): List<Transaction> {
         return supervisorScope {
             val deferredResult = async(Dispatchers.IO) {
-                transactionDB.getExpensesTransaction()
+                transactionDAO.getExpensesTransaction()
             }
             deferredResult.await()
         }
@@ -53,14 +52,14 @@ class TransactionRepository(transactionDatabase: TransactionDatabase) {
     /** Get transactions by meeting a certain condition of the client name */
     fun getTransactionByClient(clientName: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            transactionDB.getTransactionByClient(clientName)
+            transactionDAO.getTransactionByClient(clientName)
         }
     }
 
     /** Get data by a range of date */
-    fun getTransactionByDateRange(startDate: SimpleDateFormat, endDate: SimpleDateFormat) {
+    fun getTransactionByDateRange(startDate: Date, endDate: Date) {
         CoroutineScope(Dispatchers.IO).launch {
-            transactionDB.getTransactionByDataRange(startDate, endDate)
+            transactionDAO.getTransactionByDataRange(startDate, endDate)
         }
-    }
+}
 }
