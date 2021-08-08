@@ -57,7 +57,7 @@ class TransactionRepository(private val transactionDAO: TransactionDAO) {
     }
 
     /** Get data by a range of date */
-    fun getTransactionByDateRange(startDate: Date, endDate: Date) {
+    fun getTransactionByDateRange(startDate: String, endDate: String) {
         CoroutineScope(Dispatchers.IO).launch {
             transactionDAO.getTransactionByDataRange(startDate, endDate)
         }

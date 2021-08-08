@@ -1,20 +1,17 @@
 package com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsDB
 
+import androidx.databinding.adapters.Converters
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.zanoapp.applediseaseIdentification.localDataPersistence.userDB.User
-import java.text.SimpleDateFormat
-import java.util.*
+import androidx.room.TypeConverters
+import java.sql.Date
 
 
 @Entity
 data class Transaction (
-
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "transactionId")
-        public val transactionId: Int?,
+        public val transactionId: Int,
 
     @ColumnInfo(name = "transaction_type")
         public val transactionType: String,
@@ -32,6 +29,7 @@ data class Transaction (
         public val grossAmount: String,*/
 
     @ColumnInfo(name = "sale_date")
+    @TypeConverters(Converters::class)
         public val saleDate: String,
 
     @ColumnInfo(name = "additional_description")
@@ -40,4 +38,7 @@ data class Transaction (
 
     @ColumnInfo(name = "client_name")
         public val clientName: String
-    )
+    ) {
+    constructor(transactionType: String, productName: String, mass: Int, price: Double, saleDate: String, additionalDescription: String, clientName: String)
+            : this(0, transactionType, productName, mass, price, saleDate, additionalDescription, clientName)
+}

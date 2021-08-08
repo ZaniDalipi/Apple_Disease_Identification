@@ -11,7 +11,7 @@ import com.zanoapp.applediseaseIdentification.localDataPersistence.userDB.UserDa
 import com.zanoapp.applediseaseIdentification.utils.Converters
 import kotlin.coroutines.coroutineContext
 
-@Database(entities = arrayOf(Transaction::class), version = 1, exportSchema = false)
+@Database(entities = arrayOf(Transaction::class), version = 2, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class TransactionDatabase: RoomDatabase() {
     abstract fun transactionDao(): TransactionDAO

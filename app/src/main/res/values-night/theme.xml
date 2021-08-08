@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -26,6 +26,11 @@
         <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MyApp.MediumComponent</item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.MyApp.LargeComponent</item>
 
+        <!--Custom Elements-->
+        <item name="floatingActionButtonStyle">@style/Widget.MyApp.MaterialFloatingActionButton</item>
+        <item name="tabStyle">@style/customTabLayout</item>
+        <item name="chipStyle">@style/customChips</item>
+
 
     </style>
 
@@ -36,14 +41,14 @@
     </style>
 
     <style name="ShapeAppearance.MyApp.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">4dp</item>
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">8dp</item>
         <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="ShapeAppearance.MyApp.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">6dp</item>
+        <item name="cornerSize">8dp</item>
     </style>
 
     <style name="ShapeAppearance.MyApp.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
@@ -51,13 +56,48 @@
         <item name="cornerSize">6dp</item>
     </style>
 
-
-    <style name="ShapeAppearance.MyApp.SmallComponent.FloatingActionButtonCustom" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+    <!-- Custom Fab-->
+    <style name="Widget.MyApp.MaterialFloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MyApp.FloatingActionButton</item>
+    </style>
+    <style name="ShapeAppearanceOverlay.MyApp.FloatingActionButton" parent="">
         <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
         <item name="fontFamily">@font/aclonica</item>
         <item name="android:textAllCaps">true</item>
     </style>
+    <!--custom fab end -->
 
+    <!--custom chips-->
+    <style name="customChips" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="shapeAppearanceOverlay">@style/Widget.MyApp.Chips</item>
+    </style>
+
+    <style name="Widget.MyApp.Chips" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">30dp</item>
+        <item name="elevation">20dp</item>
+        <item name="android:shadowRadius">8</item>
+        <item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/primaryColor</item>
+        <item name="android:outlineSpotShadowColor" tools:targetApi="p">@color/primaryColor</item>
+        <item name="android:shadowColor">@color/primaryColor</item>
+        <item name="android:translationZ">15dp</item>
+        <item name="fontFamily">@font/aclonica</item>
+    </style>
+
+
+    <!--custom tab layout-->
+    <style name="customTabLayout" parent="Widget.MaterialComponents.TabLayout">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.TabLayout</item>
+    </style>
+
+    <style name="ThemeOverlay.App.TabLayout" parent="">
+        <item name="android:fontFamily">@font/rubik_light</item>
+        <item name="android:textSize">14sp</item>
+        <item name="backgroundColor">@color/primaryColor</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+    </style>
+    <!--custom tab layout end -->
 
     <style name="circleImageView" parent="">
         <item name="cornerFamily">rounded</item>
@@ -66,17 +106,31 @@
 
 
 
-
     <!--FONTS-->
     <!--costom style for titles-->
+
     <style name="TextAppearance.CustomHeadline6" parent="TextAppearance.MaterialComponents.Headline6">
         <item name="fontFamily">@font/aclonica</item>
         <item name="android:textColor">@color/secondaryTextColor</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="TextAppearance.CustomHeadline5" parent="TextAppearance.MaterialComponents.Headline5">
         <item name="fontFamily">@font/aclonica</item>
         <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextAppearance.CustomHeadline4" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="fontFamily">@font/aclonica</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextAppearance.CustomBody2" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="fontFamily">@font/aclonica</item>
+        <item name="android:textColor">@color/primaryDarkColor</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <!--custom style for subtitles-->

@@ -1,32 +1,22 @@
 package com.zanoapp.applediseaseIdentification.ui.managementAndAnalytics
 
-import android.app.AlertDialog
-import android.app.DatePickerDialog
+import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
-import android.system.Os.accept
-import android.text.Editable
-import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
-import android.widget.DatePicker
-import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.datepicker.DateSelector
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import com.zanoapp.applediseaseIdentification.R
-import com.zanoapp.applediseaseIdentification.databinding.MyCustomDialogForTransactionsBinding
+import com.zanoapp.applediseaseIdentification.databinding.DialogCreateTransactionBinding
 import com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsDB.Transaction
 import com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsDB.TransactionDatabase
 import com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsDB.TransactionRepository
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.time.DayOfWeek
 import java.util.*
 import android.app.Dialog as Dialog1
 
@@ -34,22 +24,19 @@ import android.app.Dialog as Dialog1
 class AddTransactionDialog : DialogFragment() {
 
     private lateinit var viewModel: AccountAnalyticsViewModel
-    private lateinit var binding: MyCustomDialogForTransactionsBinding
+    private lateinit var binding: DialogCreateTransactionBinding
     private lateinit var productName: TextInputEditText
     private lateinit var massSold: TextInputEditText
     private lateinit var unitPrice: TextInputEditText
-    private lateinit var additionalDescription: TextInputEditText
     private lateinit var clientName: TextInputEditText
-    private lateinit var transactionType: TextInputEditText
     private lateinit var datePicker: TextInputEditText
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = MyCustomDialogForTransactionsBinding.inflate(layoutInflater, container, false)
+    ): View {
+        binding = DialogCreateTransactionBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -64,8 +51,6 @@ class AddTransactionDialog : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initViewModel()
-
-
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog1 {
@@ -75,7 +60,6 @@ class AddTransactionDialog : DialogFragment() {
         return dialog
 
     }
-
 
     private fun createAlertDialogOnExitDialog() {
         dialog?.onBackPressed().apply {
@@ -111,7 +95,7 @@ class AddTransactionDialog : DialogFragment() {
             R.layout.support_simple_spinner_dropdown_item,
             transactionOptions
         ).also { adapter ->
-            binding.transactionTypeDropDownList.setText("Ins", false)
+            binding.transactionTypeDropDownList.setText("", false)
             binding.transactionTypeDropDownList.setAdapter(adapter)
         }
         datePickerConfiguration()
@@ -122,13 +106,13 @@ class AddTransactionDialog : DialogFragment() {
                 unitPrice.isNotNullOrEmpty("Field is required!!!") &&
                 datePicker.isNotNullOrEmpty("Field is required!!!")
             ) {
-                saveTransactionsToLiveDataObject()
+                insertingTransactionToDB()
             }
         }
     }
 
 
-    private fun saveTransactionsToLiveDataObject() {
+    private fun insertingTransactionToDB() {
         val productName = binding.productTypeEditText.text.toString()
         val massSold = binding.massEditText.text.toString().toInt()
         val unitPrice = binding.priceEditText.text.toString().toDouble()
@@ -137,9 +121,10 @@ class AddTransactionDialog : DialogFragment() {
         val transactionType = binding.transactionTypeDropDownList.text.toString()
         val datePicker = binding.datePickerEditText.text.toString()
 
+        Log.i("number format", datePicker)
+
 
         val currentTransaction = Transaction(
-            transactionId = (0 until 1000).step,
             productName = productName,
             mass = massSold,
             price = unitPrice,
@@ -173,6 +158,7 @@ class AddTransactionDialog : DialogFragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun datePickerConfiguration() {
         binding.datePickerEditText.isFocusable = false
         binding.datePickerEditText.setOnClickListener {
@@ -184,7 +170,15 @@ class AddTransactionDialog : DialogFragment() {
                 .build()
 
             datePicker.addOnPositiveButtonClickListener {
-                binding.datePickerEditText.setText(datePicker.headerText)
+                val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+                calendar.time = Date(it)
+                binding.datePickerEditText.setText(
+                    "${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.MONTH) + 1}/${
+                        calendar.get(
+                            Calendar.YEAR
+                        )
+                    }"
+                )
             }
             datePicker.show(parentFragmentManager, datePicker.toString())
 

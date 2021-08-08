@@ -8,12 +8,11 @@ import com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsD
 import com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsDB.TransactionRepository
 import com.zanoapp.applediseaseIdentification.localDataPersistence.userDB.UserDatabase
 import com.zanoapp.applediseaseIdentification.localDataPersistence.userDB.UserRepository
+import com.zanoapp.applediseaseIdentification.utils.TransactionMockData
 import kotlinx.coroutines.launch
 import java.util.*
 
 class AccountAnalyticsViewModel(private val transactionRepository: TransactionRepository) : ViewModel() {
-
-    lateinit var transaction: Transaction
 
     private val _currentBalance = MutableLiveData<Long>()
     val currentBalance: LiveData<Long>
@@ -63,9 +62,11 @@ class AccountAnalyticsViewModel(private val transactionRepository: TransactionRe
         transactionRepository.getTransactionByClient(clientName)
     }
 
-    fun getTransactionByDateRange(startDate: Date, endDate: Date) {
+    fun getTransactionByDateRange(startDate: String, endDate: String) {
         transactionRepository.getTransactionByDateRange(startDate, endDate)
     }
 
-
+    init {
+        getAllTransactions()
+    }
 }
