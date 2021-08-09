@@ -41,7 +41,9 @@ class AccountAnalyticsViewModel(private val transactionRepository: TransactionRe
     }
 
     fun getAllTransactions() {
-        _transactions.value = transactionRepository.getAllTransactions()
+        viewModelScope.launch {
+            _transactions.value = transactionRepository.getAllTransactions()
+        }
     }
 
 

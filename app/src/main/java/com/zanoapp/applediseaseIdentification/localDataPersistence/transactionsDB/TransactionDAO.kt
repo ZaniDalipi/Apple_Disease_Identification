@@ -17,7 +17,7 @@ interface TransactionDAO {
     fun deleteTransaction(transaction: Transaction)
 
     /** Get all the transaction that user has done */
-    @Query("Select * FROM `Transaction`")
+    @Query("Select * FROM `Transaction` ORDER BY transactionId DESC")
     fun getAllTransactions(): List<Transaction>
 
     /** get all transaction where the type is incomes, it means that the user has got paid on a product*/

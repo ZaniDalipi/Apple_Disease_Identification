@@ -21,12 +21,13 @@ class TransactionRepository(private val transactionDAO: TransactionDAO) {
     }
 
     /** Get all the transaction that user has done */
-    fun getAllTransactions(): List<Transaction> {
-        var myTransactions = listOf<Transaction>()
-        CoroutineScope(Dispatchers.IO).launch {
-            myTransactions = transactionDAO.getAllTransactions()
+    suspend fun getAllTransactions(): List<Transaction> {
+        return supervisorScope {
+            val deferredResult = async(Dispatchers.IO) {
+                transactionDAO.getAllTransactions()
+            }
+            deferredResult.await()
         }
-        return myTransactions
     }
 
     /** get all transaction where the type is incomes, it means that the user has got paid on a product*/

@@ -142,17 +142,15 @@ class AccountAnalyticsFragment : Fragment() {
             editTransactionFab.startAnimation(toBottom)
             accountAnalyticsFragmentBinding.transactionFab.startAnimation(rotateClose)
         }
+
     }
 
-    
     /** refresh listener for the list of transactions */
+
     private fun refreshTransactionsListener() {
         accountAnalyticsFragmentBinding.refreshRecyclerview.setOnRefreshListener {
-            setupRecyclerViewAdapter().apply {
-
-                accountAnalyticsFragmentBinding.refreshRecyclerview.isRefreshing = false
+            setupRecyclerViewAdapter()
             }
-        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             accountAnalyticsFragmentBinding.refreshRecyclerview.setColorSchemeColors(
                 resources.getColor(R.color.primaryColor, context?.theme),
@@ -167,21 +165,14 @@ class AccountAnalyticsFragment : Fragment() {
         val adapter = TransactionRecyclerViewAdapterRecyclerView()
         accountAnalyticsFragmentBinding.transactionsRecyclerView.adapter = adapter
 
-        viewModel.transactions.observe(viewLifecycleOwner, Observer {
-            if(it != null && it.isNotEmpty()) {
-                Log.i("TransactionInfo", it.size.toString())
-                adapter.submitList(it)
-                accountAnalyticsFragmentBinding.refreshRecyclerview.isRefreshing = false
-            } else {
-                viewModel.transactions.observe(viewLifecycleOwner, {
-                    Log.i("TransactionInfo", it.size.toString())
-                    adapter.submitList(it)
-                    accountAnalyticsFragmentBinding.refreshRecyclerview.isRefreshing = false
-                })
-            }
+        viewModel.transactions.observe(viewLifecycleOwner, {
+            adapter.submitList(it)
+            accountAnalyticsFragmentBinding.refreshRecyclerview.isRefreshing = false
+
         })
 
         val manager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         accountAnalyticsFragmentBinding.transactionsRecyclerView.layoutManager = manager
     }
+    
 }
