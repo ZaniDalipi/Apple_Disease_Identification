@@ -68,8 +68,8 @@
 
     <style name="ThemeOverlay.App.Card" parent="">
         <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorSurface">@color/backgroundColor</item>
-        <item name="colorOnSurface">@color/backgroundColor</item>
+        <item name="colorSurface">@color/chipColor</item>
+        <item name="colorOnSurface">@color/chipColor</item>
         <item name="colorOnPrimary">@color/onSecondary</item>
         <item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/primaryDarkColor</item>
     </style>

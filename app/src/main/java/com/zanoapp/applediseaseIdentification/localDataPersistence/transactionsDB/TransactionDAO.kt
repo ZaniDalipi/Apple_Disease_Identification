@@ -21,11 +21,11 @@ interface TransactionDAO {
     fun getAllTransactions(): List<Transaction>
 
     /** get all transaction where the type is incomes, it means that the user has got paid on a product*/
-    @Query("SELECT * FROM `Transaction` WHERE transaction_type == 'Incomes'")
+    @Query("SELECT * FROM `Transaction` WHERE transaction_type == 'Incomes' ORDER BY transactionId DESC")
         fun getIncomesTransaction(): List<Transaction>
 
     /** get all transaction where the type is expenses, it means that the user has paid out*/
-    @Query("SELECT * FROM `Transaction` WHERE transaction_type == 'Expenses'")
+    @Query("SELECT * FROM `Transaction` WHERE transaction_type == 'Expenses' ORDER BY transactionId DESC")
         fun getExpensesTransaction(): List<Transaction>
 
     /** Get transactions by meeting a certain condition of the client name */

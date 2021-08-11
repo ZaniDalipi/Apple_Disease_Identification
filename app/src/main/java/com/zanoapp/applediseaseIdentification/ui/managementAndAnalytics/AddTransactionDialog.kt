@@ -121,9 +121,6 @@ class AddTransactionDialog : DialogFragment() {
         val transactionType = binding.transactionTypeDropDownList.text.toString()
         val datePicker = binding.datePickerEditText.text.toString()
 
-        Log.i("number format", datePicker)
-
-
         val currentTransaction = Transaction(
             productName = productName,
             mass = massSold,

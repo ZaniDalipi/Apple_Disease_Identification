@@ -1,21 +1,15 @@
 package com.zanoapp.applediseaseIdentification.ui.managementAndAnalytics
 
-import android.app.Application
-import android.content.Context
 import androidx.lifecycle.*
 import com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsDB.Transaction
-import com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsDB.TransactionDatabase
 import com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsDB.TransactionRepository
-import com.zanoapp.applediseaseIdentification.localDataPersistence.userDB.UserDatabase
-import com.zanoapp.applediseaseIdentification.localDataPersistence.userDB.UserRepository
-import com.zanoapp.applediseaseIdentification.utils.TransactionMockData
 import kotlinx.coroutines.launch
-import java.util.*
 
-class AccountAnalyticsViewModel(private val transactionRepository: TransactionRepository) : ViewModel() {
+class AccountAnalyticsViewModel(private val transactionRepository: TransactionRepository) :
+    ViewModel() {
 
-    private val _currentBalance = MutableLiveData<Long>()
-    val currentBalance: LiveData<Long>
+    private val _currentBalance = MutableLiveData<Int>()
+    val currentBalance: LiveData<Int>
         get() = _currentBalance
 
     private val _transactions = MutableLiveData<List<Transaction>>()
@@ -31,9 +25,9 @@ class AccountAnalyticsViewModel(private val transactionRepository: TransactionRe
         get() = _expensesTransactions
 
 
-      fun insertTransactionIntoDB(transaction: Transaction){
-          transactionRepository.insertTransaction(transaction)
-      }
+    fun insertTransactionIntoDB(transaction: Transaction) {
+        transactionRepository.insertTransaction(transaction)
+    }
 
 
     fun deleteTransaction(transaction: Transaction) {
@@ -68,7 +62,11 @@ class AccountAnalyticsViewModel(private val transactionRepository: TransactionRe
         transactionRepository.getTransactionByDateRange(startDate, endDate)
     }
 
+
     init {
+        _transactions.value = transactions.value
         getAllTransactions()
+        getIncomeTransactions()
+        getExpenseTransactions()
     }
 }

@@ -13,7 +13,8 @@
     <color name="secondaryDarkColor">#004c40</color>
     <color name="secondaryTextColor">#FAF5F5</color>
 
-    <color name="backgroundColor">#E5E5E5</color>
+    <color name="backgroundColor">#FFFFFF</color>
+    <color name="chipColor">#E5E5E5</color>
     <!--OnColors-->
     <color name="onPrimary">#FFFFFF</color>
     <color name="onSecondary">#000000</color>

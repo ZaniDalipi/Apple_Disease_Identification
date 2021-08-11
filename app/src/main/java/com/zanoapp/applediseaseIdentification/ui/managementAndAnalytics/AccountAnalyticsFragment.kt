@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.zanoapp.applediseaseIdentification.R
 import com.zanoapp.applediseaseIdentification.databinding.FragmentAccountAnalyticsManagmentBinding
@@ -25,6 +26,7 @@ import com.zanoapp.applediseaseIdentification.ui.managementAndAnalytics.adapters
 
 class AccountAnalyticsFragment : Fragment() {
 
+    private lateinit var adapter: TransactionRecyclerViewAdapterRecyclerView
     private lateinit var createTransactionFab: FloatingActionButton
     private lateinit var editTransactionFab: FloatingActionButton
     private lateinit var viewModel: AccountAnalyticsViewModel
@@ -73,6 +75,7 @@ class AccountAnalyticsFragment : Fragment() {
             FragmentAccountAnalyticsManagmentBinding.inflate(layoutInflater, container, false)
 
         setupRecyclerViewAdapter()
+        chipsFilteringOfTransactions()
 
         return accountAnalyticsFragmentBinding.root
     }
@@ -92,10 +95,15 @@ class AccountAnalyticsFragment : Fragment() {
 
         refreshTransactionsListener()
         fabButtonsListener()
+
+        accountAnalyticsFragmentBinding.balanceTextView.text =
+            viewModel.currentBalance.value.toString()
+
     }
 
     /** Fab button listener when are clicked*/
     private fun fabButtonsListener() {
+
         accountAnalyticsFragmentBinding.transactionFab.setOnClickListener {
             clicked = !clicked
             setVisibility(clicked)
@@ -149,8 +157,27 @@ class AccountAnalyticsFragment : Fragment() {
 
     private fun refreshTransactionsListener() {
         accountAnalyticsFragmentBinding.refreshRecyclerview.setOnRefreshListener {
-            setupRecyclerViewAdapter()
+            when {
+                accountAnalyticsFragmentBinding.showIncomesChip.isChecked -> {
+                    viewModel.getIncomeTransactions().also {
+                        accountAnalyticsFragmentBinding.refreshRecyclerview.isRefreshing = false
+                    }
+                }
+                accountAnalyticsFragmentBinding.showExpensesChip.isChecked -> {
+                    viewModel.getExpenseTransactions().also {
+                        accountAnalyticsFragmentBinding.refreshRecyclerview.isRefreshing = false
+                    }
+                }
+                accountAnalyticsFragmentBinding.showAllTransactionChip.isChecked -> {
+                    viewModel.getAllTransactions().also {
+                        accountAnalyticsFragmentBinding.refreshRecyclerview.isRefreshing = false
+                    }
+                }
+
             }
+            accountAnalyticsFragmentBinding.refreshRecyclerview.isRefreshing = false
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             accountAnalyticsFragmentBinding.refreshRecyclerview.setColorSchemeColors(
                 resources.getColor(R.color.primaryColor, context?.theme),
@@ -162,17 +189,34 @@ class AccountAnalyticsFragment : Fragment() {
 
 
     private fun setupRecyclerViewAdapter() {
-        val adapter = TransactionRecyclerViewAdapterRecyclerView()
+        adapter = TransactionRecyclerViewAdapterRecyclerView()
         accountAnalyticsFragmentBinding.transactionsRecyclerView.adapter = adapter
 
         viewModel.transactions.observe(viewLifecycleOwner, {
             adapter.submitList(it)
             accountAnalyticsFragmentBinding.refreshRecyclerview.isRefreshing = false
-
         })
 
         val manager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         accountAnalyticsFragmentBinding.transactionsRecyclerView.layoutManager = manager
     }
-    
+
+    fun chipsFilteringOfTransactions() {
+
+        accountAnalyticsFragmentBinding.showAllTransactionChip.setOnClickListener {
+            setupRecyclerViewAdapter()
+        }
+        accountAnalyticsFragmentBinding.showIncomesChip.setOnClickListener {
+            viewModel.getIncomeTransactions()
+            viewModel.incomeTransactions.observe(viewLifecycleOwner, {
+                adapter.submitList(it)
+            })
+        }
+        accountAnalyticsFragmentBinding.showExpensesChip.setOnClickListener {
+            viewModel.getExpenseTransactions()
+            viewModel.expensesTransactions.observe(viewLifecycleOwner, {
+                adapter.submitList(it)
+            })
+        }
+    }
 }

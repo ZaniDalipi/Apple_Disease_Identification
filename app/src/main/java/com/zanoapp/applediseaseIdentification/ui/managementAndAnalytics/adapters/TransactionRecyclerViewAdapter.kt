@@ -1,16 +1,22 @@
 package com.zanoapp.applediseaseIdentification.ui.managementAndAnalytics.adapters
 
+import android.app.Activity
+import android.app.Application
+import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.LiveData
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.zanoapp.applediseaseIdentification.R
 import com.zanoapp.applediseaseIdentification.databinding.CardTransactionsBinding
 import com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsDB.Transaction
 import com.zanoapp.applediseaseIdentification.utils.setTransactionImage
+import java.security.AccessController.getContext
 import kotlin.math.roundToInt
+
 
 class TransactionRecyclerViewAdapterRecyclerView :
     ListAdapter<Transaction, TransactionRecyclerViewAdapterRecyclerView.ViewHolder>(
@@ -69,14 +75,17 @@ class TransactionRecyclerViewAdapterRecyclerView :
     fun Transaction.calculateTotal(): Int {
         val result = mass * price
 
-        if (transactionType == "Expenses") {
-            binding.transactionAmount.setTextColor(Color.RED)
-        } else {
-            binding.transactionAmount.setTextColor(Color.GREEN)
+        when (transactionType) {
+            "Incomes" -> {
+                binding.transactionAmount.setTextColor(Color.GREEN)
+            }
+            "Expenses" -> {
+                binding.transactionAmount.setTextColor(Color.RED)
+            }
+            else -> {
+                binding.transactionAmount.setTextColor(Color.GRAY)
+            }
         }
-
         return result.roundToInt()
     }
-
-
 }
