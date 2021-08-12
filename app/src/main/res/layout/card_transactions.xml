@@ -6,8 +6,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="14dp"
     android:elevation="10dp"
-    android:rotationX="4"
-    app:cardCornerRadius="8dp">
+    android:rotationX="5"
+    app:cardCornerRadius="12dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="236.000,00"
-            android:textSize="14sp"
+            android:layout_marginEnd="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -37,6 +37,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/transaction_date"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
@@ -59,3 +60,7 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
+
+
+
+

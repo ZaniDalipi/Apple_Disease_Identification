@@ -158,21 +158,24 @@ class AccountAnalyticsFragment : Fragment() {
     private fun refreshTransactionsListener() {
         accountAnalyticsFragmentBinding.refreshRecyclerview.setOnRefreshListener {
             when {
-                accountAnalyticsFragmentBinding.showIncomesChip.isChecked -> {
-                    viewModel.getIncomeTransactions().also {
-                        accountAnalyticsFragmentBinding.refreshRecyclerview.isRefreshing = false
-                    }
-                }
-                accountAnalyticsFragmentBinding.showExpensesChip.isChecked -> {
-                    viewModel.getExpenseTransactions().also {
-                        accountAnalyticsFragmentBinding.refreshRecyclerview.isRefreshing = false
-                    }
-                }
                 accountAnalyticsFragmentBinding.showAllTransactionChip.isChecked -> {
                     viewModel.getAllTransactions().also {
                         accountAnalyticsFragmentBinding.refreshRecyclerview.isRefreshing = false
                     }
                 }
+                accountAnalyticsFragmentBinding.showIncomesChip.isChecked -> {
+                    viewModel.getIncomeTransactions().also {
+                        accountAnalyticsFragmentBinding.transactionListTypeContainerTextView.setText(R.string.ins)
+                        accountAnalyticsFragmentBinding.refreshRecyclerview.isRefreshing = false
+                    }
+                }
+                accountAnalyticsFragmentBinding.showExpensesChip.isChecked -> {
+                    viewModel.getExpenseTransactions().also {
+                        accountAnalyticsFragmentBinding.transactionListTypeContainerTextView.setText(R.string.outs)
+                        accountAnalyticsFragmentBinding.refreshRecyclerview.isRefreshing = false
+                    }
+                }
+
 
             }
             accountAnalyticsFragmentBinding.refreshRecyclerview.isRefreshing = false
@@ -205,18 +208,21 @@ class AccountAnalyticsFragment : Fragment() {
 
         accountAnalyticsFragmentBinding.showAllTransactionChip.setOnClickListener {
             setupRecyclerViewAdapter()
+            accountAnalyticsFragmentBinding.transactionListTypeContainerTextView.setText(R.string.transactions)
         }
         accountAnalyticsFragmentBinding.showIncomesChip.setOnClickListener {
             viewModel.getIncomeTransactions()
             viewModel.incomeTransactions.observe(viewLifecycleOwner, {
                 adapter.submitList(it)
             })
+            accountAnalyticsFragmentBinding.transactionListTypeContainerTextView.setText(R.string.ins)
         }
         accountAnalyticsFragmentBinding.showExpensesChip.setOnClickListener {
             viewModel.getExpenseTransactions()
             viewModel.expensesTransactions.observe(viewLifecycleOwner, {
                 adapter.submitList(it)
             })
+            accountAnalyticsFragmentBinding.transactionListTypeContainerTextView.setText(R.string.outs)
         }
     }
 }

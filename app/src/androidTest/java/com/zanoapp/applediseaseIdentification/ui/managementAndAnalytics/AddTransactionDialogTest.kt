@@ -34,17 +34,17 @@ class AddTransactionDialogTest {
             val year = 201
             val months = arrayListOf("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT","NOV", "DEC")
             val productTypes = arrayListOf("APPLES", "BANANAS", "OLIVE", "CORN", "PEACH", "CHERRY", "TOMATOES",
-                "STRAWBERRIES", "BLUEBERRIES")
+                "STRAWBERRIES", "BLUEBERRIES", "OIL")
 
             //Inputs to data
             val givenInput =
                 arrayListOf(
-                    productTypes[(0..7).random()],
+                    productTypes[(0..12).random()],
                     700 + (0..100_000).random(),
                     0.40 + random(),
                     "Transaction$myIncrementalNumber",
                     "ANY",
-                    "Ins",
+                    "Incomes",
                     "${(1..31).random()}/${(1..12).random()}/20${(10..22).random()}"
                 )
 

@@ -32,7 +32,7 @@
         </item>
         <item name="tabStyle">@style/customTabLayout</item>
         <item name="chipStyle">@style/customChips</item>
-        <item name="materialCardViewStyle">@style/customCardView</item>
+        <item name="materialCardViewStyle">@style/Widget.App.CardView</item>
 
 
     </style>
@@ -61,16 +61,16 @@
     </style>
 
 <!--custom card attributes-->
-    <style name="customCardView" parent="Widget.MaterialComponents.CardView">
+    <style name="Widget.App.CardView" parent="Widget.MaterialComponents.CardView">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.Card</item>
         <item name="shapeAppearance">@style/ShapeAppearance.MyApp.MediumComponent</item>
+        <item name="android:textAppearance">@style/TextAppearance.CustomBody2</item>
     </style>
 
     <style name="ThemeOverlay.App.Card" parent="">
-        <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorSurface">@color/chipColor</item>
         <item name="colorOnSurface">@color/chipColor</item>
-        <item name="colorOnPrimary">@color/onSecondary</item>
+        <item name="colorOnPrimary">@color/primaryDarkColor</item>
         <item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/primaryDarkColor</item>
     </style>
     <!--END-->
@@ -92,23 +92,22 @@
 
     <!--custom chips-->
     <style name="customChips" parent="Widget.MaterialComponents.Chip.Choice">
-        <item name="shapeAppearanceOverlay">@style/Widget.MyApp.Chips</item>
+        <item name="materialThemeOverlay">@style/Widget.MyApp.Chips</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.MyApp.MediumComponent</item>
+        <item name="android:textAppearance">@style/TextAppearance.CustomBody2</item>
     </style>
 
     <style name="Widget.MyApp.Chips" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">30dp</item>
-        <item name="elevation">20dp</item>
-        <item name="android:shadowRadius">8</item>
-        <item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/primaryColor
-        </item>
-        <item name="android:outlineSpotShadowColor" tools:targetApi="p">@color/primaryColor</item>
-        <item name="android:shadowColor">@color/primaryColor</item>
+        <item name="cornerSize">18dp</item>
+        <item name="elevation">4dp</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorSurface">@color/chipColor</item>
+        <item name="colorOnSurface">@color/primaryColor</item>
+        <item name="colorOnPrimary">@color/primaryDarkColor</item>
         <item name="android:translationZ">15dp</item>
         <item name="fontFamily">@font/aclonica</item>
     </style>
-
-
     <!--end chips-->
 
 
@@ -154,18 +153,22 @@
 
     <style name="TextAppearance.CustomBody2" parent="TextAppearance.MaterialComponents.Body2">
         <item name="fontFamily">@font/aclonica</item>
-        <item name="android:textColor">@color/primaryDarkColor</item>
+        <item name="android:textColor">@color/primaryColor</item>
         <item name="android:textSize">12sp</item>
     </style>
 
+
+
     <!--custom style for subtitles-->
     <style name="TextAppearance.CustomSubTitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
-        <item name="fontFamily">@font/rubik_light</item>
+        <item name="fontFamily">@font/rubik_medium</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="TextAppearance.CustomBody1" parent="TextAppearance.MaterialComponents.Body1">
         <item name="fontFamily">@font/aclonica</item>
         <item name="android:includeFontPadding">true</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
 

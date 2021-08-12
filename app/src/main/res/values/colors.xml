@@ -7,14 +7,15 @@
     <color name="primaryLightColor">#5cdaac</color>
     <color name="primaryDarkColor">#007851</color>
     <color name="primaryTextColor">#FFFFFF</color>
+
     <!--secondary colors(day/night) -->
     <color name="secondaryColor">#00796b</color>
     <color name="secondaryLightColor">#48a999</color>
     <color name="secondaryDarkColor">#004c40</color>
     <color name="secondaryTextColor">#FAF5F5</color>
 
-    <color name="backgroundColor">#FFFFFF</color>
-    <color name="chipColor">#E5E5E5</color>
+    <color name="backgroundColor">#f2f2f2</color>
+    <color name="chipColor">#e5e5e5</color>
     <!--OnColors-->
     <color name="onPrimary">#FFFFFF</color>
     <color name="onSecondary">#000000</color>

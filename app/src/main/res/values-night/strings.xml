@@ -23,7 +23,7 @@
     <string name="accept">Accept 🤦‍♂</string>
     <string name="selectDateHint">dd/mm/yyyy 🗓</string>
     <string name="field_info_text">All Fields specified with * must be filled</string>
-    <string name="all_transactions">All Transactions</string>
+    <string name="all_transactions">Transactions</string>
     <string name="edit_fab_content_description">setting transactions in a editional mode</string>
     <string name="creating_a_new_transaction_description">creating a new transaction fab</string>
     <string-array name="transaction_options">
