@@ -1,28 +1,28 @@
 package com.zanoapp.applediseaseIdentification.ui.managementAndAnalytics
 
 import android.os.Build
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
-import androidx.lifecycle.Observer
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.zanoapp.applediseaseIdentification.R
 import com.zanoapp.applediseaseIdentification.databinding.FragmentAccountAnalyticsManagmentBinding
-import com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsDB.Transaction
 import com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsDB.TransactionDatabase
 import com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsDB.TransactionRepository
 import com.zanoapp.applediseaseIdentification.ui.managementAndAnalytics.adapters.TransactionRecyclerViewAdapterRecyclerView
+
 
 class AccountAnalyticsFragment : Fragment() {
 
@@ -30,7 +30,7 @@ class AccountAnalyticsFragment : Fragment() {
     private lateinit var createTransactionFab: FloatingActionButton
     private lateinit var editTransactionFab: FloatingActionButton
     private lateinit var viewModel: AccountAnalyticsViewModel
-    private lateinit var accountAnalyticsFragmentBinding: FragmentAccountAnalyticsManagmentBinding
+    private lateinit var binding: FragmentAccountAnalyticsManagmentBinding
     private var clicked = false
 
     private val rotateOpen: Animation by lazy {
@@ -71,13 +71,13 @@ class AccountAnalyticsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        accountAnalyticsFragmentBinding =
+        binding =
             FragmentAccountAnalyticsManagmentBinding.inflate(layoutInflater, container, false)
 
         setupRecyclerViewAdapter()
         chipsFilteringOfTransactions()
 
-        return accountAnalyticsFragmentBinding.root
+        return binding.root
     }
 
     private fun initViewModel() {
@@ -90,13 +90,15 @@ class AccountAnalyticsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        createTransactionFab = accountAnalyticsFragmentBinding.createTransactionFab
-        editTransactionFab = accountAnalyticsFragmentBinding.editTransactionsFab
+        createTransactionFab = binding.createTransactionFab
+        editTransactionFab = binding.editTransactionsFab
 
         refreshTransactionsListener()
         fabButtonsListener()
 
-        accountAnalyticsFragmentBinding.balanceTextView.text =
+        onItemSwipeCallback()
+
+        binding.balanceTextView.text =
             viewModel.currentBalance.value.toString()
 
     }
@@ -104,7 +106,7 @@ class AccountAnalyticsFragment : Fragment() {
     /** Fab button listener when are clicked*/
     private fun fabButtonsListener() {
 
-        accountAnalyticsFragmentBinding.transactionFab.setOnClickListener {
+        binding.transactionFab.setOnClickListener {
             clicked = !clicked
             setVisibility(clicked)
             setAnimation(clicked)
@@ -144,45 +146,48 @@ class AccountAnalyticsFragment : Fragment() {
         if (clicked) {
             createTransactionFab.startAnimation(fromBottom)
             editTransactionFab.startAnimation(fromBottom)
-            accountAnalyticsFragmentBinding.transactionFab.startAnimation(rotateOpen)
+            binding.transactionFab.startAnimation(rotateOpen)
         } else {
             createTransactionFab.startAnimation(toBottom)
             editTransactionFab.startAnimation(toBottom)
-            accountAnalyticsFragmentBinding.transactionFab.startAnimation(rotateClose)
+            binding.transactionFab.startAnimation(rotateClose)
         }
-
     }
 
     /** refresh listener for the list of transactions */
 
     private fun refreshTransactionsListener() {
-        accountAnalyticsFragmentBinding.refreshRecyclerview.setOnRefreshListener {
+        binding.refreshRecyclerview.setOnRefreshListener {
             when {
-                accountAnalyticsFragmentBinding.showAllTransactionChip.isChecked -> {
+                binding.showAllTransactionChip.isChecked -> {
                     viewModel.getAllTransactions().also {
-                        accountAnalyticsFragmentBinding.refreshRecyclerview.isRefreshing = false
+                        binding.refreshRecyclerview.isRefreshing = false
                     }
                 }
-                accountAnalyticsFragmentBinding.showIncomesChip.isChecked -> {
+                binding.showIncomesChip.isChecked -> {
                     viewModel.getIncomeTransactions().also {
-                        accountAnalyticsFragmentBinding.transactionListTypeContainerTextView.setText(R.string.ins)
-                        accountAnalyticsFragmentBinding.refreshRecyclerview.isRefreshing = false
+                        binding.transactionListTypeContainerTextView.setText(
+                            R.string.ins
+                        )
+                        binding.refreshRecyclerview.isRefreshing = false
                     }
                 }
-                accountAnalyticsFragmentBinding.showExpensesChip.isChecked -> {
+                binding.showExpensesChip.isChecked -> {
                     viewModel.getExpenseTransactions().also {
-                        accountAnalyticsFragmentBinding.transactionListTypeContainerTextView.setText(R.string.outs)
-                        accountAnalyticsFragmentBinding.refreshRecyclerview.isRefreshing = false
+                        binding.transactionListTypeContainerTextView.setText(
+                            R.string.outs
+                        )
+                        binding.refreshRecyclerview.isRefreshing = false
                     }
                 }
 
 
             }
-            accountAnalyticsFragmentBinding.refreshRecyclerview.isRefreshing = false
+            binding.refreshRecyclerview.isRefreshing = false
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            accountAnalyticsFragmentBinding.refreshRecyclerview.setColorSchemeColors(
+            binding.refreshRecyclerview.setColorSchemeColors(
                 resources.getColor(R.color.primaryColor, context?.theme),
                 resources.getColor(R.color.secondaryDarkColor, context?.theme),
                 resources.getColor(R.color.secondaryLightColor, context?.theme)
@@ -193,36 +198,93 @@ class AccountAnalyticsFragment : Fragment() {
 
     private fun setupRecyclerViewAdapter() {
         adapter = TransactionRecyclerViewAdapterRecyclerView()
-        accountAnalyticsFragmentBinding.transactionsRecyclerView.adapter = adapter
+        binding.transactionsRecyclerView.adapter = adapter
+
+
 
         viewModel.transactions.observe(viewLifecycleOwner, {
             adapter.submitList(it)
-            accountAnalyticsFragmentBinding.refreshRecyclerview.isRefreshing = false
+            binding.refreshRecyclerview.isRefreshing = false
         })
 
         val manager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
-        accountAnalyticsFragmentBinding.transactionsRecyclerView.layoutManager = manager
+        binding.transactionsRecyclerView.layoutManager = manager
+
     }
 
     fun chipsFilteringOfTransactions() {
 
-        accountAnalyticsFragmentBinding.showAllTransactionChip.setOnClickListener {
-            setupRecyclerViewAdapter()
-            accountAnalyticsFragmentBinding.transactionListTypeContainerTextView.setText(R.string.transactions)
+        binding.showAllTransactionChip.setOnClickListener {
+            viewModel.getAllTransactions()
+            binding.transactionListTypeContainerTextView.apply {
+                setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_transaction_type, 0, 0, 0)
+                setText(R.string.transactions)
+            }
+
         }
-        accountAnalyticsFragmentBinding.showIncomesChip.setOnClickListener {
+
+        binding.showIncomesChip.setOnClickListener {
             viewModel.getIncomeTransactions()
             viewModel.incomeTransactions.observe(viewLifecycleOwner, {
                 adapter.submitList(it)
             })
-            accountAnalyticsFragmentBinding.transactionListTypeContainerTextView.setText(R.string.ins)
+            binding.transactionListTypeContainerTextView.apply {
+                setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic__01_receive_amount, 0, 0, 0)
+                setText(R.string.ins)
+            }
         }
-        accountAnalyticsFragmentBinding.showExpensesChip.setOnClickListener {
+
+        binding.showExpensesChip.setOnClickListener {
             viewModel.getExpenseTransactions()
             viewModel.expensesTransactions.observe(viewLifecycleOwner, {
                 adapter.submitList(it)
             })
-            accountAnalyticsFragmentBinding.transactionListTypeContainerTextView.setText(R.string.outs)
+            binding.transactionListTypeContainerTextView.apply {
+                setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic__02_sending_amount, 0, 0, 0)
+                setText(R.string.outs)
+            }
         }
+    }
+
+    fun onItemSwipeCallback() {
+        var itemTouchHelperCallback = object : SimpleCallback(
+            0,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                when (direction) {
+                    ItemTouchHelper.RIGHT -> {
+                      binding.transactionsRecyclerView.removeViewAt(viewHolder.absoluteAdapterPosition)
+                        val selectedTransactionId = adapter.currentList[viewHolder.absoluteAdapterPosition]
+                        viewModel.deleteTransaction(selectedTransactionId.transactionId).also {
+                            refreshTransactionsListener()
+                        }
+                        Toast.makeText(
+                            requireContext(),
+                            "Got the item at position: ${viewHolder.absoluteAdapterPosition} " +
+                                    "with item id : $selectedTransactionId",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    ItemTouchHelper.LEFT -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "(left)Got the item at position: ${viewHolder.absoluteAdapterPosition}" +
+                                    " with item id : ${viewHolder.itemId}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
+        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(binding.transactionsRecyclerView)
     }
 }

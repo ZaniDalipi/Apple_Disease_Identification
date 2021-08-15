@@ -71,6 +71,7 @@
     <!--custom chips-->
     <style name="customChips" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="shapeAppearanceOverlay">@style/Widget.MyApp.Chips</item>
+        <item name="android:textAppearance">@style/TextAppearance.Chips</item>
     </style>
 
     <style name="Widget.MyApp.Chips" parent="">
@@ -133,9 +134,15 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="TextAppearance.Chips" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="fontFamily">@font/aclonica</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
     <!--custom style for subtitles-->
     <style name="TextAppearance.CustomSubTitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
-        <item name="fontFamily">@font/rubik_light</item>
+        <item name="fontFamily">@font/rubik_medium</item>
     </style>
 
     <style name="TextAppearance.CustomBody1" parent="TextAppearance.MaterialComponents.Body1">

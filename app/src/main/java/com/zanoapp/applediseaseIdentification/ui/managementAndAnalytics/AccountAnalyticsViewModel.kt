@@ -30,8 +30,8 @@ class AccountAnalyticsViewModel(private val transactionRepository: TransactionRe
     }
 
 
-    fun deleteTransaction(transaction: Transaction) {
-        transactionRepository.deleteTransaction(transaction)
+    fun deleteTransaction(transactionId: Long) {
+        transactionRepository.deleteTransaction(transactionId)
     }
 
     fun getAllTransactions() {

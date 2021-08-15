@@ -5,7 +5,9 @@ import android.app.Application
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -24,13 +26,14 @@ class TransactionRecyclerViewAdapterRecyclerView :
     ) {
 
     lateinit var binding: CardTransactionsBinding
+    /*try creating an array and populate it from the viewholder*/
 
-    inner class ViewHolder(val binding: CardTransactionsBinding) :
+
+    inner class ViewHolder() :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Transaction) {
             val transactionTotal = item.calculateTotal()
-
             binding.productNameTextView.text = item.productName
             binding.transactionDate.text = item.saleDate
             binding.transactionAmount.text = transactionTotal.toString().plus("€")
@@ -47,12 +50,16 @@ class TransactionRecyclerViewAdapterRecyclerView :
                 viewGroup,
                 false
             )
-        return ViewHolder(binding)
+        return ViewHolder()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
+        val item = currentList[position]
         holder.bind(item)
+    }
+
+    override fun getItemCount(): Int {
+        return currentList.size
     }
 
     /** My Diffutil callback for each element in the recyler view */
@@ -68,7 +75,12 @@ class TransactionRecyclerViewAdapterRecyclerView :
         }
 
 
+
+
     }
+
+
+
 
 
     /*Calculate the transaction income by multiplying sold price with the mass kg */
@@ -88,4 +100,6 @@ class TransactionRecyclerViewAdapterRecyclerView :
         }
         return result.roundToInt()
     }
+
+
 }

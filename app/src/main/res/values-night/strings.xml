@@ -26,6 +26,7 @@
     <string name="all_transactions">Transactions</string>
     <string name="edit_fab_content_description">setting transactions in a editional mode</string>
     <string name="creating_a_new_transaction_description">creating a new transaction fab</string>
+    <string name="refresh">Refresh</string>
     <string-array name="transaction_options">
         <item>Incomes</item>
         <item>Expenses</item>

@@ -75,6 +75,7 @@
     <string name="edit_fab_content_description">setting transactions in a editional mode</string>
     <string name="creating_a_new_transaction_description">creating a new transaction fab</string>
     <string name="extendable_fab_content_description">fab that will open 2 other fabs to create a new transaction and to edit the transactions in the list</string>
+    <string name="refresh">Refresh</string>
     <string-array name="transaction_options">
         <item>Incomes</item>
         <item>Expenses</item>

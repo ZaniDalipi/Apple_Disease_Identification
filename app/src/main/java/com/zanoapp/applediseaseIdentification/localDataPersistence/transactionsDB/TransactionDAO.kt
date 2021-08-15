@@ -12,9 +12,9 @@ interface TransactionDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
         fun insertTransaction(transaction: Transaction)
 
-    /** Delete a transaction */
-    @Delete
-    fun deleteTransaction(transaction: Transaction)
+    @Query("Delete from `Transaction` where transactionId == :transactionId")
+    fun deleteTransaction(transactionId: Long)
+
 
     /** Get all the transaction that user has done */
     @Query("Select * FROM `Transaction` ORDER BY transactionId DESC")

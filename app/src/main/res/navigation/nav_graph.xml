@@ -77,8 +77,6 @@
         <dialog
             android:id="@+id/addTransactionDialog"
             android:name="com.zanoapp.applediseaseIdentification.ui.managementAndAnalytics.AddTransactionDialog"
-            android:label="AddTransactionDialog" />
+            android:label="AddTransactionDialog"/>
     </navigation>
-
-
 </navigation>

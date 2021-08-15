@@ -16,32 +16,17 @@ operator fun ClosedRange<FloatBuffer>.iterator() =
         override fun next(): FloatBuffer {
             return current.inc(current)
         }
-
-
     }
-
 private operator fun FloatBuffer.inc(input: FloatBuffer): FloatBuffer {
     return inc(this)
-
 }
-
-
-
 
 fun <T> Iterator<T>.customEach(action: (T) -> Unit) {
     for(element: T in this)
         action(element)
 }
 
-fun ImageView.setTransactionImage(transaction: Transaction) {
-    setImageResource(
-        when (transaction.transactionType) {
-            "Incomes" -> R.drawable.ic_transaction_plus
-            "Expenses" -> R.drawable.ic_transaction_minus
-            else -> R.drawable.leaf_48px
-        }
-    )
-}
+
 
 
 

@@ -14,9 +14,9 @@ class TransactionRepository(private val transactionDAO: TransactionDAO) {
     }
 
     /** Delete a transaction from the DB*/
-    fun deleteTransaction(transaction: Transaction) {
+    fun deleteTransaction(transactionId: Long) {
         CoroutineScope(Dispatchers.IO).launch {
-            transactionDAO.deleteTransaction(transaction)
+            transactionDAO.deleteTransaction(transactionId)
         }
     }
 

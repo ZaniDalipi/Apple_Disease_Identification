@@ -6,7 +6,7 @@
     <dimen name="rotate_dimension">18</dimen>
 
     <!--fab margins-->
-    <dimen name="fab_margin_end_default">16dp</dimen>
+    <dimen name="fab_margin_end_default">14dp</dimen>
     <dimen name="fab_margin_bottom_default">40dp</dimen>
-    <dimen name="additional_fab_end_margin">16dp</dimen>
+    <dimen name="additional_fab_end_margin">14dp</dimen>
 </resources>

@@ -94,19 +94,14 @@
     <style name="customChips" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="materialThemeOverlay">@style/Widget.MyApp.Chips</item>
         <item name="shapeAppearance">@style/ShapeAppearance.MyApp.MediumComponent</item>
-        <item name="android:textAppearance">@style/TextAppearance.CustomBody2</item>
+        <item name="android:textAppearance">@style/TextAppearance.Chips</item>
     </style>
 
     <style name="Widget.MyApp.Chips" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">18dp</item>
         <item name="elevation">4dp</item>
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorSurface">@color/chipColor</item>
-        <item name="colorOnSurface">@color/primaryColor</item>
-        <item name="colorOnPrimary">@color/primaryDarkColor</item>
         <item name="android:translationZ">15dp</item>
-        <item name="fontFamily">@font/aclonica</item>
     </style>
     <!--end chips-->
 
@@ -155,6 +150,12 @@
         <item name="fontFamily">@font/aclonica</item>
         <item name="android:textColor">@color/primaryColor</item>
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.Chips" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="fontFamily">@font/aclonica</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textSize">10sp</item>
     </style>
 
 

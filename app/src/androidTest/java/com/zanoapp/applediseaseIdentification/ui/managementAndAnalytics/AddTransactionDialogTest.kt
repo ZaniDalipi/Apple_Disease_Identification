@@ -39,7 +39,7 @@ class AddTransactionDialogTest {
             //Inputs to data
             val givenInput =
                 arrayListOf(
-                    productTypes[(0..12).random()],
+                    productTypes[(0..9).random()].plus(myIncrementalNumber),
                     700 + (0..100_000).random(),
                     0.40 + random(),
                     "Transaction$myIncrementalNumber",

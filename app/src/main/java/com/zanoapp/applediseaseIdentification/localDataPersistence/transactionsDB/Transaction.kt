@@ -11,7 +11,7 @@ import java.sql.Date
 @Entity
 data class Transaction (
     @PrimaryKey(autoGenerate = true)
-        public val transactionId: Int,
+        public val transactionId: Long,
 
     @ColumnInfo(name = "transaction_type")
         public val transactionType: String,
