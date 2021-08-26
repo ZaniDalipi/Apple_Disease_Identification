@@ -90,9 +90,6 @@ class AddTransactionDialogTest {
                 .perform(replaceText(givenInput[6].toString()))
                 .perform(closeSoftKeyboard())
 
-
-
-
             onView(withId(R.id.saveTransactionButton))
                 .perform(click())
         }

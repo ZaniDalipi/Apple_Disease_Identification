@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback
 import androidx.recyclerview.widget.RecyclerView
@@ -90,6 +91,9 @@ class AccountAnalyticsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+
+        Log.i("DebuggingApp", "OnStart() called")
+
         createTransactionFab = binding.createTransactionFab
         editTransactionFab = binding.editTransactionsFab
 
@@ -157,15 +161,24 @@ class AccountAnalyticsFragment : Fragment() {
     /** refresh listener for the list of transactions */
 
     private fun refreshTransactionsListener() {
+        Log.i("DebuggingApp", "refreshTransactionsListener: called ")
         binding.refreshRecyclerview.setOnRefreshListener {
             when {
                 binding.showAllTransactionChip.isChecked -> {
+                    Log.i("DebuggingApp", "refreshTransactionsListener: show all transaction chip called ")
                     viewModel.getAllTransactions().also {
+                        viewModel.transactions.observe(viewLifecycleOwner, {
+                            adapter.submitList(it)
+                        })
                         binding.refreshRecyclerview.isRefreshing = false
                     }
                 }
                 binding.showIncomesChip.isChecked -> {
+                    Log.i("DebuggingApp", "refreshTransactionsListener: show income chip called ")
                     viewModel.getIncomeTransactions().also {
+                        viewModel.incomeTransactions.observe(viewLifecycleOwner, {
+                            adapter.submitList(it)
+                        })
                         binding.transactionListTypeContainerTextView.setText(
                             R.string.ins
                         )
@@ -173,15 +186,17 @@ class AccountAnalyticsFragment : Fragment() {
                     }
                 }
                 binding.showExpensesChip.isChecked -> {
+                    Log.i("DebuggingApp", "refreshTransactionsListener: show expenses chip called ")
                     viewModel.getExpenseTransactions().also {
+                        viewModel.expensesTransactions.observe(viewLifecycleOwner, {
+                            adapter.submitList(it)
+                        })
                         binding.transactionListTypeContainerTextView.setText(
                             R.string.outs
                         )
                         binding.refreshRecyclerview.isRefreshing = false
                     }
                 }
-
-
             }
             binding.refreshRecyclerview.isRefreshing = false
         }
@@ -200,7 +215,7 @@ class AccountAnalyticsFragment : Fragment() {
         adapter = TransactionRecyclerViewAdapterRecyclerView()
         binding.transactionsRecyclerView.adapter = adapter
 
-
+        viewModel.getAllTransactions()
 
         viewModel.transactions.observe(viewLifecycleOwner, {
             adapter.submitList(it)
@@ -215,7 +230,15 @@ class AccountAnalyticsFragment : Fragment() {
     fun chipsFilteringOfTransactions() {
 
         binding.showAllTransactionChip.setOnClickListener {
+
+            Log.i("DebuggingApp", "chipsFilteringOfTransactions: show all transactions chip clicked")
+
             viewModel.getAllTransactions()
+            viewModel.transactions.observe(viewLifecycleOwner, {
+                Log.i("DebuggingApp", "ShowALLChip data before submiting : ${it.size}")
+                adapter.submitList(it)
+                Log.i("DebuggingApp", "ShowALLChip data : ${it.size}")
+            })
             binding.transactionListTypeContainerTextView.apply {
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_transaction_type, 0, 0, 0)
                 setText(R.string.transactions)
@@ -224,9 +247,13 @@ class AccountAnalyticsFragment : Fragment() {
         }
 
         binding.showIncomesChip.setOnClickListener {
+
+            Log.i("DebuggingApp", "chipsFilteringOfTransactions: show income transactions chip clicked")
             viewModel.getIncomeTransactions()
             viewModel.incomeTransactions.observe(viewLifecycleOwner, {
+                Log.i("DebuggingApp", "ShowIncomeChip  data before submiting : ${it.size}")
                 adapter.submitList(it)
+                Log.i("DebuggingApp", "ShowIncomeChip data : ${it.size}")
             })
             binding.transactionListTypeContainerTextView.apply {
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic__01_receive_amount, 0, 0, 0)
@@ -235,10 +262,13 @@ class AccountAnalyticsFragment : Fragment() {
         }
 
         binding.showExpensesChip.setOnClickListener {
-            viewModel.getExpenseTransactions()
+            Log.i("DebuggingApp", "chipsFilteringOfTransactions: show expenses transactions chip clicked")
             viewModel.expensesTransactions.observe(viewLifecycleOwner, {
+                Log.i("DebuggingApp", "ShowExpensesChip data before submiting: ${it.size}")
                 adapter.submitList(it)
+                Log.i("DebuggingApp", "ShowExpensesChip data : ${it.size}")
             })
+
             binding.transactionListTypeContainerTextView.apply {
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic__02_sending_amount, 0, 0, 0)
                 setText(R.string.outs)
@@ -247,9 +277,9 @@ class AccountAnalyticsFragment : Fragment() {
     }
 
     fun onItemSwipeCallback() {
-        var itemTouchHelperCallback = object : SimpleCallback(
+        val itemTouchHelperCallback = object : SimpleCallback(
             0,
-            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+            ItemTouchHelper.RIGHT
         ) {
             override fun onMove(
                 recyclerView: RecyclerView,
@@ -262,23 +292,19 @@ class AccountAnalyticsFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 when (direction) {
                     ItemTouchHelper.RIGHT -> {
-                      binding.transactionsRecyclerView.removeViewAt(viewHolder.absoluteAdapterPosition)
-                        val selectedTransactionId = adapter.currentList[viewHolder.absoluteAdapterPosition]
-                        viewModel.deleteTransaction(selectedTransactionId.transactionId).also {
-                            refreshTransactionsListener()
-                        }
+                        val selectedTransactionId =
+                            adapter.currentList[viewHolder.absoluteAdapterPosition].also {
+                                viewModel.deleteTransaction(it.transactionId)
+                                adapter.notifyItemRemoved(viewHolder.absoluteAdapterPosition)
+                            }
+
+                        binding.transactionsRecyclerView.scrollToPosition(0)
+
+
                         Toast.makeText(
                             requireContext(),
                             "Got the item at position: ${viewHolder.absoluteAdapterPosition} " +
                                     "with item id : $selectedTransactionId",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    ItemTouchHelper.LEFT -> {
-                        Toast.makeText(
-                            requireContext(),
-                            "(left)Got the item at position: ${viewHolder.absoluteAdapterPosition}" +
-                                    " with item id : ${viewHolder.itemId}",
                             Toast.LENGTH_SHORT
                         ).show()
                     }

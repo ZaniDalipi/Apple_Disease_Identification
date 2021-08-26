@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.graphics.Color
+import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,13 +28,15 @@ class TransactionRecyclerViewAdapterRecyclerView :
     ) {
 
     lateinit var binding: CardTransactionsBinding
-    /*try creating an array and populate it from the viewholder*/
 
 
     inner class ViewHolder() :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Transaction) {
+
+            Log.i("DebuggingAppAdapter", "bind: called and the item is ${item.transactionId} ${item.productName}")
+
             val transactionTotal = item.calculateTotal()
             binding.productNameTextView.text = item.productName
             binding.transactionDate.text = item.saleDate
@@ -54,7 +58,7 @@ class TransactionRecyclerViewAdapterRecyclerView :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = currentList[position]
+        val item = getItem(position)
         holder.bind(item)
     }
 
@@ -70,23 +74,14 @@ class TransactionRecyclerViewAdapterRecyclerView :
         }
 
         override fun areContentsTheSame(oldItem: Transaction, newItem: Transaction): Boolean {
-            return oldItem == newItem
+            return false
 
         }
-
-
-
-
     }
-
-
-
-
 
     /*Calculate the transaction income by multiplying sold price with the mass kg */
     fun Transaction.calculateTotal(): Int {
         val result = mass * price
-
         when (transactionType) {
             "Incomes" -> {
                 binding.transactionAmount.setTextColor(Color.GREEN)
