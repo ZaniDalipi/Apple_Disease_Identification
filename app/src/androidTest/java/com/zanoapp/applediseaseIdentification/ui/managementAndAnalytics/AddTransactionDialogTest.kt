@@ -2,23 +2,17 @@ package com.zanoapp.applediseaseIdentification.ui.managementAndAnalytics
 
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.Lifecycle
-import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.ViewAction
-import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.zanoapp.applediseaseIdentification.R
 import org.hamcrest.CoreMatchers.*
-import org.hamcrest.Matchers.hasEntry
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.lang.Math.random
-import java.util.EnumSet.allOf
 
 @RunWith(AndroidJUnit4ClassRunner::class)
 @LargeTest

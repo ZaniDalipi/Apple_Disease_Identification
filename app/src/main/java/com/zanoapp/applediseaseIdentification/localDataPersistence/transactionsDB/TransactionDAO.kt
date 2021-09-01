@@ -15,6 +15,9 @@ interface TransactionDAO {
     @Query("Delete from `Transaction` where transactionId == :transactionId")
     fun deleteTransaction(transactionId: Long)
 
+    @Update
+    fun updateTransaction(transaction: Transaction)
+
 
     /** Get all the transaction that user has done */
     @Query("Select * FROM `Transaction` ORDER BY transactionId DESC")

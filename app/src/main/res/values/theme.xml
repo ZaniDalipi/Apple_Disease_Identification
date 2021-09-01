@@ -20,6 +20,7 @@
         <item name="textAppearanceSubtitle1">@style/TextAppearance.CustomSubTitle1</item>
         <item name="textAppearanceBody1">@style/TextAppearance.CustomBody1</item>
         <item name="textAppearanceBody2">@style/TextAppearance.CustomBody2</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.backDrop.Headline2</item>
 
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MyApp.SmallComponent
         </item>
@@ -70,7 +71,6 @@
     <style name="ThemeOverlay.App.Card" parent="">
         <item name="colorSurface">@color/chipColor</item>
         <item name="colorOnSurface">@color/chipColor</item>
-        <item name="colorOnPrimary">@color/primaryDarkColor</item>
         <item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/primaryDarkColor</item>
     </style>
     <!--END-->
@@ -126,7 +126,7 @@
 
 
     <!--FONTS-->
-    <!--costom style for titles-->
+    <!--custom style for titles-->
 
     <style name="TextAppearance.CustomHeadline6" parent="TextAppearance.MaterialComponents.Headline6">
         <item name="fontFamily">@font/aclonica</item>
@@ -162,8 +162,7 @@
 
     <!--custom style for subtitles-->
     <style name="TextAppearance.CustomSubTitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
-        <item name="fontFamily">@font/rubik_medium</item>
-        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/rubik_light</item>
     </style>
 
     <style name="TextAppearance.CustomBody1" parent="TextAppearance.MaterialComponents.Body1">
@@ -171,6 +170,14 @@
         <item name="android:includeFontPadding">true</item>
         <item name="android:textSize">14sp</item>
     </style>
+
+    <style name="TextAppearance.backDrop.Headline2" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/aclonica</item>
+        <item name="android:includeFontPadding">true</item>
+
+    </style>
+
+
 
 
     <!--EditText custom styles-->
@@ -182,11 +189,26 @@
         <item name="android:enabled">true</item>
         <item name="hintTextColor">@color/primaryColor</item>
         <item name="boxStrokeErrorColor">@color/onError</item>
-        <item name="hintTextAppearance">?attr/textAppearanceCaption</item>
-        <item name="android:textAppearance">@style/TextAppearance.CustomSubTitle1</item>
+        <item name="hintTextAppearance">@style/TextAppearance.CustomBody1</item>
+        <item name="android:textAppearance">@style/TextAppearance.CustomBody1</item>
         <item name="singleLine">true</item>
         <item name="elevation">2dp</item>
 
+    </style>
+
+    <style name="Widget.MyApp.TextInputLayout.TransactionDetailsCustom" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxStrokeColor">@color/primaryColor</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="android:enabled">true</item>
+        <item name="boxBackgroundColor">@color/chipColor</item>
+        <item name="hintTextColor">@color/secondaryDarkColor</item>
+        <item name="boxStrokeErrorColor">@color/onError</item>
+        <item name="android:shadowColor">@color/chipColor</item>
+        <item name="android:rotationX">4</item>
+        <item name="hintTextAppearance">@style/TextAppearance.CustomBody2</item>
+        <item name="android:textAppearance">@style/TextAppearance.CustomBody1</item>
+        <item name="singleLine">true</item>
     </style>
 
 </resources>

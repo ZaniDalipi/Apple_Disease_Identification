@@ -5,7 +5,7 @@
     <!--primary colors(day/night)-->
     <color name="primaryColor">#19A87D</color>
     <color name="primaryLightColor">#5cdaac</color>
-    <color name="primaryDarkColor">#007851</color>
+    <color name="primaryDarkColor">#f2f2f2</color>
     <color name="primaryTextColor">#FFFFFF</color>
 
     <!--secondary colors(day/night) -->
@@ -22,4 +22,14 @@
     <color name="onBackground">#000000</color>
     <color name="onSurface">#19A87D</color>
     <color name="onError">#E53935</color>
+
+    <!--Custom colors-->
+    <color name="gradient_end">#BD0202</color>
+    <color name="gradient_middle">#C53935</color>
+    <color name="gradient_center">#EF9A9A</color>
+
+
+    <!--custom colors for night backdrop-->
+    <color name="surface_color_backdrop">#384241</color>
+    <color name="card_color_dark_mode">#323535</color>
 </resources>

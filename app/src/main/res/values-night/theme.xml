@@ -30,6 +30,7 @@
         <item name="floatingActionButtonStyle">@style/Widget.MyApp.MaterialFloatingActionButton</item>
         <item name="tabStyle">@style/customTabLayout</item>
         <item name="chipStyle">@style/customChips</item>
+        <item name="materialCardViewStyle">@style/Widget.App.CardView</item>
 
 
     </style>
@@ -55,6 +56,20 @@
         <item name="cornerFamily">cut</item>
         <item name="cornerSize">6dp</item>
     </style>
+
+    <!--custom card attributes-->
+    <style name="Widget.App.CardView" parent="Widget.MaterialComponents.CardView">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Card</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.MyApp.MediumComponent</item>
+        <item name="android:textAppearance">@style/TextAppearance.CustomBody2</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Card" parent="">
+        <item name="colorSurface">@color/cardview_dark_background</item>
+        <item name="colorOnSurface">@color/cardview_dark_background</item>
+        <item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/surface_color_backdrop</item>
+    </style>
+    <!--END-->
 
     <!-- Custom Fab-->
     <style name="Widget.MyApp.MaterialFloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
@@ -130,7 +145,7 @@
 
     <style name="TextAppearance.CustomBody2" parent="TextAppearance.MaterialComponents.Body2">
         <item name="fontFamily">@font/aclonica</item>
-        <item name="android:textColor">@color/primaryDarkColor</item>
+        <item name="android:textColor">@color/primaryColor</item>
         <item name="android:textSize">12sp</item>
     </style>
 
@@ -142,12 +157,13 @@
 
     <!--custom style for subtitles-->
     <style name="TextAppearance.CustomSubTitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
-        <item name="fontFamily">@font/rubik_medium</item>
+        <item name="fontFamily">@font/rubik_light</item>
     </style>
 
     <style name="TextAppearance.CustomBody1" parent="TextAppearance.MaterialComponents.Body1">
         <item name="fontFamily">@font/aclonica</item>
         <item name="android:includeFontPadding">true</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
 
@@ -159,11 +175,27 @@
         <item name="boxStrokeWidthFocused">2dp</item>
         <item name="android:enabled">true</item>
         <item name="hintTextColor">@color/primaryColor</item>
-        <item name="hintTextAppearance">?attr/textAppearanceCaption</item>
-        <item name="android:textAppearance">@style/TextAppearance.CustomSubTitle1</item>
+        <item name="android:rotationX">4</item>
+        <item name="hintTextAppearance">@style/TextAppearance.CustomBody2</item>
+        <item name="android:textAppearance">@style/TextAppearance.CustomBody1</item>
         <item name="singleLine">true</item>
         <item name="elevation">2dp</item>
 
+    </style>
+
+    <style name="Widget.MyApp.TextInputLayout.TransactionDetailsCustom" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxStrokeColor">@color/primaryColor</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="android:enabled">true</item>
+        <item name="boxBackgroundColor">@color/surface_color_backdrop</item>
+        <item name="hintTextColor">@color/primaryColor</item>
+        <item name="boxStrokeErrorColor">@color/onError</item>
+        <item name="strokeColor">@color/primaryColor</item>
+        <item name="android:rotationX">4</item>
+        <item name="hintTextAppearance">@style/TextAppearance.CustomBody2</item>
+        <item name="android:textAppearance">@style/TextAppearance.CustomBody1</item>
+        <item name="singleLine">true</item>
     </style>
 
 </resources>

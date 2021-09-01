@@ -20,6 +20,12 @@ class TransactionRepository(private val transactionDAO: TransactionDAO) {
         }
     }
 
+    fun updateTransaction(transaction: Transaction){
+        CoroutineScope(Dispatchers.IO).launch {
+            transactionDAO.updateTransaction(transaction)
+        }
+    }
+
     /** Get all the transaction that user has done */
     suspend fun getAllTransactions(): List<Transaction> {
         return supervisorScope {

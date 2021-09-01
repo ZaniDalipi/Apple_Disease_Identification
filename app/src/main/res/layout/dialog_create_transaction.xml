@@ -38,6 +38,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/productTypeEditText"
                 android:layout_width="match_parent"
+                style="@style/Widget.App.TextInputLayout.Custom"
                 android:layout_height="match_parent"
                 android:inputType="text"
                 android:maxLength="24"
@@ -63,6 +64,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/massEditText"
                 android:layout_width="match_parent"
+                style="@style/Widget.App.TextInputLayout.Custom"
                 android:layout_height="match_parent"
                 android:inputType="number"
                 android:maxLength="10"
@@ -87,6 +89,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/priceEditText"
+                style="@style/Widget.App.TextInputLayout.Custom"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="numberDecimal"
@@ -95,7 +98,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/DescriptionInputLayout"
+            android:id="@+id/descriptionInputLayout"
             style="@style/Widget.App.TextInputLayout.Custom"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
@@ -112,6 +115,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/descriptionEditText"
                 android:layout_width="match_parent"
+                style="@style/Widget.App.TextInputLayout.Custom"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
                 android:maxLength="150"
@@ -130,9 +134,9 @@
             android:hint="@string/client_name"
             app:boxStrokeColor="@color/primaryColor"
             app:endIconMode="clear_text"
-            app:layout_constraintEnd_toEndOf="@+id/DescriptionInputLayout"
-            app:layout_constraintStart_toStartOf="@+id/DescriptionInputLayout"
-            app:layout_constraintTop_toBottomOf="@+id/DescriptionInputLayout">
+            app:layout_constraintEnd_toEndOf="@+id/descriptionInputLayout"
+            app:layout_constraintStart_toStartOf="@+id/descriptionInputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/descriptionInputLayout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/clientNameEditText"

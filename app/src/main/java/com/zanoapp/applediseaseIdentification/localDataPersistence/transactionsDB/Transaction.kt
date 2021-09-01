@@ -1,13 +1,15 @@
 package com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsDB
 
+import android.os.Parcelable
 import androidx.databinding.adapters.Converters
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import kotlinx.parcelize.Parcelize
 import java.sql.Date
 
-
+@Parcelize
 @Entity
 data class Transaction (
     @PrimaryKey(autoGenerate = true)
@@ -38,7 +40,7 @@ data class Transaction (
 
     @ColumnInfo(name = "client_name")
         public val clientName: String
-    ) {
+    ) : Parcelable {
     constructor(transactionType: String, productName: String, mass: Int, price: Double, saleDate: String, additionalDescription: String, clientName: String)
             : this(0, transactionType, productName, mass, price, saleDate, additionalDescription, clientName)
 }

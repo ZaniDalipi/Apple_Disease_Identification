@@ -73,10 +73,26 @@
                 app:exitAnim="@anim/to_bottom_anim"
                 app:popEnterAnim="@anim/from_bottom_anim"
                 app:popExitAnim="@anim/to_bottom_anim" />
+            <action
+                android:id="@+id/action_accountAnalyticsFragment_to_transactionDetailsFragment"
+                app:destination="@id/transactionDetailsFragment"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right"/>
         </fragment>
         <dialog
             android:id="@+id/addTransactionDialog"
             android:name="com.zanoapp.applediseaseIdentification.ui.managementAndAnalytics.AddTransactionDialog"
             android:label="AddTransactionDialog"/>
+        <fragment
+            android:id="@+id/transactionDetailsFragment"
+            android:name="com.zanoapp.applediseaseIdentification.ui.managementAndAnalytics.transactionDetailsScreen.TransactionDetailsFragment"
+            android:label="fragment_transaction_details"
+            tools:layout="@layout/fragment_transaction_details" >
+            <argument
+                android:name="transaction"
+                app:argType="com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsDB.Transaction" />
+        </fragment>
     </navigation>
 </navigation>

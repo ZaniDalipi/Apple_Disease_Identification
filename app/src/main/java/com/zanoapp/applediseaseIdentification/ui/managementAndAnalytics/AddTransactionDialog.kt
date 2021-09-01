@@ -44,8 +44,7 @@ class AddTransactionDialog : DialogFragment() {
         val database by lazy { TransactionDatabase.getInstance(requireContext()) }
         val transactionRepository by lazy { TransactionRepository(database.transactionDao()) }
         val viewModelFactory = AccountAnalyticsViewModelFactory(transactionRepository)
-        viewModel =
-            ViewModelProvider(this, viewModelFactory).get(AccountAnalyticsViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(AccountAnalyticsViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,11 +89,7 @@ class AddTransactionDialog : DialogFragment() {
 
         val transactionOptions = resources.getStringArray(R.array.transaction_options)
 
-        ArrayAdapter(
-            requireContext(),
-            R.layout.support_simple_spinner_dropdown_item,
-            transactionOptions
-        ).also { adapter ->
+        ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, transactionOptions).also { adapter ->
             binding.transactionTypeDropDownList.setText("", false)
             binding.transactionTypeDropDownList.setAdapter(adapter)
         }
@@ -170,11 +165,7 @@ class AddTransactionDialog : DialogFragment() {
                 val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
                 calendar.time = Date(it)
                 binding.datePickerEditText.setText(
-                    "${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.MONTH) + 1}/${
-                        calendar.get(
-                            Calendar.YEAR
-                        )
-                    }"
+                    "${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.MONTH) + 1}/${calendar.get(Calendar.YEAR)}"
                 )
             }
             datePicker.show(parentFragmentManager, datePicker.toString())

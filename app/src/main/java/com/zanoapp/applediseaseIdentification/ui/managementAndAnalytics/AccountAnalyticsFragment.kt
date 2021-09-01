@@ -9,21 +9,23 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.zanoapp.applediseaseIdentification.R
 import com.zanoapp.applediseaseIdentification.databinding.FragmentAccountAnalyticsManagmentBinding
+import com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsDB.Transaction
 import com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsDB.TransactionDatabase
 import com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsDB.TransactionRepository
 import com.zanoapp.applediseaseIdentification.ui.managementAndAnalytics.adapters.TransactionRecyclerViewAdapterRecyclerView
-
 
 class AccountAnalyticsFragment : Fragment() {
 
@@ -76,18 +78,64 @@ class AccountAnalyticsFragment : Fragment() {
             FragmentAccountAnalyticsManagmentBinding.inflate(layoutInflater, container, false)
 
         setupRecyclerViewAdapter()
-        chipsFilteringOfTransactions()
+
+
 
         return binding.root
     }
 
-    private fun initViewModel() {
-        val database by lazy { TransactionDatabase.getInstance(requireContext()) }
-        val transactionRepository by lazy { TransactionRepository(database.transactionDao()) }
-        val viewModelFactory = AccountAnalyticsViewModelFactory(transactionRepository)
-        viewModel =
-            ViewModelProvider(this, viewModelFactory).get(AccountAnalyticsViewModel::class.java)
+
+    private fun filterExpensesTransactions() {
+        Log.i(
+            "DebuggingApp",
+            "chipsFilteringOfTransactions: show expenses transactions chip clicked"
+        )
+        viewModel.expensesTransactions.observe(viewLifecycleOwner, {
+            Log.i("DebuggingApp", "ShowExpensesChip data before submitting: ${it.size}")
+            adapter.submitList(it)
+            Log.i("DebuggingApp", "ShowExpensesChip data : ${it.size}")
+        })
+
+        binding.transactionListTypeContainerTextView.apply {
+            setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic__02_sending_amount, 0, 0, 0)
+            setText(R.string.outs)
+        }
     }
+
+    private fun filterIncomeTransactions() {
+        Log.i(
+            "DebuggingApp",
+            "chipsFilteringOfTransactions: show income transactions chip clicked"
+        )
+        viewModel.getIncomeTransactions()
+        viewModel.incomeTransactions.observe(viewLifecycleOwner, {
+            Log.i("DebuggingApp", "ShowIncomeChip  data before submitting : ${it.size}")
+            adapter.submitList(it)
+            Log.i("DebuggingApp", "ShowIncomeChip data : ${it.size}")
+        })
+        binding.transactionListTypeContainerTextView.apply {
+            setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic__01_receive_amount, 0, 0, 0)
+            setText(R.string.ins)
+        }
+    }
+
+    private fun filterAllTransactions() {
+        Log.i(
+            "DebuggingApp",
+            "chipsFilteringOfTransactions: show all transactions chip clicked"
+        )
+        viewModel.getAllTransactions()
+        viewModel.transactions.observe(viewLifecycleOwner, {
+            Log.i("DebuggingApp", "ShowALLChip data before submitting : ${it.size}")
+            adapter.submitList(it)
+            Log.i("DebuggingApp", "ShowALLChip data : ${it.size}")
+        })
+        binding.transactionListTypeContainerTextView.apply {
+            setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_transaction_type, 0, 0, 0)
+            setText(R.string.transactions)
+        }
+    }
+
 
     override fun onStart() {
         super.onStart()
@@ -97,9 +145,20 @@ class AccountAnalyticsFragment : Fragment() {
         createTransactionFab = binding.createTransactionFab
         editTransactionFab = binding.editTransactionsFab
 
+        binding.apply {
+            showAllTransactionChip.setOnClickListener {
+                filterAllTransactions()
+            }
+            showIncomesChip.setOnClickListener {
+                filterIncomeTransactions()
+            }
+            showExpensesChip.setOnClickListener {
+                filterExpensesTransactions()
+            }
+        }
+
         refreshTransactionsListener()
         fabButtonsListener()
-
         onItemSwipeCallback()
 
         binding.balanceTextView.text =
@@ -121,16 +180,12 @@ class AccountAnalyticsFragment : Fragment() {
         }
 
         editTransactionFab.setOnClickListener {
-            Toast.makeText(
-                context,
-                "set the cards of transaction in edit mode by clicking it we go to details of transaction itself",
-                Toast.LENGTH_SHORT
-            ).show()
+            findNavController().navigate(R.id.action_accountAnalyticsFragment_to_transactionDetailsFragment)
         }
     }
 
 
-    /** Functions to set the visibility of fabs when the transaction happens and defination of transactions */
+    /** Functions to set the visibility of FAB when the transaction happens and definition of transactions */
     private fun setVisibility(clicked: Boolean) {
         if (clicked) {
             createTransactionFab.visibility = View.VISIBLE
@@ -165,7 +220,10 @@ class AccountAnalyticsFragment : Fragment() {
         binding.refreshRecyclerview.setOnRefreshListener {
             when {
                 binding.showAllTransactionChip.isChecked -> {
-                    Log.i("DebuggingApp", "refreshTransactionsListener: show all transaction chip called ")
+                    Log.i(
+                        "DebuggingApp",
+                        "refreshTransactionsListener: show all transaction chip called "
+                    )
                     viewModel.getAllTransactions().also {
                         viewModel.transactions.observe(viewLifecycleOwner, {
                             adapter.submitList(it)
@@ -227,90 +285,70 @@ class AccountAnalyticsFragment : Fragment() {
 
     }
 
-    fun chipsFilteringOfTransactions() {
 
-        binding.showAllTransactionChip.setOnClickListener {
+    fun navigateToDetailsIWithTransaction(viewHolder: RecyclerView.ViewHolder) {
+        val selectedTransaction = adapter.currentList[viewHolder.absoluteAdapterPosition]
+        val bundle = bundleOf("transaction" to selectedTransaction)
+        findNavController().navigate(
+            R.id.action_accountAnalyticsFragment_to_transactionDetailsFragment,
+            bundle
+        )
 
-            Log.i("DebuggingApp", "chipsFilteringOfTransactions: show all transactions chip clicked")
-
-            viewModel.getAllTransactions()
-            viewModel.transactions.observe(viewLifecycleOwner, {
-                Log.i("DebuggingApp", "ShowALLChip data before submiting : ${it.size}")
-                adapter.submitList(it)
-                Log.i("DebuggingApp", "ShowALLChip data : ${it.size}")
-            })
-            binding.transactionListTypeContainerTextView.apply {
-                setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_transaction_type, 0, 0, 0)
-                setText(R.string.transactions)
-            }
-
-        }
-
-        binding.showIncomesChip.setOnClickListener {
-
-            Log.i("DebuggingApp", "chipsFilteringOfTransactions: show income transactions chip clicked")
-            viewModel.getIncomeTransactions()
-            viewModel.incomeTransactions.observe(viewLifecycleOwner, {
-                Log.i("DebuggingApp", "ShowIncomeChip  data before submiting : ${it.size}")
-                adapter.submitList(it)
-                Log.i("DebuggingApp", "ShowIncomeChip data : ${it.size}")
-            })
-            binding.transactionListTypeContainerTextView.apply {
-                setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic__01_receive_amount, 0, 0, 0)
-                setText(R.string.ins)
-            }
-        }
-
-        binding.showExpensesChip.setOnClickListener {
-            Log.i("DebuggingApp", "chipsFilteringOfTransactions: show expenses transactions chip clicked")
-            viewModel.expensesTransactions.observe(viewLifecycleOwner, {
-                Log.i("DebuggingApp", "ShowExpensesChip data before submiting: ${it.size}")
-                adapter.submitList(it)
-                Log.i("DebuggingApp", "ShowExpensesChip data : ${it.size}")
-            })
-
-            binding.transactionListTypeContainerTextView.apply {
-                setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic__02_sending_amount, 0, 0, 0)
-                setText(R.string.outs)
-            }
-        }
     }
 
-    fun onItemSwipeCallback() {
+    private fun onItemSwipeCallback() {
         val itemTouchHelperCallback = object : SimpleCallback(
             0,
-            ItemTouchHelper.RIGHT
+            ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
         ) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                return false
+                navigateToDetailsIWithTransaction(viewHolder)
+                return true
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 when (direction) {
-                    ItemTouchHelper.RIGHT -> {
+                    ItemTouchHelper.LEFT -> {
                         val selectedTransactionId =
-                            adapter.currentList[viewHolder.absoluteAdapterPosition].also {
-                                viewModel.deleteTransaction(it.transactionId)
-                                adapter.notifyItemRemoved(viewHolder.absoluteAdapterPosition)
-                            }
+                            adapter.currentList[viewHolder.absoluteAdapterPosition]
+                        context?.let {
+                            MaterialAlertDialogBuilder(
+                                it,
+                                R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog_Centered
+                            )
+                                .setMessage(resources.getString(R.string.delete_transaction_message) + " " + selectedTransactionId.productName)
+                                .setNegativeButton(resources.getString(R.string.no)) { dialog, which ->
+                                    setupRecyclerViewAdapter()
+                                    dialog.cancel()
+                                }
 
-                        binding.transactionsRecyclerView.scrollToPosition(0)
-
-
-                        Toast.makeText(
-                            requireContext(),
-                            "Got the item at position: ${viewHolder.absoluteAdapterPosition} " +
-                                    "with item id : $selectedTransactionId",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                                .setPositiveButton(resources.getString(R.string.yes)) { dialog, which ->
+                                    viewModel.deleteTransaction(selectedTransactionId.transactionId)
+                                    adapter.notifyItemRemoved(viewHolder.absoluteAdapterPosition)
+                                    binding.transactionsRecyclerView.scrollToPosition(0)
+                                }
+                                .show()
+                        }
                     }
+                    ItemTouchHelper.RIGHT -> {
+                        navigateToDetailsIWithTransaction(viewHolder)
+                    }
+
                 }
             }
         }
         ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(binding.transactionsRecyclerView)
+    }
+
+    private fun initViewModel() {
+        val database by lazy { TransactionDatabase.getInstance(requireContext()) }
+        val transactionRepository by lazy { TransactionRepository(database.transactionDao()) }
+        val viewModelFactory = AccountAnalyticsViewModelFactory(transactionRepository)
+        viewModel =
+            ViewModelProvider(this, viewModelFactory).get(AccountAnalyticsViewModel::class.java)
     }
 }
