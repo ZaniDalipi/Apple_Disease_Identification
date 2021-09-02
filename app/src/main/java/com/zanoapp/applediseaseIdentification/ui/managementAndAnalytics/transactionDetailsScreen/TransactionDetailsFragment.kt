@@ -89,7 +89,7 @@ class TransactionDetailsFragment : Fragment() {
             detailsProductTypeEditText.setText(transaction.productName)
             detailsTransactionIdEditText.setText(transaction.transactionId.toString())
             detailsDescriptionEditText.setText(transaction.additionalDescription)
-            detailsClientNameEditText.setText(transaction.clientName)
+            detailsClientNameEditText.setText(transaction.clientName.toString())
             detailsDateEditText.setText(transaction.saleDate)
             detailsPriceEditText.setText(transaction.price.toString())
             detailsMassEditText.setText(transaction.mass.toString())

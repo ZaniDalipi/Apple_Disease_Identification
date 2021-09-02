@@ -70,11 +70,13 @@ class TransactionRecyclerViewAdapterRecyclerView :
     class TransactionDiffUtilsCallback : DiffUtil.ItemCallback<Transaction>() {
 
         override fun areItemsTheSame(oldItem: Transaction, newItem: Transaction): Boolean {
+            Log.i("DebuggingAppAdapter", "areItemsTheSame Called ()")
             return oldItem.transactionId == newItem.transactionId
         }
 
         override fun areContentsTheSame(oldItem: Transaction, newItem: Transaction): Boolean {
-            return false
+            Log.i("DebuggingAppAdapter", "areContentsTheSame Called ()")
+            return oldItem.describeContents() == newItem.describeContents()
 
         }
     }

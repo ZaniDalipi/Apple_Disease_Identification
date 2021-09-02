@@ -2,6 +2,7 @@ package com.zanoapp.applediseaseIdentification.ui.managementAndAnalytics
 
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.Lifecycle
+import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -27,16 +28,16 @@ class AddTransactionDialogTest {
             val myIncrementalNumber = (1..101).random()
             val year = 201
             val months = arrayListOf("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT","NOV", "DEC")
-            val productTypes = arrayListOf("APPLES", "BANANAS", "OLIVE", "CORN", "PEACH", "CHERRY", "TOMATOES",
-                "STRAWBERRIES", "BLUEBERRIES", "OIL")
+            val productTypes = arrayListOf("APPLES ", "BANANAS ", "OLIVE ", "CORN ", "PEACH ", "CHERRY ", "TOMATOES ",
+                "STRAWBERRIES ", "BLUEBERRIES ", "OIL ")
 
             //Inputs to data
             val givenInput =
                 arrayListOf(
                     productTypes[(0..9).random()].plus(myIncrementalNumber),
-                    700 + (0..100_000).random(),
-                    0.40 + random(),
-                    "Transaction$myIncrementalNumber",
+                    700 + (0..10_000).random(),
+                    0.15 + random().coerceAtMost(1.5),
+                    "Transaction $myIncrementalNumber",
                     "ANY",
                     "Incomes",
                     "${(1..31).random()}/${(1..12).random()}/20${(10..22).random()}"
@@ -76,6 +77,7 @@ class AddTransactionDialogTest {
                 .perform(click())
                 .check(matches(isDisplayed()))
                 .perform(closeSoftKeyboard())
+
 
             onView(withId(R.id.datePickerEditText))
                 .perform(click())
