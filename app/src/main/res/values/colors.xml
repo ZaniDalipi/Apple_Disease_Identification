@@ -2,22 +2,34 @@
 
 <!--?xml version="1.0" encoding="UTF-8"?-->
 <resources>
-        <!--primary colors(day/night)-->
+    <!--primary colors(day/night)-->
     <color name="primaryColor">#19A87D</color>
     <color name="primaryLightColor">#5cdaac</color>
-    <color name="primaryDarkColor">#007851</color>
-    <color name="primaryTextColor">#E0F7FA</color>
-        <!--secondary colors(day/night) -->
+    <color name="primaryDarkColor">#f2f2f2</color>
+    <color name="primaryTextColor">#FFFFFF</color>
+
+    <!--secondary colors(day/night) -->
     <color name="secondaryColor">#00796b</color>
     <color name="secondaryLightColor">#48a999</color>
     <color name="secondaryDarkColor">#004c40</color>
     <color name="secondaryTextColor">#FAF5F5</color>
 
-    <color name="backgroundColor">#ffffff</color>
-        <!--OnColors-->
+    <color name="backgroundColor">#f2f2f2</color>
+    <color name="chipColor">#e5e5e5</color>
+    <!--OnColors-->
     <color name="onPrimary">#FFFFFF</color>
     <color name="onSecondary">#000000</color>
     <color name="onBackground">#000000</color>
     <color name="onSurface">#19A87D</color>
-    <color name="onError">#FFFFFF</color>
+    <color name="onError">#E53935</color>
+
+    <!--Custom colors-->
+    <color name="gradient_end">#BD0202</color>
+    <color name="gradient_middle">#C53935</color>
+    <color name="gradient_center">#EF9A9A</color>
+
+
+    <!--custom colors for night backdrop-->
+    <color name="surface_color_backdrop">#384241</color>
+    <color name="card_color_dark_mode">#323535</color>
 </resources>

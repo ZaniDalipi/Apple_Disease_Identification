@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:fillViewport="true"
+    android:layout_height="match_parent">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="wrap_content"
+    android:layout_height="899dp">
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollViewChips"
+        android:layout_width="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="wrap_content">
+
+
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/choiceChips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="24dp"
+        android:elevation="10dp"
+        android:layout_gravity="center_horizontal"
+        app:chipSpacing="4dp"
+        android:rotationX="4"
+        app:chipSpacingHorizontal="4dp"
+        android:outlineAmbientShadowColor="@color/primaryColor"
+        android:orientation="horizontal"
+        android:padding="14dp"
+        app:layout_constraintBottom_toTopOf="@id/total_balance_textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.493"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/showAllTransactionChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:elevation="4dp"
+            android:text="@string/all_transactions"
+            app:chipIcon="@drawable/ic_transaction_type"
+            app:chipIconEnabled="true" />
+
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/showIncomesChip"
+            style="@style/customChips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="4dp"
+            android:text="@string/ins"
+            app:chipIcon="@drawable/ic__01_receive_amount"
+            app:chipIconEnabled="true" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/showExpensesChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="4dp"
+            android:text="@string/outs"
+
+            app:chipIcon="@drawable/ic__02_sending_amount"
+            app:chipIconEnabled="true" />
+
+
+    </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/total_balance_textView"
+        style="@style/TextAppearance.CustomBody2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/total_balance"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollViewChips" />
+
+
+    <!--this is the balance-->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/balance_textView"
+        style="@style/TextAppearance.CustomBody2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="@string/test_value"
+        android:rotationX="18"
+        app:layout_constraintEnd_toEndOf="@id/total_balance_textView"
+        app:layout_constraintStart_toStartOf="@id/total_balance_textView"
+        app:layout_constraintTop_toBottomOf="@+id/total_balance_textView" />
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/transactionListTypeContainerTextView"
+        style="@style/TextAppearance.CustomBody2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="14dp"
+        android:drawableStart="@drawable/ic_transaction_type"
+        android:elevation="4dp"
+        android:text="@string/transactions"
+        app:layout_constraintBottom_toTopOf="@id/refreshRecyclerview"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/balance_textView" />
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refreshRecyclerview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:paddingTop="35dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/transactionListTypeContainerTextView">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/transactionsRecyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="14dp"
+            android:layout_marginTop="24dp"
+            android:elevation="4dp"
+            android:paddingTop="35dp"
+            android:paddingBottom="45dp"
+            android:translationZ="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/balance_textView"
+            tools:listitem="@layout/card_transactions" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/showEmptyListImage"
+        android:layout_width="wrap_content"
+        android:layout_height="350dp"
+        android:cropToPadding="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/no_data_found_img"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/refreshRecyclerview"
+        app:layout_constraintStart_toStartOf="@id/refreshRecyclerview"
+        app:layout_constraintTop_toTopOf="@id/refreshRecyclerview" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/refreshRecyclerviewButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/refresh"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/showEmptyListImage" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/transaction_fab"
+        style="@style/ShapeAppearance.MaterialComponents.SmallComponent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:outlineAmbientShadowColor="@color/primaryLightColor"
+        android:layout_marginEnd="@dimen/fab_margin_end_default"
+        android:layout_marginBottom="@dimen/fab_margin_bottom_default"
+        android:clickable="true"
+        android:contentDescription="@string/extendable_fab_content_description"
+        android:elevation="14dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:foregroundTint="@color/primaryTextColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_fab" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/create_transaction_fab"
+        style="@style/ShapeAppearance.MaterialComponents.SmallComponent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/fab_margin_end_default"
+
+        android:layout_marginBottom="@dimen/additional_fab_end_margin"
+        android:contentDescription="@string/creating_a_new_transaction_description"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/transaction_fab"
+        app:layout_constraintEnd_toEndOf="@id/transaction_fab"
+        app:srcCompat="@drawable/ic_fab" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/edit_transactions_fab"
+        style="@style/ShapeAppearance.MaterialComponents.SmallComponent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/fab_margin_end_default"
+        android:layout_marginBottom="@dimen/additional_fab_end_margin"
+        android:contentDescription="@string/edit_fab_content_description"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/create_transaction_fab"
+        app:layout_constraintEnd_toEndOf="@id/create_transaction_fab"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/create_transaction_fab"
+        app:srcCompat="@android:drawable/ic_menu_edit" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

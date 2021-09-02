@@ -3,27 +3,26 @@ package com.zanoapp.applediseaseIdentification.ui.userProfileData
 
 import android.app.Application
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
-
 import com.zanoapp.applediseaseIdentification.R
-import com.zanoapp.applediseaseIdentification.databinding.UserProfileDataFragmentBinding
+import com.zanoapp.applediseaseIdentification.databinding.FragmentUserProfileDataBinding
 import com.zanoapp.applediseaseIdentification.ui.authenticationFirebase.SignUpViewModel
 import com.zanoapp.applediseaseIdentification.ui.authenticationFirebase.SignUpViewModelFactory
 
 class UserProfileDataFragment : Fragment() {
 
-    private lateinit var binding: UserProfileDataFragmentBinding
+    private lateinit var binding: FragmentUserProfileDataBinding
     private lateinit var signUpViewModel: SignUpViewModel
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -35,7 +34,7 @@ class UserProfileDataFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             layoutInflater,
-            R.layout.user_profile_data_fragment,
+            R.layout.fragment_user_profile_data,
             container,
             false
         )

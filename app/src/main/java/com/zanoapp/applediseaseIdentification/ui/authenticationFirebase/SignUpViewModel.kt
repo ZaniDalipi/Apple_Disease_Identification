@@ -17,9 +17,9 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import com.zanoapp.applediseaseIdentification.localDataPersistence.User
-import com.zanoapp.applediseaseIdentification.localDataPersistence.UserDatabase
-import com.zanoapp.applediseaseIdentification.localDataPersistence.UserRepository
+import com.zanoapp.applediseaseIdentification.localDataPersistence.userDB.User
+import com.zanoapp.applediseaseIdentification.localDataPersistence.userDB.UserDatabase
+import com.zanoapp.applediseaseIdentification.localDataPersistence.userDB.UserRepository
 import com.zanoapp.applediseaseIdentification.utils.REGISTRATION_SIGN_IN_CODE
 import com.zanoapp.applediseaseIdentification.utils.REQ_ONE_TAP
 import com.zanoapp.applediseaseIdentification.utils.TRACK_TAG_ONE_TAP

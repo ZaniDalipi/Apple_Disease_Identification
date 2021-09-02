@@ -16,7 +16,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.zanoapp.applediseaseIdentification.ui.authenticationFirebase.SignUpViewModel
@@ -40,6 +42,7 @@ class MainActivity : AppCompatActivity() {
         bottomNav = findViewById(R.id.bottom_nav_view)
         fab = findViewById(R.id.floatingActionButton)
 
+
         val viewModelFactory = SignUpViewModelFactory(application)
         signUpViewModel = ViewModelProvider(this, viewModelFactory).get(SignUpViewModel::class.java)
 
@@ -59,7 +62,8 @@ class MainActivity : AppCompatActivity() {
             topLevelDestinationIds = setOf(
                 R.id.userProfileDataFragment,
                 R.id.cameraFragment,
-                R.id.signUpFragment
+                R.id.signUpFragment,
+                R.id.accountAnalyticsFragment
             )
         )
 
@@ -67,8 +71,12 @@ class MainActivity : AppCompatActivity() {
         setupBottomNavBarWithNavigation(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.cameraFragment -> showBottomNav()
+                R.id.cameraFragment -> {
+                    showBottomNav()
+                    fab.visibility = View.VISIBLE
+                }
                 R.id.userProfileDataFragment -> showBottomNav()
+                R.id.accountAnalyticsFragment -> showBottomNav()
                 R.id.locationFragment -> showBottomNav()
                 else -> hideBottomNav()
             }
@@ -77,8 +85,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun showBottomNav() {
         bottomNav.visibility = View.VISIBLE
-        fab.visibility = View.VISIBLE
+        fab.visibility = View.GONE
     }
+
 
     private fun hideBottomNav() {
         bottomNav.visibility = View.GONE

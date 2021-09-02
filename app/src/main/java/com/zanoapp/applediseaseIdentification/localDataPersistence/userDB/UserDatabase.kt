@@ -1,4 +1,4 @@
-package com.zanoapp.applediseaseIdentification.localDataPersistence
+package com.zanoapp.applediseaseIdentification.localDataPersistence.userDB
 
 import android.content.Context
 import androidx.room.Database

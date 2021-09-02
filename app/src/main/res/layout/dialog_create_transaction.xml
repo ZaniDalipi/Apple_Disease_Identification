@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextAppearance.MaterialComponents.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:text="@string/field_info_text"
+            android:textColor="@color/onError"
+            app:layout_constraintEnd_toEndOf="@id/productTypeInputLayout"
+            app:layout_constraintStart_toStartOf="@id/productTypeInputLayout"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/productTypeInputLayout"
+            style="@style/Widget.App.TextInputLayout.Custom"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:hint="@string/product_name"
+            app:boxStrokeColor="@color/primaryColor"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/productTypeEditText"
+                android:layout_width="match_parent"
+                style="@style/Widget.App.TextInputLayout.Custom"
+                android:layout_height="match_parent"
+                android:inputType="text"
+                android:maxLength="24"
+                android:rotationX="4" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/massInputLayout"
+            style="@style/Widget.App.TextInputLayout.Custom"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:hint="@string/mass_of_product_sold"
+            app:boxStrokeColor="@color/primaryColor"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="@+id/productTypeInputLayout"
+            app:layout_constraintStart_toStartOf="@+id/productTypeInputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/productTypeInputLayout"
+            app:suffixText="KG">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/massEditText"
+                android:layout_width="match_parent"
+                style="@style/Widget.App.TextInputLayout.Custom"
+                android:layout_height="match_parent"
+                android:inputType="number"
+                android:maxLength="10"
+                android:rotationX="4" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/unitPriceInputLayout"
+            style="@style/Widget.App.TextInputLayout.Custom"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:hint="@string/unit_price_per_kg_l"
+            app:boxStrokeColor="@color/primaryColor"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="@+id/massInputLayout"
+            app:layout_constraintStart_toStartOf="@+id/massInputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/massInputLayout"
+            app:suffixText="€">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/priceEditText"
+                style="@style/Widget.App.TextInputLayout.Custom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="numberDecimal"
+                android:maxLength="10"
+                android:rotationX="4" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/descriptionInputLayout"
+            style="@style/Widget.App.TextInputLayout.Custom"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:hint="@string/additional_description_on_transaction"
+            app:boxStrokeColor="@color/primaryColor"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="@+id/unitPriceInputLayout"
+            app:layout_constraintStart_toStartOf="@+id/unitPriceInputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/unitPriceInputLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/descriptionEditText"
+                android:layout_width="match_parent"
+                style="@style/Widget.App.TextInputLayout.Custom"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:maxLength="150"
+                android:maxLines="5"
+                android:rotationX="4" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/clientNameInputLayout"
+            style="@style/Widget.App.TextInputLayout.Custom"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:hint="@string/client_name"
+            app:boxStrokeColor="@color/primaryColor"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="@+id/descriptionInputLayout"
+            app:layout_constraintStart_toStartOf="@+id/descriptionInputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/descriptionInputLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/clientNameEditText"
+                style="@style/Widget.App.TextInputLayout.Custom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textCapWords"
+                android:maxLength="24"
+                android:rotationX="4" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/transactionTypeInputLayout"
+            style="@style/Widget.App.TextInputLayout.Custom"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:hint="@string/transaction_type"
+            app:boxStrokeColor="@color/primaryColor"
+            app:endIconMode="dropdown_menu"
+            app:layout_constraintEnd_toEndOf="@+id/clientNameInputLayout"
+            app:layout_constraintStart_toStartOf="@+id/clientNameInputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/clientNameInputLayout"
+            app:startIconDrawable="@drawable/ic_transaction_type">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/transactionTypeDropDownList"
+                style="@style/Widget.App.TextInputLayout.Custom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:maxLength="8"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:cursorVisible="false"
+                android:padding="16dp"
+                android:rotationX="4" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/datePickerInputLayout"
+            style="@style/Widget.App.TextInputLayout.Custom"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:hint="@string/selectDateHint"
+            app:boxStrokeColor="@color/primaryColor"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="@id/transactionTypeInputLayout"
+            app:layout_constraintStart_toStartOf="@id/transactionTypeInputLayout"
+            app:layout_constraintTop_toBottomOf="@id/transactionTypeInputLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/datePickerEditText"
+                style="@style/Widget.App.TextInputLayout.Custom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="date"
+                android:rotationX="4" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/saveTransactionButton"
+            style="@style/ShapeAppearance.MaterialComponents.SmallComponent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="@dimen/fab_margin_bottom_default"
+            android:text="@string/save_transaction"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/datePickerInputLayout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
