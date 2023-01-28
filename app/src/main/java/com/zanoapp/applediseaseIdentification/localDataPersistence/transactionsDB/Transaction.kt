@@ -37,10 +37,10 @@ data class Transaction (
     @ColumnInfo(name = "additional_description")
         public val additionalDescription: String,
 
-
     @ColumnInfo(name = "client_name")
         public val clientName: String
     ) : Parcelable {
+
     constructor(transactionType: String, productName: String, mass: Int, price: Double, saleDate: String, additionalDescription: String, clientName: String)
             : this(0, transactionType, productName, mass, price, saleDate, additionalDescription, clientName)
 }

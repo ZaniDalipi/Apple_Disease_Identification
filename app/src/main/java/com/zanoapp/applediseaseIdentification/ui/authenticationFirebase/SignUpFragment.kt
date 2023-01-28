@@ -18,6 +18,7 @@ import com.zanoapp.applediseaseIdentification.R
 import com.zanoapp.applediseaseIdentification.databinding.FragmentSignUpBinding
 import com.zanoapp.applediseaseIdentification.ui.authenticationFirebase.SignUpViewModel.AuthenticationState.*
 import com.zanoapp.applediseaseIdentification.utils.*
+
 class SignUpFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
@@ -37,16 +38,16 @@ class SignUpFragment : Fragment() {
 
     }
 
-  /*  override fun onStart() {
-        super.onStart()
-        userObserver()
-        Log.i(TAG_VIEWMODEL, "onStart: User state is : ${signUpViewModel.user.value}")
-        authenticationObserver()
-        Log.i(
-            TAG_VIEWMODEL,
-            "onStart: Authentication state : ${signUpViewModel.authenticationState.value} "
-        )
-    }*/
+    /*  override fun onStart() {
+          super.onStart()
+          userObserver()
+          Log.i(TAG_VIEWMODEL, "onStart: User state is : ${signUpViewModel.user.value}")
+          authenticationObserver()
+          Log.i(
+              TAG_VIEWMODEL,
+              "onStart: Authentication state : ${signUpViewModel.authenticationState.value} "
+          )
+      }*/
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,7 +57,6 @@ class SignUpFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(layoutInflater, R.layout.fragment_sign_up, container, false)
         binding.lifecycleOwner = this
-
 
         return binding.root
     }
@@ -108,7 +108,7 @@ class SignUpFragment : Fragment() {
 
         binding.SignUpButton.setOnClickListener {
             signUpViewModel.signInWithGoogle(requireActivity())
-           // progressBar.visibility = View.VISIBLE
+            // progressBar.visibility = View.VISIBLE
         }
         signupWithEmail()
         authenticationObserver()

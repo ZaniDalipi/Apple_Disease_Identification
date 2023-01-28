@@ -35,14 +35,14 @@ class TransactionRecyclerViewAdapterRecyclerView :
 
         fun bind(item: Transaction) {
 
-            Log.i("DebuggingAppAdapter", "bind: called and the item is ${item.transactionId} ${item.productName}")
-
             val transactionTotal = item.calculateTotal()
-            binding.productNameTextView.text = item.productName
-            binding.transactionDate.text = item.saleDate
-            binding.transactionAmount.text = transactionTotal.toString().plus("€")
-            binding.typeOfTransactionIcon.setTransactionImage(item)
 
+            binding.apply {
+                productNameTextView.text = item.productName
+                transactionDate.text = item.saleDate
+                transactionAmount.text = transactionTotal.toString().plus("€")
+                typeOfTransactionIcon.setTransactionImage(item)
+            }
         }
     }
 
@@ -77,7 +77,6 @@ class TransactionRecyclerViewAdapterRecyclerView :
         override fun areContentsTheSame(oldItem: Transaction, newItem: Transaction): Boolean {
             Log.i("DebuggingAppAdapter", "areContentsTheSame Called ()")
             return oldItem.describeContents() == newItem.describeContents()
-
         }
     }
 
