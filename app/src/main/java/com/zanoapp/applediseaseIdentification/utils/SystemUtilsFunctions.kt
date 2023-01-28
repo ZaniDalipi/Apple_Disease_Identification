@@ -8,8 +8,8 @@ import com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsD
 import com.zanoapp.applediseaseIdentification.ui.managementAndAnalytics.AccountAnalyticsViewModel
 import com.zanoapp.applediseaseIdentification.ui.managementAndAnalytics.AccountAnalyticsViewModelFactory
 
-public fun isDarkTheme(context: Context): Boolean {
-    return context.resources.configuration.uiMode  and
+fun isDarkTheme(context: Context): Boolean {
+    return context.resources.configuration.uiMode and
             Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 }
 

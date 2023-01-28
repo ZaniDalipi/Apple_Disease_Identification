@@ -27,12 +27,11 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
 
     private val job = Job()
 
-    var _labelList = MutableLiveData<MutableList<String>>(mutableListOf<String>())
+    var _labelList = MutableLiveData(mutableListOf<String>())
     private val labelList: LiveData<MutableList<String>>
         get() = _labelList
 
-//    var myLocalModel = Application().assets.open("plant_disease_mode_v1.lite")
-
+    var myLocalModel = Application().assets.open("plant_disease_mode_v1.lite")
 
     private val uiCoroutineScope = CoroutineScope(Dispatchers.Main + job)
     private val ioScope = CoroutineScope(Dispatchers.IO + job)
@@ -47,7 +46,6 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
 
     private val _bitmapDataFromCamera = MutableLiveData<Bitmap>()
     private val _interpreter = MutableLiveData<Interpreter>()
-
 
 
     private fun getRemoteModelInBackground() {
@@ -74,22 +72,22 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
                     val modelFile = it.file
                     if (modelFile != null) {
                         _interpreter.value = Interpreter(modelFile)
-                        Log.i(TAG_MODEL_STATE, "😉😉 current model is: ${modelFile.name} " +
-                                "its space is ${modelFile.absoluteFile}")
+                        Log.i(
+                            TAG_MODEL_STATE, "😉😉 current model is: ${modelFile.name} " +
+                                    "its space is ${modelFile.absoluteFile}"
+                        )
                     } else {
 
                     }
                 }.addOnFailureListener {
                     Log.i(
                         TAG_MODEL_STATE,
-                        "Couldn't download the model something went wrong ${it.localizedMessage}")
+                        "Couldn't download the model something went wrong ${it.localizedMessage}"
+                    )
 
-                   val localModel =  FirebaseLocalModel.Builder(MODEL_PATH_LOCAL)
+                    val localModel = FirebaseLocalModel.Builder(MODEL_PATH_LOCAL)
                         .setAssetFilePath(MODEL_PATH_LOCAL)
                         .build()
-
-
-
                 }
         }
     }
@@ -98,8 +96,11 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
     fun runInference(myBitmap: Bitmap) {
         val bitmap = Bitmap.createScaledBitmap(myBitmap, 224, 244, true)
 
-        Log.i(TRACK_MODEL_INFERENCE, "🧔🧔 the input bitmap width is : ${bitmap.width} and height : ${bitmap.height}" +
-                "and its allocation byte is 👩🏿‍⚖️👩🏿‍⚖ : ${bitmap.allocationByteCount}")
+        Log.i(
+            TRACK_MODEL_INFERENCE,
+            "🧔🧔 the input bitmap width is : ${bitmap.width} and height : ${bitmap.height}" +
+                    "and its allocation byte is 👩🏿‍⚖️👩🏿‍⚖ : ${bitmap.allocationByteCount}"
+        )
 
         val input = ByteBuffer.allocateDirect(imgData.capacity()).order(ByteOrder.nativeOrder())
         Log.i(TRACK_MODEL_INFERENCE, "»» the input size is ${input.capacity()}")
@@ -113,13 +114,19 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
                 val g = Color.green(pixels)
                 val b = Color.blue(pixels)
 
-                Log.i(TRACK_MODEL_INFERENCE, "🚌 🚌 the size of pixels not normalized ${r.toByte()}")
+                Log.i(
+                    TRACK_MODEL_INFERENCE,
+                    "🚌 🚌 the size of pixels not normalized ${r.toByte()}"
+                )
 
                 // normalize
                 val redNormalized = (r - 127) / 255f
                 val greenNormalized = (g - 127) / 255f
                 val blueNormalized = (b - 127) / 255f
-                Log.i(TRACK_MODEL_INFERENCE, "🚓 🚓 the size of pixels normalized for red is ${redNormalized.toBits()}")
+                Log.i(
+                    TRACK_MODEL_INFERENCE,
+                    "🚓 🚓 the size of pixels normalized for red is ${redNormalized.toBits()}"
+                )
 
                 input.also {
                     it.putFloat(redNormalized)
@@ -145,14 +152,16 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
                 InputStreamReader(Application().assets.open("Labels.txt"))
             )
 
-           for(i in probabilities.capacity().toString()){
+            for (i in probabilities.capacity().toString()) {
                 val label = reader.readLine()
-               Log.i(TAG_MODEL_STATE, "💕💕💕💕💕 $label")
+                Log.i(TAG_MODEL_STATE, "💕💕💕💕💕 $label")
                 val probability = probabilities.get(i.toInt())
-               Log.i(TAG_MODEL_STATE, " $💖💖💖💖💖 the probabilities are $probabilities " +
-                       "and current probability is $probability " +
-                       "the capacity is ${probabilities.capacity()} ")
-               println("$label: $probability")
+                Log.i(
+                    TAG_MODEL_STATE, " $💖💖💖💖💖 the probabilities are $probabilities " +
+                            "and current probability is $probability " +
+                            "the capacity is ${probabilities.capacity()} "
+                )
+                println("$label: $probability")
             }
         } catch (e: IOException) {
             Log.i(TAG_MODEL_STATE, "no file was found ${e.message}")
@@ -237,7 +246,7 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
     init {
         Log.i(LABEL_NAME, "${labelList.value?.size}")
         getRemoteModelInBackground()
-   //     readLabels()
+        //     readLabels()
         printTopKLabels()
         applyFilterToLabels()
 

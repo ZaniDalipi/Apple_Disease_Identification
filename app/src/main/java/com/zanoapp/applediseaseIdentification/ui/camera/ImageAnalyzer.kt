@@ -50,9 +50,11 @@ class ImageAnalyzer constructor(activity: Activity) {
         }
         bitmap.getPixels(intValues, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
         convertBitmapToByteBuffer(bitmap)
-        Log.i(TAG, "classifyFrame:（⊙ｏ⊙） this is a point of obervation of the 2 variables one is the label probablitity witch is ${labelProbArray.size} \n\n and the labels are ${labelList.size}" +
-                "the filtered label list is ${filterLabelProbArray.size} ,\n the bitmap is  $bitmap")
-
+        Log.i(
+            TAG,
+            "classifyFrame:（⊙ｏ⊙） this is a point of observation of the 2 variables one is the label probability witch is ${labelProbArray.size} \n\n and the labels are ${labelList.size}" +
+                    "the filtered label list is ${filterLabelProbArray.size} ,\n the bitmap is  $bitmap"
+        )
 
 
         val startTime = SystemClock.uptimeMillis()
@@ -66,22 +68,22 @@ class ImageAnalyzer constructor(activity: Activity) {
 
     private fun applyFilter() {
         Log.i(CONTROL_LIFECYCLE_METHODS, "applyFilter: ")
-        val num_labels = labelList.size
+        val numLabels = labelList.size
 
 
-        for (j in 0 until num_labels) {
+        for (j in 0 until numLabels) {
             filterLabelProbArray[0][j] += FILTER_FACTOR * (labelProbArray[0][j] -
                     filterLabelProbArray[0][j])
         }
 
         for (i in 1 until FILTER_STAGES_RGB) {
-            for (j in 0 until num_labels) {
+            for (j in 0 until numLabels) {
                 filterLabelProbArray[i][j] += FILTER_FACTOR * (filterLabelProbArray[i - 1][j] -
                         filterLabelProbArray[i][j])
             }
         }
 
-        for (j in 0 until num_labels) {
+        for (j in 0 until numLabels) {
             labelProbArray[0][j] = filterLabelProbArray[FILTER_STAGES_RGB - 1][j]
         }
     }
@@ -98,7 +100,7 @@ class ImageAnalyzer constructor(activity: Activity) {
         Log.i(CONTROL_LIFECYCLE_METHODS, "loadLabelList: ")
         val labelList = mutableListOf<String>()
         val reader = BufferedReader(InputStreamReader(activity.assets.open(LABEL_PATH)))
-        var line: String = " "
+        var line = " "
         while (reader.readLine().also { line = it } != null) {
             labelList.add(line)
         }
@@ -157,7 +159,9 @@ class ImageAnalyzer constructor(activity: Activity) {
         val size = sortedLabels.size
         for (i in 0 until size) {
             val label = sortedLabels.poll()
-            textToShow = String.format("\n%s: %4.2f", label.key, label.value) + textToShow
+            if (label != null) {
+                textToShow = String.format("\n%s: %4.2f", label.key, label.value) + textToShow
+            }
         }
         return textToShow
     }

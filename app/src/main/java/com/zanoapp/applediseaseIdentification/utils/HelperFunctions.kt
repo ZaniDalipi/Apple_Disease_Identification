@@ -1,9 +1,6 @@
 package com.zanoapp.applediseaseIdentification.utils
 
 
-import android.widget.ImageView
-import com.zanoapp.applediseaseIdentification.R
-import com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsDB.Transaction
 import java.nio.FloatBuffer
 
 operator fun ClosedRange<FloatBuffer>.iterator() =
@@ -17,12 +14,13 @@ operator fun ClosedRange<FloatBuffer>.iterator() =
             return current.inc(current)
         }
     }
+
 private operator fun FloatBuffer.inc(input: FloatBuffer): FloatBuffer {
     return inc(this)
 }
 
 fun <T> Iterator<T>.customEach(action: (T) -> Unit) {
-    for(element: T in this)
+    for (element: T in this)
         action(element)
 }
 

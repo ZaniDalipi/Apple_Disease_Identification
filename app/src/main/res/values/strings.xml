@@ -40,7 +40,7 @@
     <string name="example_hint_email">Email</string>
     <string name="example_user_hint">Example Example</string>
     <string name="hint">Take care for our environment by using less pesticides, and be more efficient</string>
-    <string name="login_text">Or login</string>
+    <string name="sign_up_login_textView">Or login</string>
     <string name="plant_management">Plant Management</string>
     <!--END-->
 
@@ -72,13 +72,47 @@
     <string name="accept">Accept 🤦‍♂</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="selectDateHint">dd/mm/yyyy 🗓</string>
+    <string name="transaction_details_select_date_hint">dd/mm/yyyy 🗓</string>
     <string name="field_info_text">All Fields specified with * must be filled</string>
     <string name="all_transactions">Transactions</string>
-    <string name="edit_fab_content_description">setting transactions in a editional mode</string>
+    <string name="edit_fab_content_description">setting transactions in a edition mode</string>
     <string name="creating_a_new_transaction_description">creating a new transaction fab</string>
-    <string name="extendable_fab_content_description">fab that will open 2 other fabs to create a new transaction and to edit the transactions in the list</string>
+    <string name="extendable_fab_content_description">fab that will open 2 other fab to create a new transaction and to edit the transactions in the list</string>
     <string name="refresh">Refresh</string>
+
+
+    <string name="pesticides_and_insecticides">Pesticides And Insecticides</string>
+    <string name="save_result_from_analyze">Save result</string>
+
+
+    <string name="pesticide_name_hint">Pesticide Name</string>
+    <string name="active_ingredients_hint">Active Ingredients</string>
+    <string name="preparate_type_hint">Preparate Type</string>
+
+
+    <string name="transaction_amount_hint">236.000,00</string>
+    <string name="transaction_date_hint">29/07/2021</string>
+    <string name="transaction_product_name_hint">Apples</string>
+
+    <!-- START
+    This is for signup Screen -->
+    <string name="sign_in_create_your_account_textView">Create your account :</string>
+    <string name="sign_in_password_textView">Password</string>
+    <string name="sign_in_re_enter_password_textView">Re-enter password</string>
+    <string name="sign_in_with_textView">Sign in with :</string>
+    <!--END-->
+
+    <!-- START
+    This is for transaction Details Screen strings-->
+    <string name="save_floating_action_button">Save floating action button</string>
+    <string name="edit_floating_action_button">Edit floating action button</string>
+    <string name="transaction_details_product_type_hint">Product type 🍎</string>
+    <string name="transaction_details_id_hint">ID 📑</string>
+    <string name="transaction_details_price">price €</string>
+    <string name="transaction_details_mass">Mass ⚖</string>
+    <string name="transaction_details_client_name">Client Name 🧑🏽</string>
+    <!--END-->
+
     <string-array name="transaction_options">
         <item>Incomes</item>
         <item>Expenses</item>

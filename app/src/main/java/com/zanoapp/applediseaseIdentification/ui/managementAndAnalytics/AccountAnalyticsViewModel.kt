@@ -29,7 +29,7 @@ class AccountAnalyticsViewModel(private val transactionRepository: TransactionRe
         transactionRepository.insertTransaction(transaction)
     }
 
-    fun updateTransaction(transaction: Transaction){
+    fun updateTransaction(transaction: Transaction) {
         transactionRepository.updateTransaction(transaction)
     }
 

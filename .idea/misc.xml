@@ -5,6 +5,14 @@
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
     </configurations>
   </component>
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/kranj/OneDrive/Documents/AndroidStudioProjects/AppleDiseaseIndentification/app/src/main/res/layout/activity_main.xml" value="0.296875" />
+        <entry key="..\:/Users/kranj/OneDrive/Documents/AndroidStudioProjects/AppleDiseaseIndentification/app/src/main/res/layout/card_pesticides.xml" value="0.23645833333333333" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
       <profile-state>

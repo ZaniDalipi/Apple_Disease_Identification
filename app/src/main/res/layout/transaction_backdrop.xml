@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:elevation="14dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -37,7 +38,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="50dp"
                 android:elevation="4dp"
-                android:hint="Product type 🍎"
+                android:hint="@string/transaction_details_product_type_hint"
                 app:boxStrokeColor="@color/primaryColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/transaction_total_text_View">
@@ -51,7 +52,8 @@
                     android:focusableInTouchMode="false"
                     android:inputType="text"
                     android:maxLength="24"
-                    android:rotationX="4" />
+                    android:rotationX="4"
+                    tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--Transaction Id-->
@@ -64,7 +66,7 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginEnd="20dp"
                 android:elevation="4dp"
-                android:hint="ID 📑"
+                android:hint="@string/transaction_details_id_hint"
                 android:textAlignment="center"
                 app:boxStrokeColor="@color/primaryColor"
                 app:expandedHintEnabled="true"
@@ -127,7 +129,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="24dp"
                 android:elevation="4dp"
-                android:hint="@string/selectDateHint"
+                android:hint="@string/transaction_details_select_date_hint"
                 app:boxStrokeColor="@color/primaryColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detailsDescriptionInputLayout">
@@ -156,7 +158,7 @@
                 android:layout_marginTop="50dp"
                 android:layout_marginBottom="20dp"
                 android:elevation="4dp"
-                android:hint="price €"
+                android:hint="@string/transaction_details_price"
                 app:boxStrokeColor="@color/primaryColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detailsDateInputLayout"
@@ -188,7 +190,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="20dp"
                 android:elevation="4dp"
-                android:hint="Mass ⚖"
+                android:hint="@string/transaction_details_mass"
                 app:boxStrokeColor="@color/primaryColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detailsDateInputLayout"
@@ -204,7 +206,8 @@
                     android:focusableInTouchMode="false"
                     android:inputType="numberDecimal"
                     android:maxLength="6"
-                    android:rotationX="4" />
+                    android:rotationX="4"
+                    tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--Client Name-->
@@ -215,7 +218,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:elevation="4dp"
-                android:hint="Client Name 🧑🏽"
+                android:hint="@string/transaction_details_client_name"
                 app:boxStrokeColor="@color/primaryColor"
                 app:layout_constraintBottom_toBottomOf="@id/detailsDateInputLayout"
                 app:layout_constraintStart_toStartOf="parent"

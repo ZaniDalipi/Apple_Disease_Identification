@@ -321,12 +321,12 @@ class AccountAnalyticsFragment : Fragment() {
                                 R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog_Centered
                             )
                                 .setMessage(resources.getString(R.string.delete_transaction_message) + " " + selectedTransactionId.productName)
-                                .setNegativeButton(resources.getString(R.string.no)) { dialog, which ->
+                                .setNegativeButton(resources.getString(R.string.no)) { dialog, _ ->
                                     setupRecyclerViewAdapter()
                                     dialog.cancel()
                                 }
 
-                                .setPositiveButton(resources.getString(R.string.yes)) { dialog, which ->
+                                .setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
                                     viewModel.deleteTransaction(selectedTransactionId.transactionId)
                                     adapter.notifyItemRemoved(viewHolder.absoluteAdapterPosition)
                                     binding.transactionsRecyclerView.scrollToPosition(0)

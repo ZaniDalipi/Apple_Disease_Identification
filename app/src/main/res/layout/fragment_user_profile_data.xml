@@ -27,15 +27,16 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/dynamicUserEmailTextView"
+            style="@style/TextAppearance.MaterialComponents.Body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="33dp"
+            android:hint="@string/example_hint_email"
+            android:text="@{signUpViewModel.user.email}"
             app:layout_constraintStart_toEndOf="@id/staticUserEmailTextView"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="18dp"
-            style="@style/TextAppearance.MaterialComponents.Body2"
-            android:text="@{signUpViewModel.user.email}"
-            android:hint="@string/example_hint_email"
-            android:layout_marginTop="33dp" />
+            tools:ignore="TextContrastCheck" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/staticUserNameTextView"
@@ -50,16 +51,17 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/dynamicUserNameTextView"
+            style="@style/TextAppearance.MaterialComponents.Body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="33dp"
+            android:hint="@string/example_user_hint"
+            android:text="@{signUpViewModel.user.displayName}"
+            app:layout_constraintBottom_toBottomOf="@id/staticUserNameTextView"
             app:layout_constraintStart_toEndOf="@id/staticUserNameTextView"
             app:layout_constraintTop_toBottomOf="@id/dynamicUserEmailTextView"
-            android:layout_marginStart="18dp"
-            app:layout_constraintBottom_toBottomOf="@id/staticUserNameTextView"
-            android:text="@{signUpViewModel.user.displayName}"
-            style="@style/TextAppearance.MaterialComponents.Body2"
-            android:hint="@string/example_user_hint"
-            android:layout_marginTop="33dp" />
+            tools:ignore="TextContrastCheck" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/signOutButton"
@@ -68,7 +70,8 @@
             android:layout_marginBottom="60dp"
             android:text="@string/sign_out"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="TextContrastCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
