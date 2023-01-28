@@ -5,9 +5,11 @@ import android.app.Application
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.facebook.CallbackManager
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -22,9 +24,9 @@ import com.zanoapp.applediseaseIdentification.localDataPersistence.userDB.UserDa
 import com.zanoapp.applediseaseIdentification.localDataPersistence.userDB.UserRepository
 import com.zanoapp.applediseaseIdentification.utils.REGISTRATION_SIGN_IN_CODE
 import com.zanoapp.applediseaseIdentification.utils.REQ_ONE_TAP
-import com.zanoapp.applediseaseIdentification.utils.TRACK_TAG_ONE_TAP
 import com.zanoapp.applediseaseIdentification.utils.TRACK_SIGNUP_STATE
-import kotlinx.coroutines.*
+import com.zanoapp.applediseaseIdentification.utils.TRACK_TAG_ONE_TAP
+import kotlinx.coroutines.launch
 
 
 class SignUpViewModel(application: Application) : AndroidViewModel(application) {
@@ -40,10 +42,6 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
     private lateinit var googleSignInClient: GoogleSignInClient
     private var callbackManager: CallbackManager? = CallbackManager.Factory.create()
     private lateinit var oneTapClient: SignInClient
-    private lateinit var signInRequest: BeginSignInRequest
-
-    private val _showOneTapUI = MutableLiveData(true)
-    var showOneTapUI: LiveData<Boolean> = _showOneTapUI
 
 
     /** Live Data authentication data holder that will monitor the state of user*/
@@ -68,63 +66,10 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
     init {
         _user.value = auth.currentUser
         checkIfUseIsAuthenticated()
-      //  oneTapSignUpSetup()
+        //  oneTapSignUpSetup()
         Log.i(TRACK_SIGNUP_STATE, "_user_value(init): ${_user.value?.email}")
         viewModelScope.launch { getUserFromDb() }
     }
-
-    /**function that its intention is to setup one tap first components like:
-     *  oneTapClient witch has to get the previous signed in account
-     *  and than we have the signInRequest builder that will begin the sign in with previous authorized accounts just because it is true
-     *
-     *
-     * *//*
-    *//*private fun oneTapSignUpSetup() {
-        try {
-            oneTapClient = Identity.getSignInClient(Activity())
-            signInRequest = BeginSignInRequest.builder()
-                .setGoogleIdTokenRequestOptions(
-                    BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                        .setSupported(true)
-                        .setServerClientId("939177967297-m8t18sqb3436mohhb50rgh9scvdrdcv7.apps.googleusercontent.com")
-                        .setFilterByAuthorizedAccounts(true)
-                        .build()
-                ).build()
-        } catch (e: Exception) {
-            Toast.makeText(
-                Activity(),
-                "Couldn't start One Tap UI : ${e.localizedMessage}",
-                Toast.LENGTH_SHORT
-            ).show()
-        } finally {
-            displaySignUpOptions()
-        }
-    }
-*//*
-    private fun displaySignUpOptions() {
-        oneTapClient.beginSignIn(signInRequest)
-            .addOnSuccessListener { result ->
-                try {
-                    Activity().startIntentSenderForResult(
-                        result.pendingIntent.intentSender, REQ_ONE_TAP, null, 0, 0, 0, null
-                    )
-                } catch (e: IntentSender.SendIntentException) {
-                    Log.e(TAG_ONE_TAP, "Couldn't start One Tap UI : ${e.localizedMessage}")
-                    Toast.makeText(
-                        Activity(),
-                        "Couldn't start One Tap UI : ${e.localizedMessage}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-            .addOnFailureListener {
-                Toast.makeText(
-                    Activity(),
-                    "Sorry Something went wrong with one tap ${it.localizedMessage}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-    }*/
 
 
     /**Function that will be triggered after sign up button is clicked and the intention of this function is to initialize the needed objects to request an intent to the user ,and make sure to communicate with firebase backend server through defining the options */
@@ -255,7 +200,6 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
     }
 
 
-    /** function that will check if a user is authenticated in the beginning of starting the application*/
     private fun checkIfUseIsAuthenticated() {
         if (_user.value != null) {
             _authenticationState.value = AuthenticationState.AUTHENTICATED

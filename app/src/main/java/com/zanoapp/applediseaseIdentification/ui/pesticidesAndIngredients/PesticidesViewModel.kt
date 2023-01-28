@@ -1,4 +1,4 @@
-package com.zanoapp.applediseaseIdentification.ui.PesticidesAndIngredients
+package com.zanoapp.applediseaseIdentification.ui.pesticidesAndIngredients
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

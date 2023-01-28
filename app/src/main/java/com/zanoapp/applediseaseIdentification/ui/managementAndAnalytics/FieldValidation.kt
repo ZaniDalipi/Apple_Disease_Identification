@@ -6,7 +6,7 @@ import android.widget.EditText
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
-/*validation extension function */
+/** validation extension function */
 fun TextInputEditText.isNotNullOrEmpty(errorString: String): Boolean {
     val textInputLayout = this.parent.parent as TextInputLayout
     textInputLayout.errorIconDrawable = null

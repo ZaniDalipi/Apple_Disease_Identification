@@ -30,8 +30,7 @@ class UserProfileDataFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         binding = DataBindingUtil.inflate(
             layoutInflater,
             R.layout.fragment_user_profile_data,
@@ -59,7 +58,8 @@ class UserProfileDataFragment : Fragment() {
         val viewModelFactory = SignUpViewModelFactory(application)
         signUpViewModel = ViewModelProvider(this, viewModelFactory).get(SignUpViewModel::class.java)
     }
-    private fun initGoogleSignInOptions(){
+
+    private fun initGoogleSignInOptions() {
         auth = FirebaseAuth.getInstance()
         val googleSignInOptions =
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -70,14 +70,17 @@ class UserProfileDataFragment : Fragment() {
         googleSignInClient = GoogleSignIn.getClient(requireContext(), googleSignInOptions)
     }
 
-    /** Sign Out user*/
-    private fun signOutUser(){
-
+    private fun signOutUser() {
         auth.signOut()
         googleSignInClient.signOut().addOnCompleteListener {
-            Toast.makeText(activity,"you have logged out : ${signUpViewModel.user.value?.displayName} ",Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                activity,
+                "you have been logged out : ${signUpViewModel.user.value?.displayName} ",
+                Toast.LENGTH_SHORT
+            ).show()
             signUpViewModel._userState.value = false
-            signUpViewModel._authenticationState.value = SignUpViewModel.AuthenticationState.UNAUTHENTICATED
+            signUpViewModel._authenticationState.value =
+                SignUpViewModel.AuthenticationState.UNAUTHENTICATED
             findNavController().navigate(R.id.action_userProfileDataFragment_to_signUpFragment)
         }
     }

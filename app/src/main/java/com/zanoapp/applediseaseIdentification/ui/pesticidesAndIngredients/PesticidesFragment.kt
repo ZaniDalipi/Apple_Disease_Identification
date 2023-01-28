@@ -1,4 +1,4 @@
-package com.zanoapp.applediseaseIdentification.ui.PesticidesAndIngredients
+package com.zanoapp.applediseaseIdentification.ui.pesticidesAndIngredients
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle

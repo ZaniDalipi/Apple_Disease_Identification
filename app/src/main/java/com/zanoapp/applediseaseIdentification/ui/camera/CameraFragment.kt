@@ -15,7 +15,6 @@ import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-
 import androidx.camera.view.PreviewView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
@@ -24,19 +23,15 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import com.google.common.util.concurrent.ListenableFuture
-import com.zanoapp.applediseaseIdentification.MainActivity
 import com.zanoapp.applediseaseIdentification.R
 import com.zanoapp.applediseaseIdentification.databinding.FragmentCameraBinding
 import com.zanoapp.applediseaseIdentification.ui.camera.ImageAnalyzer.Companion.DIM_IMG_SIZE_X
 import com.zanoapp.applediseaseIdentification.ui.camera.ImageAnalyzer.Companion.DIM_IMG_SIZE_Y
 import com.zanoapp.applediseaseIdentification.utils.CONTROL_LIFECYCLE_METHODS
 import com.zanoapp.applediseaseIdentification.utils.TRACK_FRAGCAMBITMAP_STATE
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
 
-//arbitrary value to track the permission request
 private const val REQUEST_CODE_PERMISSION = 10
 private val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.CAMERA)
 
@@ -46,12 +41,10 @@ class CameraFragment : Fragment(), LifecycleOwner,
 
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
     private lateinit var imageAnalyzer: ImageAnalyzer
-    private lateinit var viewModel: CameraViewModel
     private var runClassifier = false
     private val job = Job()
     private var myBitmap: Bitmap? = null
 
-    private val uiCoroutineScope = CoroutineScope(Dispatchers.Main + job)
     private lateinit var viewFinder: PreviewView
     private lateinit var preview: Preview
     private var camera: Camera? = null
@@ -72,7 +65,6 @@ class CameraFragment : Fragment(), LifecycleOwner,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.i(CONTROL_LIFECYCLE_METHODS, "onViewCreated: called")
 
         val container = view as ConstraintLayout
         viewFinder = container.findViewById(R.id.viewFinder)
@@ -102,7 +94,6 @@ class CameraFragment : Fragment(), LifecycleOwner,
         cameraProviderFuture.addListener({
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-            //Preview
             preview = Preview.Builder().build()
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
@@ -138,7 +129,7 @@ class CameraFragment : Fragment(), LifecycleOwner,
         )
     }
 
-    /** CAMERA PERMISSION*/
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -216,7 +207,7 @@ class CameraFragment : Fragment(), LifecycleOwner,
         }
 
 
-        var textToShow: String = ""
+        val textToShow: String
         if (viewFinder.bitmap == null) {
             showToast("the bitmap is null")
         } else {
@@ -231,8 +222,6 @@ class CameraFragment : Fragment(), LifecycleOwner,
         val activity: Activity? = activity
         activity?.runOnUiThread { binding.predictionText.text = text }
     }
-
-    private val ioScope = CoroutineScope(Dispatchers.IO + job)
 
     private val periodicClassify: Runnable =
         Runnable {

@@ -89,7 +89,7 @@ class TransactionDetailsFragment : Fragment() {
             detailsProductTypeEditText.setText(transaction.productName)
             detailsTransactionIdEditText.setText(transaction.transactionId.toString())
             detailsDescriptionEditText.setText(transaction.additionalDescription)
-            detailsClientNameEditText.setText(transaction.clientName.toString())
+            detailsClientNameEditText.setText(transaction.clientName)
             detailsDateEditText.setText(transaction.saleDate)
             detailsPriceEditText.setText(transaction.price.toString())
             detailsMassEditText.setText(transaction.mass.toString())
@@ -97,19 +97,32 @@ class TransactionDetailsFragment : Fragment() {
             when (transaction.transactionType) {
                 "Incomes" -> {
                     binding.gradientBackgroundTransactionType.background =
-                        ResourcesCompat.getDrawable(resources,R.drawable.income_background_gradient,null)
+                        ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.income_background_gradient,
+                            null
+                        )
 
                     binding.transactionTypeIconImageView.background =
-                        ResourcesCompat.getDrawable(resources,R.drawable.ic__01_receive_amount,null)
+                        ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.ic__01_receive_amount,
+                            null
+                        )
                 }
 
                 "Expenses" -> {
                     binding.gradientBackgroundTransactionType.background =
-                        ResourcesCompat.getDrawable(resources,R.drawable.expenses_background_gradient,null)
+                        ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.expenses_background_gradient,
+                            null
+                        )
 
                     binding.transactionTypeIconImageView.background =
-                        ResourcesCompat.getDrawable(resources,R.drawable.ic__02_sending_amount,null
-                    )
+                        ResourcesCompat.getDrawable(
+                            resources, R.drawable.ic__02_sending_amount, null
+                        )
                 }
             }
         }
@@ -121,7 +134,9 @@ class TransactionDetailsFragment : Fragment() {
         isEditableModeOn = false
         transactionBackdropBinding.apply {
             detailsProductTypeEditText.apply { isFocusableInTouchMode = false; isFocusable = false }
-            detailsTransactionIdEditText.apply { isFocusableInTouchMode = false; isFocusable = false }
+            detailsTransactionIdEditText.apply {
+                isFocusableInTouchMode = false; isFocusable = false
+            }
             detailsDescriptionEditText.apply { isFocusableInTouchMode = false; isFocusable = false }
             detailsClientNameEditText.apply { isFocusableInTouchMode = false; isFocusable = false }
             detailsDateEditText.apply { isFocusableInTouchMode = false; isFocusable = false }
@@ -138,7 +153,8 @@ class TransactionDetailsFragment : Fragment() {
     private fun saveUpdatedTransaction() {
 
         newTransactionData = Transaction(
-            transactionId = transactionBackdropBinding.detailsTransactionIdEditText.text.toString().toLong(),
+            transactionId = transactionBackdropBinding.detailsTransactionIdEditText.text.toString()
+                .toLong(),
             transactionType = selectedTransaction.transactionType,
             productName = transactionBackdropBinding.detailsProductTypeEditText.text.toString(),
             mass = transactionBackdropBinding.detailsMassEditText.text.toString().toInt(),
@@ -149,9 +165,13 @@ class TransactionDetailsFragment : Fragment() {
 
         )
 
-        if (newTransactionData!!.transactionId == selectedTransaction.transactionId){
+        if (newTransactionData!!.transactionId == selectedTransaction.transactionId) {
             viewModel.updateTransaction(newTransactionData!!)
-            Toast.makeText(context, "Saved Transaction: ${newTransactionData!!.productName}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                "Saved Transaction: ${newTransactionData!!.productName}",
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
 
@@ -165,7 +185,9 @@ class TransactionDetailsFragment : Fragment() {
 
         transactionBackdropBinding.apply {
             detailsProductTypeEditText.isFocusableInTouchMode = true
-            detailsTransactionIdEditText.apply { isFocusableInTouchMode = false; isFocusable = false }
+            detailsTransactionIdEditText.apply {
+                isFocusableInTouchMode = false; isFocusable = false
+            }
             detailsDescriptionEditText.isFocusableInTouchMode = true
             detailsClientNameEditText.isFocusableInTouchMode = true
             detailsDateEditText.apply { isFocusableInTouchMode = true; isFocusable = false }
@@ -222,17 +244,19 @@ class TransactionDetailsFragment : Fragment() {
             ViewModelProvider(this, viewModelFactory).get(AccountAnalyticsViewModel::class.java)
     }
 
-    fun Transaction.calculateTotal(): Int {
+    private fun Transaction.calculateTotal(): Int {
         val result = mass * price
         when (transactionType) {
             "Incomes" -> {
                 transactionBackdropBinding.transactionTotalTextView.setTextColor(
-                    ResourcesCompat.getColor(resources, R.color.primaryColor, null))
+                    ResourcesCompat.getColor(resources, R.color.primaryColor, null)
+                )
 
             }
             "Expenses" -> {
                 transactionBackdropBinding.transactionTotalTextView.setTextColor(
-                    ResourcesCompat.getColor(resources, R.color.onError, null))
+                    ResourcesCompat.getColor(resources, R.color.onError, null)
+                )
             }
             else -> {
                 transactionBackdropBinding.transactionTotalTextView.setTextColor(Color.GRAY)

@@ -1,4 +1,4 @@
-package com.zanoapp.applediseaseIdentification.ui.PesticidesAndIngredients.adapters
+package com.zanoapp.applediseaseIdentification.ui.pesticidesAndIngredients.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

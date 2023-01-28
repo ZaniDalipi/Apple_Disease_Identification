@@ -11,29 +11,21 @@ import kotlinx.parcelize.Parcelize
 data class Pesticide(
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "pesticide_id")
-    public val pesticideId: Int,
+    @ColumnInfo(name = "pesticide_id") val pesticideId: Int,
 
-    @ColumnInfo(name = "pesticide_name")
-    public val pesticideName: String,
+    @ColumnInfo(name = "pesticide_name") val pesticideName: String,
 
-    @ColumnInfo(name = "pesticide_type")
-    public val pesticideType: String,
+    @ColumnInfo(name = "pesticide_type") val pesticideType: String,
 
-    @ColumnInfo(name = "pesticide_company")
-    public val pesticideCompany: String,
+    @ColumnInfo(name = "pesticide_company") val pesticideCompany: String,
 
-    @ColumnInfo(name = "pesticide_ingredients")
-    public val pesticideIngredients: String,
+    @ColumnInfo(name = "pesticide_ingredients") val pesticideIngredients: String,
 
-    @ColumnInfo(name = "pesticide_description")
-    public val pesticideDescription: String,
+    @ColumnInfo(name = "pesticide_description") val pesticideDescription: String,
 
-    @ColumnInfo(name = "pesticide_is_it_organic")
-    public val isItOrganic: String,
+    @ColumnInfo(name = "pesticide_is_it_organic") val isItOrganic: String,
 
-    @ColumnInfo(name = "pesticide_usage_dose")
-    public val pesticideUsage: String
+    @ColumnInfo(name = "pesticide_usage_dose") val pesticideUsage: String
 ) : Parcelable {
     constructor(
         pesticideName: String,

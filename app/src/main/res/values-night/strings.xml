@@ -24,13 +24,19 @@
     <string name="accept">Accept 🤦‍♂</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="selectDateHint">dd/mm/yyyy 🗓</string>
+    <string name="transaction_details_select_date_hint">dd/mm/yyyy 🗓</string>
     <string name="field_info_text">All Fields specified with * must be filled</string>
     <string name="all_transactions">Transactions</string>
     <string name="edit_fab_content_description">setting transactions in a editional mode</string>
     <string name="creating_a_new_transaction_description">creating a new transaction fab</string>
     <string name="refresh">Refresh</string>
     <string name="pesticides_and_insecticides">Pesticides And Insecticides</string>
+    <string name="save_result_from_analyze">save result</string>
+    <string name="pesticide_name_hint">Pesticide Name</string>
+    <string name="sign_in_create_your_account_textView">Create your account :</string>
+    <string name="sign_in_re_enter_password_textView">re-enter password</string>
+    <string name="sign_in_with_textView">Sign in with :</string>
+    <string name="transaction_details_product_type_hint">Product type 🍎</string>
     <string-array name="transaction_options">
         <item>Incomes</item>
         <item>Expenses</item>

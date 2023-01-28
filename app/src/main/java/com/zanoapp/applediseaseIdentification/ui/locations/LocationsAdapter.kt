@@ -1,6 +1,6 @@
-/*
-package com.zanoapp.applediseaseIdentification.uiController.locations
 
+package com.zanoapp.applediseaseIdentification.ui.locations
+/*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

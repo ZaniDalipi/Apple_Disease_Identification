@@ -1,24 +1,15 @@
 package com.zanoapp.applediseaseIdentification.ui.managementAndAnalytics.adapters
 
-import android.app.Activity
-import android.app.Application
-import android.content.Context
 import android.graphics.Color
-import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.zanoapp.applediseaseIdentification.R
 import com.zanoapp.applediseaseIdentification.databinding.CardTransactionsBinding
 import com.zanoapp.applediseaseIdentification.localDataPersistence.transactionsDB.Transaction
 import com.zanoapp.applediseaseIdentification.utils.setTransactionImage
-import java.security.AccessController.getContext
 import kotlin.math.roundToInt
 
 
@@ -30,7 +21,7 @@ class TransactionRecyclerViewAdapterRecyclerView :
     lateinit var binding: CardTransactionsBinding
 
 
-    inner class ViewHolder() :
+    inner class ViewHolder :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Transaction) {
@@ -66,7 +57,7 @@ class TransactionRecyclerViewAdapterRecyclerView :
         return currentList.size
     }
 
-    /** My Diffutil callback for each element in the recyler view */
+    /** My Diffutils callback for each element in the recycler view */
     class TransactionDiffUtilsCallback : DiffUtil.ItemCallback<Transaction>() {
 
         override fun areItemsTheSame(oldItem: Transaction, newItem: Transaction): Boolean {
