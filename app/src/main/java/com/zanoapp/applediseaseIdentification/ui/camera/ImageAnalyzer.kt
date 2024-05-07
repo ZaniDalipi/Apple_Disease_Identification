@@ -1,7 +1,9 @@
 package com.zanoapp.applediseaseIdentification.ui.camera
 
 import android.app.Activity
+import android.app.PendingIntent.getActivity
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.SystemClock
 import android.util.Log
 import com.zanoapp.applediseaseIdentification.utils.CONTROL_LIFECYCLE_METHODS
@@ -13,10 +15,11 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
+import java.security.AccessController.getContext
 import java.util.*
 
 
-class ImageAnalyzer constructor(activity: Activity) {
+class ImageAnalyzer() : Activity() {
 
     private val intValues = IntArray(DIM_IMG_SIZE_X * DIM_IMG_SIZE_Y)
 
@@ -96,10 +99,10 @@ class ImageAnalyzer constructor(activity: Activity) {
     }
 
     /** Reads label list from Assets.  */
-    private fun loadLabelList(activity: Activity): List<String> {
+    private fun loadLabelList(): List<String> {
         Log.i(CONTROL_LIFECYCLE_METHODS, "loadLabelList: ")
         val labelList = mutableListOf<String>()
-        val reader = BufferedReader(InputStreamReader(activity.assets.open(LABEL_PATH)))
+        val reader = BufferedReader(InputStreamReader(Activity().assets.open(LABEL_PATH)))
         var line = " "
         while (reader.readLine().also { line = it } != null) {
             labelList.add(line)
@@ -109,14 +112,15 @@ class ImageAnalyzer constructor(activity: Activity) {
     }
 
     /** Memory-map the model file in Assets.  */
-    private fun loadModelFile(activity: Activity): MappedByteBuffer {
+    private fun loadModelFile(): MappedByteBuffer {
         Log.i(CONTROL_LIFECYCLE_METHODS, "loadModelFile: ")
-        val fileDescriptor = activity.assets.openFd(MODEL_PATH)
+        val fileDescriptor = Activity().assets.openFd(MODEL_PATH)
         val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
         val fileChannel = inputStream.channel
 
         val startOffset = fileDescriptor.startOffset
-        val declaredLength = fileDescriptor.declaredLength
+        val declaredLength =
+            fileDescriptor.declaredLength
 
         return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
     }
@@ -185,16 +189,17 @@ class ImageAnalyzer constructor(activity: Activity) {
         private const val FILTER_STAGES_RGB = 3
         private const val FILTER_FACTOR = 0.4f
 
-        fun newInstance() = ImageAnalyzer(Activity())
+        fun newInstance() = ImageAnalyzer()
     }
 
     /** Initializes an `ImageClassifier`.  */
     init {
         Log.i(CONTROL_LIFECYCLE_METHODS, "Init called in Image Analyzer: ")
 
-        tfliteModel = loadModelFile(activity)
+        tfliteModel = loadModelFile()
+        Log.i(TAG, " this is the model that has been loaded ${tfliteModel.toString()} ")
         tflite = Interpreter(tfliteModel!!, null)
-        labelList = loadLabelList(activity)
+        labelList = loadLabelList()
 
         imgData = ByteBuffer.allocateDirect(
             4 * DIM_BATCH_SIZE *
@@ -206,10 +211,7 @@ class ImageAnalyzer constructor(activity: Activity) {
         Log.i(TAG, "the label list size is ${labelList.size}: ")
         labelProbArray = Array(1) { FloatArray(labelList.size) }
         filterLabelProbArray = Array(FILTER_STAGES_RGB) { FloatArray(labelList.size) }
-
     }
-
-
 }
 
 

@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val viewModelFactory = SignUpViewModelFactory(application)
-        signUpViewModel = ViewModelProvider(this, viewModelFactory).get(SignUpViewModel::class.java)
+        signUpViewModel = ViewModelProvider(this, viewModelFactory)[SignUpViewModel::class.java]
 
         fab.setOnClickListener {
             //findNavController(R.id.my_nav_host_fragment).navigate(R.id.action_mainActivity_to_cameraFragment)
@@ -98,6 +98,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

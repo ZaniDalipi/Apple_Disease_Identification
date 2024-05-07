@@ -169,21 +169,19 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
     }
 
 
-/*
 
-    fun readLabels() {
-        val listOfLabels = mutableListOf<String>()
-        val label = Application().assets.open("Labels.txt", 1).bufferedReader().use {
-            it.readText()
-        }
-        listOfLabels.add(label)
-        for (items in listOfLabels) {
-            Log.i("myListOfDisease", listOfLabels.toString())
-        }
+        fun readLabels() {
+            val listOfLabels = mutableListOf<String>()
+            val label = Application().assets.open("Labels.txt", 1).bufferedReader().use {
+                it.readText()
+            }
+            listOfLabels.add(label)
+            for (items in listOfLabels) {
+                Log.i("myListOfDisease", listOfLabels.toString())
+            }
 
-        _labelList.value = listOfLabels
-    }
-*/
+            _labelList.value = listOfLabels
+        }
 
     private fun applyFilterToLabels() {
         val numberOfLabels = labelList.value?.size
@@ -246,7 +244,7 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
     init {
         Log.i(LABEL_NAME, "${labelList.value?.size}")
         getRemoteModelInBackground()
-        //     readLabels()
+        //readLabels()
         printTopKLabels()
         applyFilterToLabels()
 

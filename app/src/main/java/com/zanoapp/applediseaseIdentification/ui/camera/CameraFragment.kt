@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import com.google.common.util.concurrent.ListenableFuture
 import com.zanoapp.applediseaseIdentification.R
@@ -39,11 +40,13 @@ private val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.CAMERA)
 class CameraFragment : Fragment(), LifecycleOwner,
     ActivityCompat.OnRequestPermissionsResultCallback {
 
+
+    val viewModel: CameraViewModel by viewModels()
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
     private lateinit var imageAnalyzer: ImageAnalyzer
     private var runClassifier = false
     private val job = Job()
-    private var myBitmap: Bitmap? = null
+    private lateinit var myBitmap: Bitmap
 
     private lateinit var viewFinder: PreviewView
     private lateinit var preview: Preview
@@ -74,9 +77,10 @@ class CameraFragment : Fragment(), LifecycleOwner,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         Log.i(CONTROL_LIFECYCLE_METHODS, "onCreate: called inside the fragment")
         try {
-            imageAnalyzer = ImageAnalyzer(Activity())
+            imageAnalyzer = ImageAnalyzer()
             runClassifier = true
             Toast.makeText(activity, "Model and labels has been loaded", Toast.LENGTH_SHORT).show()
 
@@ -102,7 +106,7 @@ class CameraFragment : Fragment(), LifecycleOwner,
             try {
                 camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview)
                 preview.setSurfaceProvider(viewFinder.surfaceProvider)
-                myBitmap = viewFinder.bitmap
+                myBitmap = viewFinder.bitmap!!
                 Log.d(
                     TRACK_FRAGCAMBITMAP_STATE,
                     "startCamera: this is inside the try and the bitmap is ${viewFinder.bitmap}"
@@ -110,7 +114,7 @@ class CameraFragment : Fragment(), LifecycleOwner,
             } catch (ex: Exception) {
                 showToast("Failed to setup camera preview")
             }
-        }, ContextCompat.getMainExecutor(context))
+        }, ContextCompat.getMainExecutor(requireContext()))
     }
 
     override fun onResume() {
@@ -197,13 +201,13 @@ class CameraFragment : Fragment(), LifecycleOwner,
 
         Log.d(
             TRACK_FRAGCAMBITMAP_STATE,
-            "MyBitmap byte count ${myBitmap?.byteCount} && the source provide is  ${viewFinder.surfaceProvider}"
+            "MyBitmap byte count ${myBitmap.byteCount} && the source provide is  ${viewFinder.surfaceProvider}"
         )
 
         viewFinder.implementationMode = PreviewView.ImplementationMode.COMPATIBLE
         val previewChild = viewFinder.getChildAt(0)
         if (previewChild is TextureView) {
-            myBitmap = previewChild.getBitmap(DIM_IMG_SIZE_X, DIM_IMG_SIZE_Y)
+            myBitmap = previewChild.getBitmap(DIM_IMG_SIZE_X, DIM_IMG_SIZE_Y)!!
         }
 
 
@@ -212,8 +216,8 @@ class CameraFragment : Fragment(), LifecycleOwner,
             showToast("the bitmap is null")
         } else {
             Log.d(TRACK_FRAGCAMBITMAP_STATE, "classifyFrame: bitmap value is $myBitmap")
-            textToShow = imageAnalyzer.classifyFrame(myBitmap!!)
-            myBitmap?.recycle()
+            textToShow = imageAnalyzer.classifyFrame(myBitmap)
+            myBitmap.recycle()
             showToast(textToShow)
         }
     }
