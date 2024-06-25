@@ -13,8 +13,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.video.Recording
 import androidx.camera.view.PreviewView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
@@ -31,29 +33,42 @@ import com.zanoapp.applediseaseIdentification.ui.camera.ImageAnalyzer.Companion.
 import com.zanoapp.applediseaseIdentification.utils.CONTROL_LIFECYCLE_METHODS
 import com.zanoapp.applediseaseIdentification.utils.TRACK_FRAGCAMBITMAP_STATE
 import kotlinx.coroutines.Job
+import java.util.concurrent.ExecutorService
 
 
 private const val REQUEST_CODE_PERMISSION = 10
 private val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.CAMERA)
 
 
+typealias LumaListener = (luma: Double) -> Unit
+
 class CameraFragment : Fragment(), LifecycleOwner,
     ActivityCompat.OnRequestPermissionsResultCallback {
 
+//        private var imageAnalyzerInstance: ImageAnalyzer? = null
+
 
     val viewModel: CameraViewModel by viewModels()
+
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
+//    private lateinit var myBitmap: Bitmap
     private lateinit var imageAnalyzer: ImageAnalyzer
     private var runClassifier = false
     private val job = Job()
-    private lateinit var myBitmap: Bitmap
+
+    private var camera: Camera? = null
 
     private lateinit var viewFinder: PreviewView
     private lateinit var preview: Preview
-    private var camera: Camera? = null
+
     private var _binding: FragmentCameraBinding? = null
     private val binding
         get() = _binding!!
+
+    private var imageCapture: ImageCapture? = null
+    private var recording: Recording? = null
+
+    private lateinit var cameraExecutor: ExecutorService
 
 
     override fun onCreateView(
@@ -72,12 +87,6 @@ class CameraFragment : Fragment(), LifecycleOwner,
         val container = view as ConstraintLayout
         viewFinder = container.findViewById(R.id.viewFinder)
 
-
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
         Log.i(CONTROL_LIFECYCLE_METHODS, "onCreate: called inside the fragment")
         try {
             imageAnalyzer = ImageAnalyzer()
@@ -88,6 +97,12 @@ class CameraFragment : Fragment(), LifecycleOwner,
             Toast.makeText(activity, "Something went wrong ${io.message}", Toast.LENGTH_SHORT)
                 .show()
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        checkForCameraPermission()
     }
 
     private fun startCamera() {
@@ -106,7 +121,7 @@ class CameraFragment : Fragment(), LifecycleOwner,
             try {
                 camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview)
                 preview.setSurfaceProvider(viewFinder.surfaceProvider)
-                myBitmap = viewFinder.bitmap!!
+//                myBitmap = viewFinder.bitmap!!
                 Log.d(
                     TRACK_FRAGCAMBITMAP_STATE,
                     "startCamera: this is inside the try and the bitmap is ${viewFinder.bitmap}"
@@ -199,15 +214,15 @@ class CameraFragment : Fragment(), LifecycleOwner,
         }
 
 
-        Log.d(
-            TRACK_FRAGCAMBITMAP_STATE,
-            "MyBitmap byte count ${myBitmap.byteCount} && the source provide is  ${viewFinder.surfaceProvider}"
-        )
+//        Log.d(
+//            TRACK_FRAGCAMBITMAP_STATE,
+//            "MyBitmap byte count ${myBitmap.byteCount} && the source provide is  ${viewFinder.surfaceProvider}"
+//        )
 
         viewFinder.implementationMode = PreviewView.ImplementationMode.COMPATIBLE
         val previewChild = viewFinder.getChildAt(0)
         if (previewChild is TextureView) {
-            myBitmap = previewChild.getBitmap(DIM_IMG_SIZE_X, DIM_IMG_SIZE_Y)!!
+//            myBitmap = previewChild.getBitmap(DIM_IMG_SIZE_X, DIM_IMG_SIZE_Y)!!
         }
 
 
@@ -215,10 +230,10 @@ class CameraFragment : Fragment(), LifecycleOwner,
         if (viewFinder.bitmap == null) {
             showToast("the bitmap is null")
         } else {
-            Log.d(TRACK_FRAGCAMBITMAP_STATE, "classifyFrame: bitmap value is $myBitmap")
-            textToShow = imageAnalyzer.classifyFrame(myBitmap)
-            myBitmap.recycle()
-            showToast(textToShow)
+//            Log.d(TRACK_FRAGCAMBITMAP_STATE, "classifyFrame: bitmap value is $myBitmap")
+//            textToShow = imageAnalyzer.classifyFrame(myBitmap)
+//            myBitmap.recycle()
+//            showToast(textToShow)
         }
     }
 

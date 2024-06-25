@@ -12,4 +12,6 @@ class SavedLocationsViewModel : ViewModel() {
     * 2. also we have to create a room db to save the data of the user in it from this viewModel (asynchronously in the background)
     * 3.
     * */
+
+
 }

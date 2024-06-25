@@ -43,9 +43,9 @@ class AddTransactionDialogTest {
                     "${(1..31).random()}/${(1..12).random()}/20${(10..22).random()}"
                 )
 
-            /*val launchFragment =
+            val launchFragment =
                 launchFragmentInContainer<AddTransactionDialog>(themeResId = R.style.Theme_MyApp)
-                    .moveToState(Lifecycle.State.RESUMED)*/
+                    .moveToState(Lifecycle.State.RESUMED)
 
             /*add text to all fields  */
             onView(withId(R.id.productTypeEditText))

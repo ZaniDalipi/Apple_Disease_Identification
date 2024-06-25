@@ -69,7 +69,7 @@
     <string name="long_message">Are you sure you want to Exit  ? 🤔</string>
     <string name="delete_transaction_message">Are you sure you want delete transaction:  </string>
     <string name="decline">Decline 🤷‍♂</string>
-    <string name="accept">Accept 🤦‍♂</string>
+    <string name="accept">Yes‍♂</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="transaction_details_select_date_hint">dd/mm/yyyy 🗓</string>
@@ -111,6 +111,9 @@
     <string name="transaction_details_price">price €</string>
     <string name="transaction_details_mass">Mass ⚖</string>
     <string name="transaction_details_client_name">Client Name 🧑🏽</string>
+    <string name="user_profile_content_description">User profile content description</string>
+    <string name="take_photo">take photo \n</string>
+    <string name="start_capture">capture \n\n</string>
     <!--END-->
 
     <string-array name="transaction_options">

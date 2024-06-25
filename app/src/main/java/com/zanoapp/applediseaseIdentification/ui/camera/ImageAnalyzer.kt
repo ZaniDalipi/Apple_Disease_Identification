@@ -19,7 +19,9 @@ import java.security.AccessController.getContext
 import java.util.*
 
 
-class ImageAnalyzer() : Activity() {
+class ImageAnalyzer(
+
+): Activity() {
 
     private val intValues = IntArray(DIM_IMG_SIZE_X * DIM_IMG_SIZE_Y)
 
@@ -68,6 +70,8 @@ class ImageAnalyzer() : Activity() {
         textToShow = (endTime - startTime).toString() + "ms" + textToShow
         return textToShow
     }
+
+
 
     private fun applyFilter() {
         Log.i(CONTROL_LIFECYCLE_METHODS, "applyFilter: ")
@@ -170,6 +174,10 @@ class ImageAnalyzer() : Activity() {
         return textToShow
     }
 
+    fun newInstance(): ImageAnalyzer {
+        return ImageAnalyzer()
+    }
+
     companion object {
 
         private const val TAG = "classifier"
@@ -189,7 +197,7 @@ class ImageAnalyzer() : Activity() {
         private const val FILTER_STAGES_RGB = 3
         private const val FILTER_FACTOR = 0.4f
 
-        fun newInstance() = ImageAnalyzer()
+        public fun newInstance() = ImageAnalyzer()
     }
 
     /** Initializes an `ImageClassifier`.  */
