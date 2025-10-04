@@ -133,7 +133,7 @@ For mobile, also measure:
 ## Architecture & Notes
 
 * Frontend: Kotlin Android app
-* Model: likely TFLite or embedded model inside the app
+* Model:  TFLite or embedded model inside the app - tested on data from my apple orchard just for demostration as final project on my university
 * Preprocessing: resize + normalize to match model's expected input
 
 Look into `app/src/main` for the activity and model-loading code. The prediction pipeline usually:
