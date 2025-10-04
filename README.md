@@ -28,7 +28,7 @@
 
 This repository contains an Android application (Kotlin) that demonstrates identification of common apple leaf diseases from images. The app integrates an image classification model (TensorFlow Lite / ONNX / other — check `/app` or `assets` for the exact model file) and provides a simple UI to capture or pick a photo and display predicted disease classes.
 
-If you landed here expecting miracles, this README will at least get you a working local build and tell the model where to hide.
+
 
 ## Features
 
@@ -39,19 +39,8 @@ If you landed here expecting miracles, this README will at least get you a worki
 
 ## Repository Structure
 
-```
-Apple_Disease_Identification/
-├─ .idea/
-├─ app/                  # Android app module (Kotlin)
-├─ gradle/               # Gradle wrapper
-├─ build.gradle
-├─ settings.gradle
-├─ gradlew
-├─ gradlew.bat
-└─ README.md
-```
+Simple android app not needed to do something more complex like multi-modularizaton.
 
-> Note: If you expect a `models/`, `assets/`, or `README_model.md` folder and don’t see it, the model may be stored inside `app/src/main/assets/` or was not included in this repo. Look there first.
 
 ## Requirements
 
@@ -69,10 +58,11 @@ git clone https://github.com/ZaniDalipi/Apple_Disease_Identification.git
 cd Apple_Disease_Identification
 ```
 
+You may miss the TF model becuase i used Firebase to read it and do inference.
+
 2. Open the project in Android Studio (`File -> Open`) and let Gradle sync.
 3. If Android Studio prompts to install missing SDK components, accept them.
 
-If there is a bundled model you'll find it in `app/src/main/assets/` or `app/src/main/res/raw/`. If not, get a `.tflite` or similar model and place it there.
 
 ## Usage
 
@@ -88,6 +78,8 @@ If there is a bundled model you'll find it in `app/src/main/assets/` or `app/src
 * The app likely loads a small image-classifier model from `assets/`. Search for code referencing `Interpreter`, `tflite`, `Model`, `TensorImage`, or similar in the Android code (e.g., `app/src/main/java/...`).
 * If you replace the model, ensure input size and preprocessing in the app match the model (image size, normalization, channel order).
 
+* ** probably nowdays the Tensorflow lite library has changed and you wont be able to do inference, i use this project just as a showcase.
+
 ## Dataset
 
 The original dataset is not included here. Typical datasets used for apple disease classification include PlantVillage or custom-collected images for classes such as:
@@ -96,6 +88,7 @@ The original dataset is not included here. Typical datasets used for apple disea
 * Black Rot
 * Cedar Apple Rust
 * Healthy
+* * couldnt gather more data, i used my local orchard for demostration and a database from .
 
 If you plan to retrain, collect a balanced dataset and apply augmentation for robustness (rotation, scaling, color jitter, random crop).
 
